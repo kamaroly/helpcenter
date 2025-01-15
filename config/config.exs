@@ -41,7 +41,8 @@ config :spark,
 
 config :helpcenter,
   ecto_repos: [Helpcenter.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ash_domains: [Helpcenter.KnowledgeBase]
 
 # Configures the endpoint
 config :helpcenter, HelpcenterWeb.Endpoint,

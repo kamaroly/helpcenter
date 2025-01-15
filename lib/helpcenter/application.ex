@@ -17,7 +17,8 @@ defmodule Helpcenter.Application do
       # Start a worker by calling: Helpcenter.Worker.start_link(arg)
       # {Helpcenter.Worker, arg},
       # Start to serve requests, typically the last entry
-      HelpcenterWeb.Endpoint
+      HelpcenterWeb.Endpoint,
+      {AshAuthentication.Supervisor, [otp_app: :helpcenter]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
