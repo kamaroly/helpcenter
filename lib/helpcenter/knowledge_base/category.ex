@@ -12,7 +12,9 @@ defmodule Helpcenter.KnowledgeBase.Category do
   end
 
   actions do
-    defaults [:read, :destroy, create: :*, update: :*]
+    default_accept [:name, :slug, :description]
+
+    defaults [:create, :read, :update, :destroy]
   end
 
   # Tell Ash what columns or attributes this resource has and their types and validations
