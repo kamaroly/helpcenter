@@ -1,290 +1,258 @@
 <.flash_group flash={@flash} />
+  <!-- Header / Hero -->
+    <header class="bg-gray-900 px-6 py-6 text-white">
+      <div class="mx-auto max-w-7xl">
+        <!-- Top row: Logo + Language selection -->
+        <div class="flex items-center justify-between">
+          <!-- Logo / Title -->
+          <div class="flex items-center space-x-2">
+            <!-- “Zippiker” in golden yellow -->
+            <div class="text-3xl font-bold text-yellow-500">Zippiker</div>
+          </div>
 
-<!-- Header / Hero -->
-<header class="bg-gray-900 text-white px-6 py-6">
-  <div class="max-w-7xl mx-auto">
-    <!-- Top row: Logo + Language selection -->
-    <div class="flex items-center justify-between">
-      <!-- Logo / Title -->
-      <div class="flex items-center space-x-2">
-        <!-- “Zippiker” in golden yellow -->
-        <div class="text-3xl font-bold text-yellow-500">Zippiker</div>
-      </div>
-      
-<!-- Language Selection (optional) -->
-      <div>
-        <select class="bg-gray-800 border-none text-white text-sm p-2 rounded outline-none">
-          <option>English</option>
-          <option>Español</option>
-          <option>日本語</option>
-        </select>
-      </div>
-    </div>
-    
-<!-- Subtitle (reduced size and goldish yellow) -->
-    <div class="mt-5 text-center">
-      <h1 class="text-xl font-medium text-yellow-400">
-        Advice and answers from the Zippiker Team
-      </h1>
-    </div>
-    
-<!-- Search Bar (centered) -->
-    <!-- Search Bar (centered) with icons -->
-    <div class="flex justify-center mt-5">
-      <!-- Container for relative positioning -->
-      <div class="relative w-full max-w-xl">
-        <label for="search" class="sr-only">Search for articles</label>
-        
-<!-- Search Icon (left) -->
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M8 4a6 6 0 014.472 10.03l3.316 
+          <!-- Language Selection (optional) -->
+          <div>
+            <select class="rounded border-none bg-gray-800 p-2 text-sm text-white outline-none">
+              <option>English</option>
+              <option>Español</option>
+              <option>日本語</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Subtitle (reduced size and goldish yellow) -->
+        <div class="mt-5 text-center">
+          <h1 class="text-xl font-medium text-yellow-400">Advice and answers from the Zippiker Team</h1>
+        </div>
+
+        <!-- Search Bar (centered) -->
+        <!-- Search Bar (centered) with icons -->
+        <div class="mt-5 flex justify-center">
+          <!-- Container for relative positioning -->
+          <div class="relative w-full max-w-xl">
+            <label for="search" class="sr-only">Search for articles</label>
+
+            <!-- Search Icon (left) -->
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a6 6 0 014.472 10.03l3.316 
                      3.317a1 1 0 01-1.414 1.414l-3.316-3.316A6 
                      6 0 118 4zm0 2a4 4 0 100 8 4 4 0 
                      000-8z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-        
-<!-- Search Input -->
-        <input
-          type="text"
-          id="search"
-          placeholder="Search for articles..."
-          class="pl-10 pr-10 w-full py-2 text-gray-300 bg-gray-800 rounded 
-                     focus:outline-none focus:ring-1 focus:ring-yellow-500"
-        />
-        
-<!-- Clear Button (right), hidden by default) -->
-        <button
-          type="button"
-          id="clearBtn"
-          class="absolute inset-y-0 right-0  items-center pr-3 
-                     text-gray-400 hover:text-gray-300 hidden 
-                     focus:outline-none"
-        >
-          <!-- Clear (X) Icon -->
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+
+            <!-- Search Input -->
+            <input type="text" id="search" placeholder="Search for articles..." class="w-full rounded bg-gray-800 py-2 pl-10 pr-10 text-gray-300 focus:bg-gray-200 focus:text-gray-900 focus:outline-none focus:ring-1 focus:ring-yellow-500" />
+
+            <!-- Clear Button (right), hidden by default) -->
+            <button type="button" id="clearBtn" class="absolute inset-y-0 right-0 hidden items-center pr-3 text-gray-400 hover:text-gray-300 focus:outline-none">
+              <!-- Clear (X) Icon -->
+              <svg class="h-5 w-5 text-yellow-100" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 
                      0L10 8.586l4.293-4.293a1 1 
                      0 011.414 1.414L11.414 10l4.293 
                      4.293a1 1 0 01-1.414 1.414L10 
                      11.414l-4.293 4.293a1 1 0 
                      01-1.414-1.414L8.586 10 4.293 
                      5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </button>
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
+    </header>
 
-<!-- Main Content: Card Grid -->
-<main class="max-w-7xl mx-auto py-10">
-  <!-- Make the grid 3 columns on medium screens and above -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <!-- 1) Billing -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M4 3h12v2H4V3zm0 3h12v2H4V6zm0 
-               3h10v2H4V9zm0 3h8v2H4v-2z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Billing
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Manage invoices, payment methods, and transaction history.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">7 articles</p>
-    </a>
-    
-<!-- 2) Leave Management -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M6 2a2 2 0 00-2 2v12a2 2 
+    <!-- Main Content: Card Grid -->
+    <main class="mx-auto max-w-7xl py-10">
+      <!-- Make the grid 3 columns on medium screens and above -->
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+        <!-- 1) Billing -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M4 3h12v2H4V3zm0 3h12v2H4V6zm0 
+               3h10v2H4V9zm0 3h8v2H4v-2z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Billing</h2>
+          </div>
+          <p class="text-sm text-gray-600">Manage invoices, payment methods, and transaction history.</p>
+          <p class="mt-2 text-xs text-gray-500">7 articles</p>
+        </a>
+
+        <!-- 2) Leave Management -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M6 2a2 2 0 00-2 2v12a2 2 
                0 002 2h8a2 2 0 002-2V4a2 
-               2 0 00-2-2H6zm2 14V4h4v12H8z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Leave Management
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Request, approve, and track employee leaves.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">5 articles</p>
-    </a>
-    
-<!-- 3) Core HR -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 2a8 8 0 100 16 8 8 
+               2 0 00-2-2H6zm2 14V4h4v12H8z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Leave Management</h2>
+          </div>
+          <p class="text-sm text-gray-600">Request, approve, and track employee leaves.</p>
+          <p class="mt-2 text-xs text-gray-500">5 articles</p>
+        </a>
+
+        <!-- 3) Core HR -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M10 2a8 8 0 100 16 8 8 
                0 000-16zm0 2a6 6 0 11-.001 
-               12.001A6 6 0 0110 4z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Core HR
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Manage benefits, disciplinary actions, certificates, documents,
-        and compensations.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">12 articles</p>
-    </a>
-    
-<!-- 4) Account Access -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M2 10c0-4.418 3.582-8 
+               12.001A6 6 0 0110 4z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Core HR</h2>
+          </div>
+          <p class="text-sm text-gray-600">Manage benefits, disciplinary actions, certificates, documents, and compensations.</p>
+          <p class="mt-2 text-xs text-gray-500">12 articles</p>
+        </a>
+
+        <!-- 4) Account Access -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M2 10c0-4.418 3.582-8 
                8-8s8 3.582 8 8-3.582 
                8-8 8-8-3.582-8-8zm7-3a1 
                1 0 012 0v2a1 1 0 01-2 
                0V7zm1 6a1 1 0 100-2 
-               1 1 0 000 2z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Account Access
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        User logins, password resets, and role permissions.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">9 articles</p>
-    </a>
-    
-<!-- 5) Files -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M8 2a2 2 0 00-2 2v12a2 2 0 002 
+               1 1 0 000 2z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Account Access</h2>
+          </div>
+          <p class="text-sm text-gray-600">User logins, password resets, and role permissions.</p>
+          <p class="mt-2 text-xs text-gray-500">9 articles</p>
+        </a>
+
+        <!-- 5) Files -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M8 2a2 2 0 00-2 2v12a2 2 0 002 
                2h4a2 2 0 002-2V6.414a2 
                2 0 00-.586-1.414l-2.414-2.414A2 
                2 0 009.586 2H8zm3 4h-2V3.999L11 
-               6z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Files
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Store, share, and manage company documents securely.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">6 articles</p>
-    </a>
-    
-<!-- 6) Reports -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M3 4a1 1 0 011-1h12a1 1 
+               6z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Files</h2>
+          </div>
+          <p class="text-sm text-gray-600">Store, share, and manage company documents securely.</p>
+          <p class="mt-2 text-xs text-gray-500">6 articles</p>
+        </a>
+
+        <!-- 6) Reports -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M3 4a1 1 0 011-1h12a1 1 
                0 011 1v10a1 1 0 01-1 1H9l-4 
                3v-3a1 1 0 00-1-1H4a1 
-               1 0 01-1-1V4z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Reports
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Generate and analyze data-driven insights.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">8 articles</p>
-    </a>
-    
-<!-- 7) Inventory -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M4 2h12a1 1 0 011 
+               1 0 01-1-1V4z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Reports</h2>
+          </div>
+          <p class="text-sm text-gray-600">Generate and analyze data-driven insights.</p>
+          <p class="mt-2 text-xs text-gray-500">8 articles</p>
+        </a>
+
+        <!-- 7) Inventory -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M4 2h12a1 1 0 011 
                1v14a1 1 0 01-1 1H4a1 
                1 0 01-1-1V3a1 1 0 
                011-1zm2 3v2h8V5H6zm0 
-               4v6h8V9H6z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Inventory
-        </h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Track assets, supplies, and restocking processes.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">10 articles</p>
-    </a>
-    
-<!-- 8) Integration -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9.172 16.172a4 4 0 
+               4v6h8V9H6z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Inventory</h2>
+          </div>
+          <p class="text-sm text-gray-600">Track assets, supplies, and restocking processes.</p>
+          <p class="mt-2 text-xs text-gray-500">10 articles</p>
+        </a>
+
+        <!-- 8) Integration -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M9.172 16.172a4 4 0 
                010-5.656l1.414-1.414-1.414-1.414a4 
                4 0 010-5.656l.586-.586H3a1 
                1 0 00-1 1v12a1 1 0 
                001 1h12a1 1 0 
                001-1v-3.758l-.586.586a4 4 0 
-               01-5.656 0L9.172 16.172z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">Integration</h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Seamlessly connect with third-party apps and tools.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">14 articles</p>
-    </a>
-    
-<!-- 9) Custom Reports -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M5 4a2 2 0 00-2 2v8a2 2 
+               01-5.656 0L9.172 16.172z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Integration</h2>
+          </div>
+          <p class="text-sm text-gray-600">Seamlessly connect with third-party apps and tools.</p>
+          <p class="mt-2 text-xs text-gray-500">14 articles</p>
+        </a>
+
+        <!-- 9) Custom Reports -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M5 4a2 2 0 00-2 2v8a2 2 
                0 002 2h10a2 2 0 002-2V6a2 
                2 0 00-2-2H5zm0 2h10v8H5V6zm2 
-               1v2h2V7H7zm0 3v2h2v-2H7z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">Custom Reports</h2>
-      </div>
-      <p class="text-sm text-gray-600">
-        Build flexible, detailed reports tailored to your needs.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">5 articles</p>
-    </a>
-    
-<!-- 10) Data Security & Privacy -->
-    <a href="#" class="block rounded-lg shadow hover:shadow-md p-5 transition bg-white">
-      <div class="flex items-center mb-3">
-        <svg class="w-6 h-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10 2a6 6 0 00-6 
+               1v2h2V7H7zm0 3v2h2v-2H7z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Custom Reports</h2>
+          </div>
+          <p class="text-sm text-gray-600">Build flexible, detailed reports tailored to your needs.</p>
+          <p class="mt-2 text-xs text-gray-500">5 articles</p>
+        </a>
+
+        <!-- 10) Data Security & Privacy -->
+        <a href="#" class="block rounded-md hover:border p-5 shadow transition hover:shadow-md">
+          <div class="mb-3 flex items-center">
+            <svg class="h-6 w-6 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+              <path
+                d="M10 2a6 6 0 00-6 
                6v2.586l-.707.707A1 
                1 0 003 12v2a1 1 0 
                001 1h12a1 1 0 
                001-1v-2a1 1 0 
                00-.293-.707L16 
                10.586V8a6 6 0 
-               00-6-6z" />
-        </svg>
-        <h2 class="ml-2 text-lg font-medium text-gray-800">
-          Data Security &amp; Privacy
-        </h2>
+               00-6-6z"
+              />
+            </svg>
+            <h2 class="ml-2 text-lg font-medium text-gray-800">Data Security &amp; Privacy</h2>
+          </div>
+          <p class="text-sm text-gray-600">Ensure data protection, compliance, and privacy best practices.</p>
+          <p class="mt-2 text-xs text-gray-500">7 articles</p>
+        </a>
       </div>
-      <p class="text-sm text-gray-600">
-        Ensure data protection, compliance, and privacy best practices.
-      </p>
-      <p class="mt-2 text-xs text-gray-500">7 articles</p>
-    </a>
-  </div>
-</main>
+    </main>
 
 <script>
   // Grab the search input and the clear button

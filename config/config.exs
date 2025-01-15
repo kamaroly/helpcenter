@@ -19,6 +19,8 @@ config :spark,
     remove_parens?: true,
     "Ash.Resource": [
       section_order: [
+        :authentication,
+        :tokens,
         :postgres,
         :resource,
         :code_interface,
@@ -42,7 +44,7 @@ config :spark,
 config :helpcenter,
   ecto_repos: [Helpcenter.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Helpcenter.KnowledgeBase]
+  ash_domains: [Helpcenter.Accounts, Helpcenter.KnowledgeBase]
 
 # Configures the endpoint
 config :helpcenter, HelpcenterWeb.Endpoint,
