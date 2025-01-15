@@ -10,14 +10,13 @@ defmodule Helpcenter.KnowledgeBase.Comment do
 
   attributes do
     uuid_primary_key :id
-
     attribute :content, :string, allow_nil?: false
-    create_timestamp :created_at
+    timestamps()
   end
 
   relationships do
-    belongs_to :article, Helpcenter.KnowledgeBase.Article,
-      attribute_type: :uuid,
-      allow_nil?: false
+    belongs_to :article, Helpcenter.KnowledgeBase.Article do
+      source_attribute :article_id
+    end
   end
 end

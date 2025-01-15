@@ -1,13 +1,21 @@
 defmodule Helpcenter.KnowledgeBase.Category do
   use Ash.Resource,
+    # <-- Tell Ash that this resource belongs to KnowledgeBase domain
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer
 
   postgres do
+    # <-- Tell Ash that this resource data is stored in a table named "categories"
     table "categories"
+    # <-- Tell Ash that this resource access data storage via Helpcenter.Repo
     repo Helpcenter.Repo
   end
 
+  actions do
+    defaults [:read, :destroy, create: :*, update: :*]
+  end
+
+  # Tell Ash what columns or attributes this resource has and their types and validations
   attributes do
     uuid_primary_key :id
 
@@ -15,11 +23,16 @@ defmodule Helpcenter.KnowledgeBase.Category do
     attribute :slug, :string
     attribute :description, :string, allow_nil?: true
 
-    create_timestamp :created_at
-    update_timestamp :updated_at
+    timestamps()
   end
 
+  # Relationship Block. In this case this resource has many articles
   relationships do
-    has_many :articles, Helpcenter.KnowledgeBase.Article, destination_attribute: :category_id
+    has_many :articles, Helpcenter.KnowledgeBase.Article do
+      description "Relationship with the articles."
+
+      # <-- Tell Ash that the articles table has a column named "category_id" that references this resource
+      destination_attribute :category_id
+    end
   end
 end

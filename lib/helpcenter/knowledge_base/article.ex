@@ -13,28 +13,31 @@ defmodule Helpcenter.KnowledgeBase.Article do
 
     attribute :title, :string, allow_nil?: false
     attribute :slug, :string
-    # Use :string if short text; :text if your content might be large.
     attribute :content, :string
     attribute :views_count, :integer, default: 0
     attribute :published, :boolean, default: false
 
-    create_timestamp :created_at
-    update_timestamp :updated_at
+    timestamps()
   end
 
   relationships do
-    belongs_to :category, Helpcenter.KnowledgeBase.Category,
-      allow_nil?: false,
-      attribute_type: :uuid
+    belongs_to :category, Helpcenter.KnowledgeBase.Category do
+      source_attribute :category_id
+    end
 
-    has_many :comments, Helpcenter.KnowledgeBase.Comment
+    has_many :comments, Helpcenter.KnowledgeBase.Comment do
+      destination_attribute :article_id
+    end
 
     # Many-to-many relationship with Tag
-    many_to_many :tags, Helpcenter.KnowledgeBase.Tag,
-      through: Helpcenter.KnowledgeBase.ArticleTag,
-      source_attribute_on_join_resource: :article_id,
-      destination_attribute_on_join_resource: :tag_id
+    many_to_many :tags, Helpcenter.KnowledgeBase.Tag do
+      through Helpcenter.KnowledgeBase.ArticleTag
+      source_attribute_on_join_resource :article_id
+      destination_attribute_on_join_resource :tag_id
+    end
 
-    has_many :article_feedbacks, Helpcenter.KnowledgeBase.ArticleFeedback
+    has_many :article_feedbacks, Helpcenter.KnowledgeBase.ArticleFeedback do
+      destination_attribute :article_id
+    end
   end
 end

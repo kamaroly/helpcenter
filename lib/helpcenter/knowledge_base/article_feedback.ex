@@ -18,8 +18,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleFeedback do
   end
 
   relationships do
-    belongs_to :article, Helpcenter.KnowledgeBase.Article,
-      attribute_type: :uuid,
-      allow_nil?: false
+    belongs_to :article, Helpcenter.KnowledgeBase.Article do
+      source_attribute :article_id
+    end
   end
 end

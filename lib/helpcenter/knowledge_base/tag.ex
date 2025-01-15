@@ -14,14 +14,14 @@ defmodule Helpcenter.KnowledgeBase.Tag do
     attribute :name, :string, allow_nil?: false
     attribute :slug, :string
 
-    create_timestamp :created_at
-    update_timestamp :updated_at
+    timestamps()
   end
 
   relationships do
-    many_to_many :articles, Helpcenter.KnowledgeBase.Article,
-      through: Helpcenter.KnowledgeBase.ArticleTag,
-      source_attribute_on_join_resource: :tag_id,
-      destination_attribute_on_join_resource: :article_id
+    many_to_many :articles, Helpcenter.KnowledgeBase.Article do
+      through Helpcenter.KnowledgeBase.ArticleTag
+      source_attribute_on_join_resource :tag_id
+      destination_attribute_on_join_resource :article_id
+    end
   end
 end
