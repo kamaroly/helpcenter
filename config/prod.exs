@@ -6,7 +6,17 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :helpcenter, HelpcenterWeb.Endpoint,
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  # Binding to loopback ipv4 address prevents access from other machines.
+  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
+  http: [ip: {0, 0, 0, 0}, port: 4005],
+  secret_key_base: System.get_env("SECRET_KEY_BASE_HELPCENTER"),
+  server: true,
+  # or your domain
+  url: [host: "0.0.0.0"],
+  http: [port: 4005],
+  # check_origin: ["http://localhost:4005", "http://127.0.0.1:4005"]
+  check_origin: false
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Helpcenter.Finch
