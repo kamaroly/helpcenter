@@ -9,7 +9,7 @@ config :ash, disable_async?: true
 # Run `mix help test` for more information.
 config :helpcenter, Helpcenter.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "ikijumba",
   hostname: "localhost",
   database: "helpcenter_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
