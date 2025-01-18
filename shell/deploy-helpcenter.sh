@@ -17,7 +17,7 @@ cd /opt/helpcenter
 
 # Export required environment variables
 export SECRET_KEY_BASE=$SECRET_KEY_BASE
-export DATABASE_URL=ecto://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME
+export DATABASE_URL=ecto://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME_HELPCENTER
 
 
 # Function to check if a port is responding
@@ -40,8 +40,8 @@ function is_port_responding() {
 # Zero-downtime deployment logic take multiple releases
 for PORT in "${PORTS[@]}"; do
     echo "Stopping existing app_$PORT on port $PORT (if running)..."
-    pkill -9 beam || echo "No running instance on port $PORT"
-
+    RELEASE_NODE=app_$PORT PORT=$PORT $BUILD_PATH/bin/$APP_NAME stop
+   
     echo "Restarting app_$PORT on port $PORT..."
     RELEASE_NODE=app_$PORT PORT=$PORT $BUILD_PATH/bin/$APP_NAME $MODE
 
