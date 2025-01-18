@@ -85,7 +85,6 @@ jobs:
 
     - name: Deploy assets
       run: |
-        npm install
         MIX_ENV=prod mix assets.deploy
 
     - name: Generate the Phoenix release
