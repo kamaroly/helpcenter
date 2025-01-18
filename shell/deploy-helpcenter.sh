@@ -16,7 +16,7 @@ cd /opt/helpcenter
 
 
 # Export required environment variables
-export SECRET_KEY_BASE=$SECRET_KEY_BASE
+export SECRET_KEY_BASE=$SECRET_KEY_BASE_HELPCENTER
 export DATABASE_URL=ecto://$DB_USER:$DB_PASS@$DB_HOST/$DB_NAME_HELPCENTER
 
 
