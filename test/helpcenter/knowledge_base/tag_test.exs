@@ -6,7 +6,7 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
 
   describe "Knowledge Base Tags Tests" do
     test "User can create a new tag" do
-      attrs = %{name: "Billing", slug: "billing"}
+      attrs = %{name: "Billing"}
 
       Tag
       |> Ash.Changeset.for_create(:create, attrs)
@@ -14,7 +14,6 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
 
       assert Tag
              |> Ash.Query.filter(name == ^attrs.name)
-             |> Ash.Query.filter(slug == ^attrs.slug)
              |> Ash.exists?()
     end
 
@@ -33,12 +32,11 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
         Tag
         |> Ash.Query.filter(name == "Time-Off")
         |> Ash.read_first!()
-        |> Ash.Changeset.for_update(:update, %{name: "Leave", slug: "leave"})
+        |> Ash.Changeset.for_update(:update, %{name: "Leave"})
         |> Ash.update()
 
       assert Tag
              |> Ash.Query.filter(name == ^tag.name)
-             |> Ash.Query.filter(slug == ^tag.slug)
              |> Ash.read_first()
     end
 

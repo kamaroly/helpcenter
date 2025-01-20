@@ -27,10 +27,21 @@ defmodule Helpcenter.KnowledgeBase.Article do
       change manage_relationship(:category_attrs, :category, type: :create)
     end
 
-    update :create_with_comment do
+    create :create_with_comment do
       description "Create article with a comment."
       argument :comment, :map, allow_nil?: false
       change manage_relationship(:comment, :comments, type: :create)
+    end
+
+    create :create_with_tags do
+      description "Create an article with tags"
+      argument :tags, {:array, :map}, allow_nil?: false
+
+      change manage_relationship(:tags, :tags,
+               on_no_match: :create,
+               on_match: :ignore,
+               on_missing: :create
+             )
     end
 
     update :add_comment do

@@ -1,5 +1,6 @@
 defmodule Helpcenter.KnowledgeBase.ArticleTest do
   use HelpcenterWeb.ConnCase, async: false
+  alias Helpcenter.KnowledgeBase.ArticleTag
   alias Helpcenter.KnowledgeBase.Comment
   alias Helpcenter.KnowledgeBase.ArticleFeedback
   alias Helpcenter.KnowledgeBase.Category
@@ -85,6 +86,29 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
              |> Ash.Query.filter(feedback == ^attrs.feedback)
              |> Ash.Query.filter(helpful == ^attrs.helpful)
              |> Ash.Query.filter(article_id == ^article.id)
+             |> Ash.exists?()
+    end
+
+    test "An article can be created with tags" do
+      attributes = %{
+        title: "Common Issues During Setup and How to Fix Them",
+        slug: "setup-common-issues",
+        content: "Troubleshooting guide for common challenges faced during initial setup.",
+        tags: [%{name: "issues"}, %{name: "solution"}]
+      }
+
+      {:ok, _article} =
+        Helpcenter.KnowledgeBase.Article
+        |> Ash.Changeset.for_create(:create_with_tags, attributes)
+        |> Ash.create()
+
+      assert Article
+             |> Ash.Query.filter(title == ^attributes.title)
+             |> Ash.exists?()
+
+      assert ArticleTag
+             |> Ash.Query.filter(article.title == ^attributes.title)
+             |> Ash.Query.filter(tag.name == "issues")
              |> Ash.exists?()
     end
   end

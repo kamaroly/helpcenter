@@ -9,16 +9,13 @@ defmodule Helpcenter.KnowledgeBase.Tag do
   end
 
   actions do
-    default_accept [:name, :slug]
+    default_accept [:name]
     defaults [:create, :read, :update, :destroy]
   end
 
   attributes do
     uuid_primary_key :id
-
     attribute :name, :string, allow_nil?: false
-    attribute :slug, :string
-
     timestamps()
   end
 
