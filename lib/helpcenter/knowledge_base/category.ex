@@ -21,8 +21,8 @@ defmodule Helpcenter.KnowledgeBase.Category do
       change manage_relationship(:article_attrs, :articles, type: :create)
     end
 
-    update :create_article do
-      description "Create an article under a specified category"
+    update :add_article do
+      description "Add an article under a specified category"
       require_atomic? false
       argument :article_attrs, :map, allow_nil?: false
       change manage_relationship(:article_attrs, :articles, type: :create)

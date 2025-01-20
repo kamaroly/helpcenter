@@ -8,6 +8,11 @@ defmodule Helpcenter.KnowledgeBase.ArticleFeedback do
     repo Helpcenter.Repo
   end
 
+  actions do
+    default_accept [:feedback, :helpful, :article_id]
+    defaults [:create, :read, :update, :destroy]
+  end
+
   attributes do
     uuid_primary_key :id
 

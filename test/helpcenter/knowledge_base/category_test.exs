@@ -125,16 +125,17 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       }
 
       # 3 Create an article under this category
-      category
-      |> Ash.Changeset.for_update(:create_article, %{article_attrs: attrs})
-      |> Ash.update()
+      {:ok, _category} =
+        category
+        |> Ash.Changeset.for_update(:add_article, %{article_attrs: attrs})
+        |> Ash.update()
 
       # Confirm that the article has been create
       assert Helpcenter.KnowledgeBase.Article
              |> Ash.Query.filter(title == ^attrs.title)
              |> Ash.Query.filter(content == ^attrs.content)
              |> Ash.Query.filter(category_id == ^category.id)
-             |> Ash.exists?()
+             |> Ash.read()
     end
 
     test "Category can be retrieved with related articles" do

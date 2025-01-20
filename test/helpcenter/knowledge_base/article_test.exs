@@ -1,8 +1,11 @@
 defmodule Helpcenter.KnowledgeBase.ArticleTest do
   use HelpcenterWeb.ConnCase, async: false
+  alias Helpcenter.KnowledgeBase.Comment
+  alias Helpcenter.KnowledgeBase.ArticleFeedback
   alias Helpcenter.KnowledgeBase.Category
   alias Helpcenter.KnowledgeBase.Article
   import CategoryCase
+  import ArticleCase
   require Ash.Query
 
   describe "Article Tests" do
@@ -51,6 +54,37 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
              |> Ash.Query.filter(name == ^attributes.category_attrs.name)
              |> Ash.Query.filter(slug == ^attributes.category_attrs.slug)
              |> Ash.Query.filter(description == ^attributes.category_attrs.description)
+             |> Ash.exists?()
+    end
+
+    test "A comment can be added to an article" do
+      article = get_article()
+      attrs = %{content: "First article content you will see!"}
+
+      {:ok, _article} =
+        article
+        |> Ash.Changeset.for_update(:add_comment, %{comment: attrs})
+        |> Ash.update()
+
+      assert Comment
+             |> Ash.Query.filter(content == ^attrs.content)
+             |> Ash.Query.filter(article_id == ^article.id)
+             |> Ash.exists?()
+    end
+
+    test "A feedback can be added to an article" do
+      article = get_article()
+      attrs = %{feedback: "It came out earlier than needed", helpful: true}
+
+      {:ok, _article} =
+        article
+        |> Ash.Changeset.for_update(:add_feedback, %{feedback: attrs})
+        |> Ash.update()
+
+      assert ArticleFeedback
+             |> Ash.Query.filter(feedback == ^attrs.feedback)
+             |> Ash.Query.filter(helpful == ^attrs.helpful)
+             |> Ash.Query.filter(article_id == ^article.id)
              |> Ash.exists?()
     end
   end

@@ -26,6 +26,26 @@ defmodule Helpcenter.KnowledgeBase.Article do
       argument :category_attrs, :map, allow_nil?: false
       change manage_relationship(:category_attrs, :category, type: :create)
     end
+
+    update :create_with_comment do
+      description "Create article with a comment."
+      argument :comment, :map, allow_nil?: false
+      change manage_relationship(:comment, :comments, type: :create)
+    end
+
+    update :add_comment do
+      description "Add a comment to an article"
+      require_atomic? false
+      argument :comment, :map, allow_nil?: false
+      change manage_relationship(:comment, :comments, type: :create)
+    end
+
+    update :add_feedback do
+      description "Add a feedback to an article"
+      require_atomic? false
+      argument :feedback, :map, allow_nil?: false
+      change manage_relationship(:feedback, :feedbacks, type: :create)
+    end
   end
 
   attributes do
@@ -56,7 +76,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
       destination_attribute_on_join_resource :tag_id
     end
 
-    has_many :article_feedbacks, Helpcenter.KnowledgeBase.ArticleFeedback do
+    has_many :feedbacks, Helpcenter.KnowledgeBase.ArticleFeedback do
       destination_attribute :article_id
     end
   end
