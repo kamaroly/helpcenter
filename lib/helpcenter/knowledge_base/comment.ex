@@ -8,6 +8,11 @@ defmodule Helpcenter.KnowledgeBase.Comment do
     repo Helpcenter.Repo
   end
 
+  actions do
+    default_accept [:content, :article_id]
+    defaults [:create, :read, :update, :destroy]
+  end
+
   attributes do
     uuid_primary_key :id
     attribute :content, :string, allow_nil?: false

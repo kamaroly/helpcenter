@@ -1,11 +1,13 @@
 defmodule Helpcenter.KnowledgeBase.CategoryTest do
   require Ash.Query
+  alias Helpcenter.KnowledgeBase.Article
   alias Helpcenter.KnowledgeBase.Category
   use HelpcenterWeb.ConnCase, async: false
   import CategoryCase
+  import ArticleCase
 
   describe "Knowledge Base Category Tests" do
-    test "User can create a category" do
+    test "Can create a category" do
       attrs = %{
         name: "Billing",
         slug: "billing",
@@ -25,7 +27,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       refute category.updated_at |> is_nil()
     end
 
-    test "User can filter categories" do
+    test "Can filter categories" do
       create_categories()
 
       require Ash.Query
@@ -44,7 +46,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       |> Ash.read()
     end
 
-    test "User can update an existing category" do
+    test "Can update an existing category" do
       # Seed data to work with
       create_categories()
 
@@ -63,21 +65,92 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
              |> Ash.exists?()
     end
 
-    test "User can destroy an existing Category" do
+    test "Can destroy an existing Category" do
       create_categories()
 
       require Ash.Query
 
+      # First identify category to destroy
       category_to_delete =
         Helpcenter.KnowledgeBase.Category
         |> Ash.Query.filter(name == "Approvals and Workflows")
         |> Ash.read_first!()
 
+      # Tell Ash to destroy it
       Ash.destroy(category_to_delete)
 
       refute Helpcenter.KnowledgeBase.Category
              |> Ash.Query.filter(name == "Approvals and Workflows")
              |> Ash.exists?()
+    end
+
+    test "Category can be created with an article" do
+      # Define category and related article attributes
+      attrs = %{
+        name: "Features",
+        slug: "features",
+        description: "Category for features",
+        article_attrs: %{
+          title: "Compliance Features in Zippiker",
+          slug: "compliance-features-zippiker",
+          content: "Overview of compliance management features built into Zippiker."
+        }
+      }
+
+      # Create category and its article at the same time
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Changeset.for_create(:create_with_article, attrs)
+      |> Ash.create()
+
+      assert Category
+             |> Ash.Query.filter(name == ^attrs.name)
+             |> Ash.exists?()
+
+      assert Article
+             |> Ash.Query.filter(title == ^attrs.article_attrs.title)
+             |> Ash.exists?()
+    end
+
+    test "An article can be added to an existing category" do
+      # 1. Get category to create an article under
+      category = get_category()
+
+      # 2. Prepare new article data
+      attrs = %{
+        title: "Getting Started with Zippiker",
+        slug: "getting-started-zippiker",
+        content: "Learn how to set up your Zippiker account and configure basic settings.",
+        views_count: 1452,
+        published: true
+      }
+
+      # 3 Create an article under this category
+      category
+      |> Ash.Changeset.for_update(:create_article, %{article_attrs: attrs})
+      |> Ash.update()
+
+      # Confirm that the article has been create
+      assert Helpcenter.KnowledgeBase.Article
+             |> Ash.Query.filter(title == ^attrs.title)
+             |> Ash.Query.filter(content == ^attrs.content)
+             |> Ash.Query.filter(category_id == ^category.id)
+             |> Ash.exists?()
+    end
+
+    test "Category can be retrieved with related articles" do
+      # First create articles for the category
+      category = get_category()
+      articles = create_articles(category)
+
+      category_with_articles =
+        Helpcenter.KnowledgeBase.Category
+        |> Ash.Query.filter(id == ^category.id)
+        # Tell Ash to load related articles
+        |> Ash.Query.load(:articles)
+        |> Ash.read_first!()
+
+      # This category might have added article else where in concurrency writing. Thus, use <=
+      assert Enum.count(category_with_articles.articles) <= Enum.count(articles)
     end
   end
 end
