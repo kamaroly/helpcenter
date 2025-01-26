@@ -11,13 +11,13 @@
       </div>
       
 <!-- Language Selection (optional) -->
-      <div>
+      <%!-- <div>
         <select class="rounded border-none bg-gray-800 p-2 text-sm text-white outline-none">
           <option>English</option>
           <option>Español</option>
           <option>日本語</option>
         </select>
-      </div>
+      </div> --%>
     </div>
     
 <!-- Subtitle (reduced size and goldish yellow) -->
@@ -86,7 +86,7 @@
 <main class="mx-auto max-w-7xl py-10">
   <!-- Make the grid 3 columns on medium screens and above -->
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-    <!-- 1) Billing -->
+    <%!-- List category and display their count --%>
     <a
       :for={category <- @categories}
       href="#"
@@ -95,12 +95,14 @@
       <div class="mb-3 flex items-center">
         <svg class="h-6 w-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
           <path d="M4 3h12v2H4V3zm0 3h12v2H4V6zm0 
-               3h10v2H4V9zm0 3h8v2H4v-2z" />
+            3h10v2H4V9zm0 3h8v2H4v-2z" />
         </svg>
         <h2 class="ml-2 text-lg font-medium text-gray-800">{category.name}</h2>
       </div>
       <p class="text-sm text-gray-600">{category.description}</p>
-      <p class="mt-2 text-xs text-gray-500">7 articles</p>
+
+      <%!-- Count articles under each category  --%>
+      <p class="mt-2 text-xs text-gray-500">{category.article_count} articles</p>
     </a>
   </div>
 </main>

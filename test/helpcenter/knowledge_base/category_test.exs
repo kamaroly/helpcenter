@@ -153,5 +153,19 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       # This category might have added article else where in concurrency writing. Thus, use <=
       assert Enum.count(category_with_articles.articles) <= Enum.count(articles)
     end
+
+    test "articles_count aggregate can be loaded on the category" do
+      # Create categories and seed articles
+      category = get_category()
+      create_articles(category)
+
+      loaded_category =
+        Helpcenter.KnowledgeBase.Category
+        |> Ash.Query.filter(id == ^category.id)
+        |> Ash.Query.load([:article_count, :articles])
+        |> Ash.read_first!()
+
+      assert loaded_category.article_count == Enum.count(loaded_category.articles)
+    end
   end
 end

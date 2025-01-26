@@ -49,4 +49,8 @@ defmodule Helpcenter.KnowledgeBase.Category do
       destination_attribute :category_id
     end
   end
+
+  aggregates do
+    count :article_count, :articles
+  end
 end

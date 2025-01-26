@@ -74,6 +74,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
   relationships do
     belongs_to :category, Helpcenter.KnowledgeBase.Category do
       source_attribute :category_id
+      allow_nil? false
     end
 
     has_many :comments, Helpcenter.KnowledgeBase.Comment do

@@ -25,6 +25,7 @@ defmodule Helpcenter.KnowledgeBase.ArticleFeedback do
   relationships do
     belongs_to :article, Helpcenter.KnowledgeBase.Article do
       source_attribute :article_id
+      allow_nil? false
     end
   end
 end

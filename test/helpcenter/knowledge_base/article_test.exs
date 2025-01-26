@@ -90,10 +90,13 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
     end
 
     test "An article can be created with tags" do
+      category = get_category()
+
       attributes = %{
         title: "Common Issues During Setup and How to Fix Them",
         slug: "setup-common-issues",
         content: "Troubleshooting guide for common challenges faced during initial setup.",
+        category_id: category.id,
         tags: [%{name: "issues"}, %{name: "solution"}]
       }
 
@@ -109,6 +112,29 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
       assert ArticleTag
              |> Ash.Query.filter(article.title == ^attributes.title)
              |> Ash.Query.filter(tag.name == "issues")
+             |> Ash.exists?()
+    end
+
+    test "Articles can be filtered by their tags" do
+      create_articles()
+      category = get_category()
+
+      attributes = %{
+        title: "Common Issues During Setup and How to Fix Them",
+        slug: "setup-common-issues",
+        content: "Troubleshooting guide for common challenges faced during initial setup.",
+        category_id: category.id,
+        tags: [%{name: "issues"}, %{name: "solution"}]
+      }
+
+      # Add article with tags
+      {:ok, _article} =
+        Helpcenter.KnowledgeBase.Article
+        |> Ash.Changeset.for_create(:create_with_tags, attributes)
+        |> Ash.create()
+
+      assert Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(articles.tags.name == "issues")
              |> Ash.exists?()
     end
   end

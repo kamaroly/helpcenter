@@ -3,10 +3,11 @@ defmodule HelpcenterWeb.PageController do
   use HelpcenterWeb, :controller
 
   def home(conn, _params) do
+    # Retrieve categories with the articles
+    categories = Ash.read!(Category, load: :article_count)
+
     # The home page is often custom made,
     # so skip the default app layout.
-
-    categories = Ash.read!(Category)
     render(conn, :home, layout: false, categories: categories)
   end
 end
