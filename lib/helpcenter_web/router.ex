@@ -24,7 +24,11 @@ defmodule HelpcenterWeb.Router do
   scope "/", HelpcenterWeb do
     pipe_through :browser
 
-    live "/categories", CategoriesLive
+    scope "/categories" do
+      live "/", CategoriesLive
+      live "/create", CreateCategoryLive
+      live "/:category_id", EditCategoryLive
+    end
 
     ash_authentication_live_session :authenticated_routes do
       # in each liveview, add one of the following at the top of the module:
