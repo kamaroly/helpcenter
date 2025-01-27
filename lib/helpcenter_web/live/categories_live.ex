@@ -58,6 +58,8 @@ defmodule HelpcenterWeb.CategoriesLive do
 
   # Responds when a user clicks on trash button
   def handle_event("delete-" <> category_id, _params, socket) do
+    dbg(category_id)
+
     case destroy_record(category_id) do
       :ok ->
         socket
