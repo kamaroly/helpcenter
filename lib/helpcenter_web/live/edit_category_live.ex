@@ -3,7 +3,6 @@ defmodule HelpcenterWeb.EditCategoryLive do
   Edits an existing categroy
   """
   use HelpcenterWeb, :live_view
-  alias AshPhoenix.Form
 
   def render(assigns) do
     ~H"""
