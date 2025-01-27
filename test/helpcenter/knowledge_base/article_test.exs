@@ -1,8 +1,8 @@
 defmodule Helpcenter.KnowledgeBase.ArticleTest do
+  alias Helpcenter.KnowledgeBase.ArticleFeedback
   use HelpcenterWeb.ConnCase, async: false
   alias Helpcenter.KnowledgeBase.ArticleTag
   alias Helpcenter.KnowledgeBase.Comment
-  alias Helpcenter.KnowledgeBase.ArticleFeedback
   alias Helpcenter.KnowledgeBase.Category
   alias Helpcenter.KnowledgeBase.Article
   import CategoryCase

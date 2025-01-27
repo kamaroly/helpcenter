@@ -28,6 +28,9 @@ defmodule HelpcenterWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import HelpcenterWeb.ConnCase
+
+      # Import conveniences for testing with channels
+      import Phoenix.ChannelTest
     end
   end
 

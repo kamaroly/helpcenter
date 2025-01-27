@@ -1,10 +1,8 @@
 defmodule Helpcenter.KnowledgeBase.CategoryTest do
-  require Ash.Query
-  alias Helpcenter.KnowledgeBase.Article
-  alias Helpcenter.KnowledgeBase.Category
   use HelpcenterWeb.ConnCase, async: false
   import CategoryCase
   import ArticleCase
+  require Ash.Query
 
   describe "Knowledge Base Category Tests" do
     test "Can create a category" do
@@ -15,7 +13,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       }
 
       {:ok, category} =
-        Category
+        Helpcenter.KnowledgeBase.Category
         |> Ash.Changeset.for_create(:create, attrs)
         |> Ash.create()
 
@@ -32,7 +30,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
 
       require Ash.Query
 
-      assert Category
+      assert Helpcenter.KnowledgeBase.Category
              |> Ash.Query.filter(name == "Billing and Payments")
              |> Ash.exists?()
 
@@ -102,11 +100,11 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       |> Ash.Changeset.for_create(:create_with_article, attrs)
       |> Ash.create()
 
-      assert Category
+      assert Helpcenter.KnowledgeBase.Category
              |> Ash.Query.filter(name == ^attrs.name)
              |> Ash.exists?()
 
-      assert Article
+      assert Helpcenter.KnowledgeBase.Article
              |> Ash.Query.filter(title == ^attrs.article_attrs.title)
              |> Ash.exists?()
     end
@@ -166,6 +164,23 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
         |> Ash.read_first!()
 
       assert loaded_category.article_count == Enum.count(loaded_category.articles)
+    end
+
+    test "'categories' pubsub event is published on create" do
+      # Subscribe to the event so we can test whether it is being fired
+      HelpcenterWeb.Endpoint.subscribe("categories")
+
+      attributes = %{name: "Art 1", slug: "art-1", description: "descrpt-1"}
+
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Changeset.for_create(:create, attributes)
+      |> Ash.create()
+
+      # Confirm that the event is being recieved and its data
+      assert_receive %Phoenix.Socket.Broadcast{topic: "categories", payload: category}
+      assert category.data.name == attributes.name
+      assert category.data.slug == attributes.slug
+      assert category.data.description == attributes.description
     end
   end
 end
