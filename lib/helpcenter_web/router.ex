@@ -24,6 +24,7 @@ defmodule HelpcenterWeb.Router do
   scope "/", HelpcenterWeb do
     pipe_through :browser
 
+    # Add categories route
     scope "/categories" do
       live "/", CategoriesLive
       live "/create", CreateCategoryLive

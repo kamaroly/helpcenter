@@ -96,7 +96,7 @@ defmodule HelpcenterWeb do
       # Routes generation with the ~p sigil
       unquote(verified_routes())
 
-      # Live view and live
+      # Live view and live components callbacks helpers
       def ok(socket), do: {:ok, socket}
       def halt(socket), do: {:halt, socket}
       def continue(socket), do: {:cont, socket}
