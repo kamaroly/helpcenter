@@ -40,5 +40,19 @@ defmodule Helpcenter.KnowledgeBase.CommentTest do
     test "A Comment can be deleted" do
       assert :ok = get_comment() |> Ash.destroy!()
     end
+
+    test "Delete an article deletes its comments too without relying on data layer" do
+      require Ash.Query
+      comment = get_comment()
+
+      :ok =
+        Helpcenter.KnowledgeBase.Article
+        |> Ash.get!(comment.article_id)
+        |> Ash.destroy!()
+
+      refute Helpcenter.KnowledgeBase.Article
+             |> Ash.Query.filter(id == ^comment.id)
+             |> Ash.exists?()
+    end
   end
 end

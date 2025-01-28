@@ -1,0 +1,11 @@
+{application,spitfire,
+             [{config_mtime,1736925800},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger]},
+              {description,"Error resilient parser for Elixir"},
+              {modules,['Elixir.Spitfire','Elixir.Spitfire.Env',
+                        'Elixir.Spitfire.NoFuelRemaining',
+                        'Elixir.Spitfire.While','Elixir.Spitfire.While2',
+                        spitfire_interpolation,spitfire_tokenizer]},
+              {registered,[]},
+              {vsn,"0.1.4"}]}.

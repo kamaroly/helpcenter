@@ -2,6 +2,18 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   use HelpcenterWeb, :live_component
   alias AshPhoenix.Form
 
+  @doc """
+  This funciton allows us to call this component as if it was a static component
+
+  ### Example:
+      - <HelpcenterWeb.Categories.CategoryForm.form /> for creating a new category
+      - <HelpcenterWeb.Categories.CategoryForm.form category_id={...}/> for editing an existing category
+
+  ### Params
+    id: unique string identifer for this components. It allows us to have this component multiple times on the same page.
+        default: UUIDv7
+    category_id: unique category identifier needed while editing this component
+  """
   attr :id, :string, default: Ash.UUIDv7.generate()
   attr :category_id, :string, default: nil
 
@@ -17,7 +29,10 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   def render(assigns) do
     ~H"""
     <div id={"category-form-component-#{@id}"}>
-      <%!-- Typical simple form from core_components --%>
+      <%!--
+       This form must target its self so that phx-change and phx-submit events stays in it.
+       Otherwise these changes will be sent to the parent liveview
+      --%>
       <.simple_form
         for={@form}
         id={"category-form-#{@category_id}"}
@@ -86,22 +101,27 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
     end
   end
 
+  # Assign form to this component assigns
   defp assign_form(socket) do
-    form = get_form(socket.assigns)
-    assign(socket, :form, form)
+    assign(socket, :form, get_form(socket.assigns))
   end
 
   # New category form
   # 1. Create a changeset for Category resource
   # 2. Inform Ash that it is for inserting new data in the data layer.
   # 3. Converts the form into liveview form so it can be handled by simple form
+
+  # Prevent overriding existing form during update on changes
+  defp get_form(%{form: _form} = assigns), do: assigns
+
+  # Form for creating a new category
   defp get_form(%{category_id: nil}) do
     Helpcenter.KnowledgeBase.Category
     |> Form.for_create(:create)
     |> to_form()
   end
 
-  # Ecisting form
+  # Form for existing category
   defp get_form(%{category_id: category_id}) do
     Helpcenter.KnowledgeBase.Category
     |> Ash.get!(category_id)

@@ -1,0 +1,11 @@
+{application,splode,
+             [{config_mtime,1738037646},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger]},
+              {description,"Splode helps you deal with errors and exceptions in your application that are aggregatable and consistent.\n"},
+              {modules,['Elixir.Inspect.Splode.Stacktrace','Elixir.Splode',
+                        'Elixir.Splode.Error','Elixir.Splode.Error.Unknown',
+                        'Elixir.Splode.ErrorClass',
+                        'Elixir.Splode.Stacktrace']},
+              {registered,[]},
+              {vsn,"0.2.8"}]}.

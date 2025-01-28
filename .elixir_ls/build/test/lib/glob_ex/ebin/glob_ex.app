@@ -1,0 +1,10 @@
+{application,glob_ex,
+             [{config_mtime,1736925800},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger]},
+              {description,"A library for glob expressions."},
+              {modules,['Elixir.GlobEx','Elixir.GlobEx.CompileError',
+                        'Elixir.GlobEx.Compiler','Elixir.GlobEx.Sigils',
+                        'Elixir.Inspect.GlobEx']},
+              {registered,[]},
+              {vsn,"0.1.11"}]}.

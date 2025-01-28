@@ -1,4 +1,6 @@
 defmodule Helpcenter.KnowledgeBase.Article do
+  require Ash.Resource.Change.Builtins
+
   use Ash.Resource,
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer
@@ -24,7 +26,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
       :category_id
     ]
 
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :read, :update]
 
     create :create_with_category do
       description "Create an article and its category at the same time"
@@ -62,6 +64,33 @@ defmodule Helpcenter.KnowledgeBase.Article do
       argument :feedback, :map, allow_nil?: false
       change manage_relationship(:feedback, :feedbacks, type: :create)
     end
+
+    destroy :destroy do
+      description "Destroy article and its comments"
+
+      # Make this action primary. It can be called with Ash.destroy without
+      # having to mention the action to use
+      primary? true
+      require_atomic? false
+
+      # Before this action is executed, we'll need to delete corresponding
+      # comments
+      change before_action(fn changeset, context ->
+               # We need Ash.Query to allow filtering
+               require Ash.Query
+
+               # Find all comments related to this article
+               %Ash.BulkResult{status: :success} =
+                 Helpcenter.KnowledgeBase.Comment
+                 |> Ash.Query.filter(article_id == ^changeset.data.id)
+                 |> Ash.read!()
+
+                 #  Bulk delete all comments related to this article
+                 |> Ash.bulk_destroy(:destroy, condition = %{}, batch_size: 100)
+
+               changeset
+             end)
+    end
   end
 
   attributes do
@@ -79,6 +108,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
   relationships do
     belongs_to :category, Helpcenter.KnowledgeBase.Category do
       source_attribute :category_id
+      # category_id can be null when there is no related category
       allow_nil? true
     end
 
