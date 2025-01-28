@@ -6,6 +6,11 @@ defmodule Helpcenter.KnowledgeBase.Article do
   postgres do
     table "articles"
     repo Helpcenter.Repo
+
+    # 1. Tell Ash what happens in the case a category related to this article is deleted
+    references do
+      reference :category, on_delete: :nilify
+    end
   end
 
   actions do
@@ -74,7 +79,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
   relationships do
     belongs_to :category, Helpcenter.KnowledgeBase.Category do
       source_attribute :category_id
-      allow_nil? false
+      allow_nil? true
     end
 
     has_many :comments, Helpcenter.KnowledgeBase.Comment do

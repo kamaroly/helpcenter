@@ -44,11 +44,10 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
     |> ok()
   end
 
-  @doc """
-  This callback does 2 main things:
-  1. Validate the submitted form params against existing form
-  2. Assign the validated form with its errors to the socket
-  """
+  # This callback does 2 main things:
+  # 1. Validate the submitted form params against existing form
+  # 2. Assign the validated form with its errors to the socket
+
   def handle_event("validate", %{"form" => params}, socket) do
     # 1. Validate the form
     form = Form.validate(socket.assigns.form, params)
@@ -58,17 +57,17 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
     |> noreply()
   end
 
-  @doc """
-  This function does 3 things:
-  1. Insert submitted form params in the database if the form is valid
-  2. If db insertion successed:
-     2.1 It add the flash notification for the
-     2.2 It redirects the user to /categories listing
+  #
+  # This function does 3 things:
+  # 1. Insert submitted form params in the database if the form is valid
+  # 2. If db insertion successed:
+  #    2.1 It add the flash notification for the
+  #    2.2 It redirects the user to /categories listing
 
-  3. If insertion fails:
-     3.1 It reassign the form objects with error/ reasons for failure to display
-     3.2 It adds a flash notification to inform the user that it has failed.
-  """
+  # 3. If insertion fails:
+  #    3.1 It reassign the form objects with error/ reasons for failure to display
+  #    3.2 It adds a flash notification to inform the user that it has failed.
+  #
   def handle_event("save", %{"form" => params}, socket) do
     # 1. Attempt inserting into the database
     case Form.submit(socket.assigns.form, params: params) do

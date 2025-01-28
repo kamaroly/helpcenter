@@ -90,7 +90,8 @@ defmodule ArticleCase do
       %{
         title: "Common Issues During Setup and How to Fix Them",
         slug: "setup-common-issues",
-        content: "Troubleshooting guide for common challenges faced during initial setup."
+        content: "Troubleshooting guide for common challenges faced during initial setup.",
+        category_id: category.id
       },
       %{
         title: "Compliance Features in Zippiker",
@@ -102,6 +103,6 @@ defmodule ArticleCase do
       }
     ]
 
-    Ash.Seed.seed!(Article, attrs)
+    Ash.Seed.seed!(Helpcenter.KnowledgeBase.Article, attrs)
   end
 end

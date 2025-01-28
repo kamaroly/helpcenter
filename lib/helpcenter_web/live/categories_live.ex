@@ -14,6 +14,8 @@ defmodule HelpcenterWeb.CategoriesLive do
     <.table id="knowledge-base-categories" rows={@categories}>
       <:col :let={row} label={gettext("Name")}>{row.name}</:col>
       <:col :let={row} label={gettext("Description")}>{row.description}</:col>
+      <:col :let={row} label={gettext("Articles")}>{row.article_count}</:col>
+
       <:action :let={row}>
         <%!-- Edit Category button --%>
         <.button
@@ -58,8 +60,6 @@ defmodule HelpcenterWeb.CategoriesLive do
 
   # Responds when a user clicks on trash button
   def handle_event("delete-" <> category_id, _params, socket) do
-    dbg(category_id)
-
     case destroy_record(category_id) do
       :ok ->
         socket
@@ -67,7 +67,7 @@ defmodule HelpcenterWeb.CategoriesLive do
         |> noreply()
 
       {:error, error} ->
-        IO.puts(error)
+        dbg(error)
 
         socket
         |> put_flash(:error, "Unable to delete category")
@@ -88,11 +88,13 @@ defmodule HelpcenterWeb.CategoriesLive do
   end
 
   defp assign_categories(socket) do
-    {:ok, categories} =
-      Helpcenter.KnowledgeBase.Category
-      |> Ash.read()
+    assign(socket, :categories, get_articles())
+  end
 
-    assign(socket, :categories, categories)
+  defp get_articles do
+    Helpcenter.KnowledgeBase.Category
+    |> Ash.Query.load(:article_count)
+    |> Ash.read!()
   end
 
   defp destroy_record(category_id) do
