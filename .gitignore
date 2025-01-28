@@ -37,3 +37,5 @@ npm-debug.log
 
 /rel/
 
+/.elixir_ls/
+

@@ -86,7 +86,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
                  |> Ash.read!()
 
                  #  Bulk delete all comments related to this article
-                 |> Ash.bulk_destroy(:destroy, condition = %{}, batch_size: 100)
+                 |> Ash.bulk_destroy(:destroy, _condition = %{}, batch_size: 100)
 
                changeset
              end)
