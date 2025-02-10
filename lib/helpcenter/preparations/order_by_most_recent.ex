@@ -1,4 +1,4 @@
-defmodule Helpcenter.KnowledgeBase.Category.Preparations.OrderByMostRecent do
+defmodule Helpcenter.Preparations.OrderByMostRecent do
   use Ash.Resource.Preparation
 
   def prepare(query, _opts, _context) do

@@ -17,9 +17,9 @@ defmodule Helpcenter.KnowledgeBase.Category do
     defaults [:create, :read, :update, :destroy]
 
     read :most_recent do
-      prepare Helpcenter.KnowledgeBase.Category.Preparations.LimitTo5
-      prepare Helpcenter.KnowledgeBase.Category.Preparations.MonthToDate
-      prepare Helpcenter.KnowledgeBase.Category.Preparations.OrderByMostRecent
+      prepare Helpcenter.Preparations.LimitTo5
+      prepare Helpcenter.Preparations.MonthToDate
+      prepare Helpcenter.Preparations.OrderByMostRecent
     end
 
     create :create_with_article do
