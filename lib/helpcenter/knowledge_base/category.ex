@@ -16,6 +16,12 @@ defmodule Helpcenter.KnowledgeBase.Category do
     default_accept [:name, :slug, :description]
     defaults [:create, :read, :update, :destroy]
 
+    read :most_recent do
+      prepare Helpcenter.KnowledgeBase.Category.Preparations.LimitTo5
+      prepare Helpcenter.KnowledgeBase.Category.Preparations.MonthToDate
+      prepare Helpcenter.KnowledgeBase.Category.Preparations.OrderByMostRecent
+    end
+
     create :create_with_article do
       description "Create a Category and an article under it"
       argument :article_attrs, :map, allow_nil?: false

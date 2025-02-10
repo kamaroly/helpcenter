@@ -182,5 +182,11 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       assert category.data.slug == attributes.slug
       assert category.data.description == attributes.description
     end
+
+    test "'categories' reads only last 5 records" do
+      create_categories()
+
+      assert Ash.count!(Helpcenter.KnowledgeBase.Category, action: :most_recent) == 5
+    end
   end
 end

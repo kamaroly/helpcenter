@@ -9,7 +9,6 @@ defmodule HelpcenterWeb.CreateCategoryLive do
     <%!-- Display link to take user back to category list --%>
     <.back navigate={~p"/categories"}>{gettext("Back to categories")}</.back>
 
-    <%!-- Typical simple form from core_components --%>
     <HelpcenterWeb.Categories.CategoryForm.form />
     """
   end

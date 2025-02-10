@@ -66,9 +66,7 @@ defmodule HelpcenterWeb.CategoriesLive do
         |> put_flash(:info, "Category deleted successfully")
         |> noreply()
 
-      {:error, error} ->
-        dbg(error)
-
+      {:error, _error} ->
         socket
         |> put_flash(:error, "Unable to delete category")
         |> noreply()

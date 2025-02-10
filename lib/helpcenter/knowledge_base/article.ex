@@ -51,6 +51,17 @@ defmodule Helpcenter.KnowledgeBase.Article do
              )
     end
 
+    read :between do
+      description "Filter articles between two dates"
+      argument :start_date, :datetime, allow_nil?: false
+      argument :end_date, :datetime, allow_nil?: false
+
+      filter expr(
+               inserted_at >= ^arg(:start_date) and
+                 inserted_at <= ^arg(:end_date)
+             )
+    end
+
     update :add_comment do
       description "Add a comment to an article"
       require_atomic? false
