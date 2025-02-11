@@ -12,6 +12,10 @@ defmodule Helpcenter.KnowledgeBase.Category do
     repo Helpcenter.Repo
   end
 
+  changes do
+    change Helpcenter.Changes.Slugify
+  end
+
   actions do
     default_accept [:name, :slug, :description]
     defaults [:create, :read, :update, :destroy]

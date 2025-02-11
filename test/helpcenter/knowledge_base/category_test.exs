@@ -183,10 +183,25 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       assert category.data.description == attributes.description
     end
 
-    test "'categories' reads only last 5 records" do
+    test "Global preparations works as expected" do
       create_categories()
 
-      assert Ash.count!(Helpcenter.KnowledgeBase.Category, action: :most_recent) == 5
+      assert Helpcenter.KnowledgeBase.Category
+             |> Helpcenter.Preparations.LimitTo5.prepare([], [])
+             |> Helpcenter.Preparations.MonthToDate.prepare([], [])
+             |> Helpcenter.Preparations.OrderByMostRecent.prepare([], [])
+             |> Ash.count!() == 5
+    end
+
+    test "Slug change generates slug successfully" do
+      params = %{
+        name: "Home appliances you cannot find elsewhere",
+        description: "Home appliances description"
+      }
+
+      {:ok, category} = Ash.create(Helpcenter.KnowledgeBase.Category, params)
+
+      refute category.slug |> is_nil()
     end
   end
 end
