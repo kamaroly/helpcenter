@@ -1,5 +1,5 @@
 {application,spitfire,
-             [{config_mtime,1736925800},
+             [{config_mtime,1739196390},
               {optional_applications,[]},
               {applications,[kernel,stdlib,elixir,logger]},
               {description,"Error resilient parser for Elixir"},
@@ -8,4 +8,4 @@
                         'Elixir.Spitfire.While','Elixir.Spitfire.While2',
                         spitfire_interpolation,spitfire_tokenizer]},
               {registered,[]},
-              {vsn,"0.1.4"}]}.
+              {vsn,"0.1.5"}]}.

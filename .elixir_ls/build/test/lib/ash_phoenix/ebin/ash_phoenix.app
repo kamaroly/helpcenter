@@ -1,5 +1,5 @@
 {application,ash_phoenix,
-             [{config_mtime,1738037640},
+             [{config_mtime,1739881378},
               {compile_env,[{ash,['include_embedded_source_by_default?'],
                                  {ok,false}}]},
               {optional_applications,[igniter]},
@@ -62,4 +62,4 @@
                         'Elixir.Plug.Exception.Ash.Error.Query.NotFound',
                         'Elixir.Plug.Exception.Ash.Error.Unknown']},
               {registered,[]},
-              {vsn,"2.1.15"}]}.
+              {vsn,"2.1.18"}]}.

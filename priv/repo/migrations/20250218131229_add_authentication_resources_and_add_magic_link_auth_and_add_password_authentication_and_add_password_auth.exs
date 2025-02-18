@@ -1,4 +1,4 @@
-defmodule Helpcenter.Repo.Migrations.AddAuthenticationResources do
+defmodule Helpcenter.Repo.Migrations.AddAuthenticationResourcesAndAddMagicLinkAuthAndAddPasswordAuthenticationAndAddPasswordAuth do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -8,16 +8,19 @@ defmodule Helpcenter.Repo.Migrations.AddAuthenticationResources do
   use Ecto.Migration
 
   def up do
-    create table(:users, primary_key: false) do
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+    alter table(:users) do
+      add :confirmed_at, :utc_datetime_usec
+      add :email, :citext, null: false
+      add :hashed_password, :text
     end
+
+    create unique_index(:users, [:email], name: "users_unique_email_index")
 
     create table(:tokens, primary_key: false) do
       add :created_at, :utc_datetime_usec,
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
-      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :jti, :text, null: false, primary_key: true
       add :subject, :text, null: false
       add :expires_at, :utc_datetime, null: false
@@ -37,6 +40,12 @@ defmodule Helpcenter.Repo.Migrations.AddAuthenticationResources do
   def down do
     drop table(:tokens)
 
-    drop table(:users)
+    drop_if_exists unique_index(:users, [:email], name: "users_unique_email_index")
+
+    alter table(:users) do
+      remove :hashed_password
+      remove :email
+      remove :confirmed_at
+    end
   end
 end

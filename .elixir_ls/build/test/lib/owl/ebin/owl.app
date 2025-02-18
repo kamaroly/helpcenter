@@ -1,5 +1,5 @@
 {application,owl,
-             [{config_mtime,1738037646},
+             [{config_mtime,1739196390},
               {optional_applications,[ucwidth]},
               {applications,[kernel,stdlib,elixir,logger,crypto,ucwidth]},
               {description,"owl"},
@@ -15,5 +15,5 @@
                         'Elixir.Owl.Tag','Elixir.Owl.Task',
                         'Elixir.Owl.TrueColor']},
               {registered,[]},
-              {vsn,"0.12.1"},
+              {vsn,"0.12.2"},
               {mod,{'Elixir.Owl.Application',[]}}]}.

@@ -1,5 +1,5 @@
 {application,bandit,
-             [{config_mtime,1738037646},
+             [{config_mtime,1738915801},
               {optional_applications,[]},
               {applications,[kernel,stdlib,elixir,logger,thousand_island,plug,
                              websock,hpax,telemetry]},
@@ -78,5 +78,5 @@
                         'Elixir.Bandit.WebSocket.Socket.ThousandIsland.Socket',
                         'Elixir.Bandit.WebSocket.UpgradeValidation']},
               {registered,[]},
-              {vsn,"1.6.6"},
+              {vsn,"1.6.7"},
               {mod,{'Elixir.Bandit.Application',[]}}]}.

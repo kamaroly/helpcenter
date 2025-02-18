@@ -1,5 +1,5 @@
 {application,swoosh,
-             [{config_mtime,1736925799},
+             [{config_mtime,1738915801},
               {optional_applications,[hackney,finch,req,mail,gen_smtp,mua,
                                       cowboy,plug,plug_cowboy,bandit,
                                       multipart,ex_aws]},
@@ -60,7 +60,7 @@
                         'Elixir.Swoosh.TestAssertions',
                         'Elixir.Swoosh.X.TestAssertions']},
               {registered,[]},
-              {vsn,"1.17.6"},
+              {vsn,"1.17.10"},
               {mod,{'Elixir.Swoosh.Application',[]}},
               {env,[{json_library,'Elixir.Jason'},
                     {api_client,'Elixir.Swoosh.ApiClient.Hackney'}]}]}.

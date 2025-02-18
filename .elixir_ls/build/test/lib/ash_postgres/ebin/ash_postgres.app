@@ -1,5 +1,5 @@
 {application,ash_postgres,
-             [{config_mtime,1738037640},
+             [{config_mtime,1739881380},
               {optional_applications,[igniter]},
               {applications,[kernel,stdlib,elixir,ash,ash_sql,igniter,
                              ecto_sql,ecto,jason,postgrex]},
@@ -33,6 +33,7 @@
                         'Elixir.AshPostgres.Functions.Like',
                         'Elixir.AshPostgres.Functions.TrigramSimilarity',
                         'Elixir.AshPostgres.Functions.VectorCosineDistance',
+                        'Elixir.AshPostgres.Functions.VectorL2Distance',
                         'Elixir.AshPostgres.Igniter',
                         'Elixir.AshPostgres.Ltree',
                         'Elixir.AshPostgres.Ltree.EctoType',
@@ -46,6 +47,8 @@
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AddCheckConstraint',
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AddCustomIndex',
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AddCustomStatement',
+                        'Elixir.AshPostgres.MigrationGenerator.Operation.AddPrimaryKey',
+                        'Elixir.AshPostgres.MigrationGenerator.Operation.AddPrimaryKeyDown',
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AddReferenceIndex',
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AddUniqueIndex',
                         'Elixir.AshPostgres.MigrationGenerator.Operation.AlterAttribute',
@@ -115,6 +118,7 @@
                         'Elixir.Inspect.AshPostgres.Functions.Like',
                         'Elixir.Inspect.AshPostgres.Functions.TrigramSimilarity',
                         'Elixir.Inspect.AshPostgres.Functions.VectorCosineDistance',
+                        'Elixir.Inspect.AshPostgres.Functions.VectorL2Distance',
                         'Elixir.Mix.Tasks.AshPostgres.Create',
                         'Elixir.Mix.Tasks.AshPostgres.Drop',
                         'Elixir.Mix.Tasks.AshPostgres.Gen.Resources',
@@ -124,4 +128,4 @@
                         'Elixir.Mix.Tasks.AshPostgres.Rollback',
                         'Elixir.Mix.Tasks.AshPostgres.SquashSnapshots']},
               {registered,[]},
-              {vsn,"2.5.1"}]}.
+              {vsn,"2.5.5"}]}.

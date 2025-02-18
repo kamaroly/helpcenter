@@ -1,5 +1,5 @@
 {application,spark,
-             [{config_mtime,1738037646},
+             [{config_mtime,1738915802},
               {compile_env,[{spark,[parallel_compile],error}]},
               {optional_applications,[sourceror,jason,igniter]},
               {applications,[kernel,stdlib,elixir,logger,sourceror,jason,
@@ -40,4 +40,4 @@
                         'Elixir.Spark.Options.Validator',
                         'Elixir.Spark.OptionsHelpers']},
               {registered,[]},
-              {vsn,"2.2.43"}]}.
+              {vsn,"2.2.45"}]}.

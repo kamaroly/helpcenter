@@ -1,5 +1,5 @@
 {application,igniter,
-             [{config_mtime,1738037646},
+             [{config_mtime,1739881381},
               {optional_applications,[phx_new]},
               {applications,[kernel,stdlib,elixir,logger,public_key,ssl,inets,
                              eex,rewrite,glob_ex,spitfire,sourceror,jason,req,
@@ -57,5 +57,5 @@
                         'Elixir.Mix.Tasks.Igniter.Upgrade',
                         'Elixir.Mix.Tasks.Igniter.UpgradeIgniter']},
               {registered,[]},
-              {vsn,"0.5.20"},
+              {vsn,"0.5.25"},
               {plt_add_apps,[mix]}]}.

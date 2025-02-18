@@ -1,5 +1,5 @@
 {application,phoenix_live_view,
-    [{config_mtime,1736925799},
+    [{config_mtime,1738915801},
      {compile_env,
          [{phoenix_live_view,[enable_expensive_runtime_checks],{ok,true}}]},
      {optional_applications,[phoenix_view,jason,floki]},
@@ -63,5 +63,5 @@
           'Elixir.Phoenix.LiveViewTest.View',
           'Elixir.String.Chars.Phoenix.LiveComponent.CID']},
      {registered,[]},
-     {vsn,"1.0.2"},
+     {vsn,"1.0.4"},
      {mod,{'Elixir.Phoenix.LiveView.Application',[]}}]}.

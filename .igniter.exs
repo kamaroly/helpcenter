@@ -5,5 +5,6 @@
   module_location: :outside_matching_folder,
   extensions: [{Igniter.Extensions.Phoenix, []}],
   source_folders: ["lib", "test/support"],
-  dont_move_files: [~r"lib/mix"]
+  dont_move_files: [~r"lib/mix"],
+  deps_location: :last_list_literal
 ]

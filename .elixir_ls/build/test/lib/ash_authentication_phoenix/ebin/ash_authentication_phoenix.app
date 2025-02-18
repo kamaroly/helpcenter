@@ -1,5 +1,5 @@
 {application,ash_authentication_phoenix,
-             [{config_mtime,1738037640},
+             [{config_mtime,1739881378},
               {optional_applications,[gettext,igniter]},
               {applications,[kernel,stdlib,elixir,logger,ash_authentication,
                              ash_phoenix,ash,jason,phoenix_html,
@@ -43,4 +43,4 @@
                         'Elixir.Mix.Tasks.AshAuthentication.Phoenix.Routes',
                         'Elixir.Mix.Tasks.AshAuthenticationPhoenix.Install']},
               {registered,[]},
-              {vsn,"2.4.5"}]}.
+              {vsn,"2.4.7"}]}.

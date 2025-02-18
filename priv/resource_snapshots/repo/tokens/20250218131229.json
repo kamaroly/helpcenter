@@ -12,16 +12,6 @@
     },
     {
       "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
-      "generated?": false,
-      "primary_key?": true,
-      "references": null,
-      "size": null,
-      "source": "id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": false,
       "default": "nil",
       "generated?": false,
       "primary_key?": true,
@@ -96,7 +86,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "27006862558561C1E01E5A744C851B11439372F72D2DF8503B67A2A054B83D00",
+  "hash": "41AF8D1675BF3045E158EB9E0DA70DB9AF555A3232D6BEA2B35AFBD4245CB033",
   "identities": [],
   "multitenancy": {
     "attribute": null,

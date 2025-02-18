@@ -12,10 +12,6 @@ defmodule Helpcenter.KnowledgeBase.Category do
     repo Helpcenter.Repo
   end
 
-  changes do
-    change Helpcenter.Changes.Slugify
-  end
-
   actions do
     default_accept [:name, :slug, :description]
     defaults [:create, :read, :update, :destroy]
@@ -60,6 +56,10 @@ defmodule Helpcenter.KnowledgeBase.Category do
     publish_all :update, [[:id, nil]]
     publish_all :create, [[:id, nil]]
     publish_all :destroy, [[:id, nil]]
+  end
+
+  changes do
+    change Helpcenter.Changes.Slugify
   end
 
   # Tell Ash what columns or attributes this resource has and their types and validations
