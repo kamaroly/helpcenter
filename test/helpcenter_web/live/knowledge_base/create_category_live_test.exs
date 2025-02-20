@@ -8,7 +8,11 @@ defmodule HelpcenterWeb.KnowledgeBase.CreateCategoryLiveTest do
   describe "New Category" do
     test "User can create category from the UI", %{conn: conn} do
       category = get_category()
-      {:ok, view, html} = live(conn, ~p"/categories/#{category.id}")
+
+      {:ok, view, html} =
+        conn
+        |> login(create_user())
+        |> live(~p"/categories/#{category.id}")
 
       # Confirm category is rendered successfully
       assert html =~ category.name

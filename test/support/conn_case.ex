@@ -31,6 +31,8 @@ defmodule HelpcenterWeb.ConnCase do
 
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
+
+      import AuthCase
     end
   end
 

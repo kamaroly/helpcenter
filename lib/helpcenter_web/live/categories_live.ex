@@ -1,6 +1,5 @@
 defmodule HelpcenterWeb.CategoriesLive do
   use HelpcenterWeb, :live_view
-  on_mount {HelpcenterWeb.LiveUserAuth, :live_user_required}
 
   def render(assigns) do
     ~H"""
@@ -12,12 +11,12 @@ defmodule HelpcenterWeb.CategoriesLive do
     <%!-- List category records --%>
     <h1>{gettext("Categories")}</h1>
 
-    <.table id="knowledge-base-categories" rows={@categories}>
-      <:col :let={row} label={gettext("Name")}>{row.name}</:col>
-      <:col :let={row} label={gettext("Description")}>{row.description}</:col>
-      <:col :let={row} label={gettext("Articles")}>{row.article_count}</:col>
+    <.table id="knowledge-base-categories" rows={@streams.categories}>
+      <:col :let={{_id, row}} label={gettext("Name")}>{row.name}</:col>
+      <:col :let={{_id, row}} label={gettext("Description")}>{row.description}</:col>
+      <:col :let={{_id, row}} label={gettext("Articles")}>{row.article_count}</:col>
 
-      <:action :let={row}>
+      <:action :let={{_id, row}}>
         <%!-- Edit Category button --%>
         <.button
           id={"edit-button-#{row.id}"}
@@ -87,7 +86,7 @@ defmodule HelpcenterWeb.CategoriesLive do
   end
 
   defp assign_categories(socket) do
-    assign(socket, :categories, get_articles())
+    stream(socket, :categories, get_articles())
   end
 
   defp get_articles do
