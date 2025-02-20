@@ -2,13 +2,23 @@
   "attributes": [
     {
       "allow_nil?": false,
-      "default": "fragment(\"gen_random_uuid()\")",
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "created_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
       "generated?": false,
       "primary_key?": true,
       "references": null,
       "size": null,
-      "source": "id",
-      "type": "uuid"
+      "source": "jti",
+      "type": "text"
     },
     {
       "allow_nil?": false,
@@ -17,8 +27,38 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "name",
+      "source": "subject",
       "type": "text"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "expires_at",
+      "type": "utc_datetime"
+    },
+    {
+      "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "purpose",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "extra_data",
+      "type": "map"
     },
     {
       "allow_nil?": false,
@@ -46,7 +86,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "5CC5588B442028D1CC05BFCF69D833587EB498082C200FC8F8AFB3733360B739",
+  "hash": "502B59338E7D3FC327F1CDB93EFA14D578C6D40E44804B073E90CFBA9DB0079B",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -55,5 +95,5 @@
   },
   "repo": "Elixir.Helpcenter.Repo",
   "schema": null,
-  "table": "tags"
+  "table": "tokens"
 }

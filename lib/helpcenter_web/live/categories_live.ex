@@ -1,5 +1,6 @@
 defmodule HelpcenterWeb.CategoriesLive do
   use HelpcenterWeb, :live_view
+  on_mount {HelpcenterWeb.LiveUserAuth, :live_user_required}
 
   def render(assigns) do
     ~H"""

@@ -17,7 +17,7 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "title",
+      "source": "name",
       "type": "text"
     },
     {
@@ -37,28 +37,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "content",
+      "source": "description",
       "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "views_count",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": true,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "published",
-      "type": "boolean"
     },
     {
       "allow_nil?": false,
@@ -79,43 +59,14 @@
       "size": null,
       "source": "updated_at",
       "type": "utc_datetime_usec"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "articles_category_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "categories"
-      },
-      "size": null,
-      "source": "category_id",
-      "type": "uuid"
     }
   ],
   "base_filter": null,
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "D3E99E94F2342AA6BC4C5890D64E3C59646C85380CA6C37450ABD2A2C72A961D",
+  "has_create_action": true,
+  "hash": "28E85CC2818A5FD2FC5853114C89B4D0132A314DAC026FDD122AB188CDFAA7C7",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -124,5 +75,5 @@
   },
   "repo": "Elixir.Helpcenter.Repo",
   "schema": null,
-  "table": "articles"
+  "table": "categories"
 }

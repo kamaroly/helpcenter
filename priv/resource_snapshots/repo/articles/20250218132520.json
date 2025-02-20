@@ -12,6 +12,56 @@
     },
     {
       "allow_nil?": false,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "title",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "slug",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "nil",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "content",
+      "type": "text"
+    },
+    {
+      "allow_nil?": true,
+      "default": "0",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "views_count",
+      "type": "bigint"
+    },
+    {
+      "allow_nil?": true,
+      "default": "false",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "published",
+      "type": "boolean"
+    },
+    {
+      "allow_nil?": false,
       "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
       "generated?": false,
       "primary_key?": false,
@@ -48,44 +98,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "article_tags_article_id_fkey",
-        "on_delete": null,
+        "name": "articles_category_id_fkey",
+        "on_delete": "nilify",
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "articles"
+        "table": "categories"
       },
       "size": null,
-      "source": "article_id",
-      "type": "uuid"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": {
-        "deferrable": false,
-        "destination_attribute": "id",
-        "destination_attribute_default": null,
-        "destination_attribute_generated": null,
-        "index?": false,
-        "match_type": null,
-        "match_with": null,
-        "multitenancy": {
-          "attribute": null,
-          "global": null,
-          "strategy": null
-        },
-        "name": "article_tags_tag_id_fkey",
-        "on_delete": null,
-        "on_update": null,
-        "primary_key?": true,
-        "schema": "public",
-        "table": "tags"
-      },
-      "size": null,
-      "source": "tag_id",
+      "source": "category_id",
       "type": "uuid"
     }
   ],
@@ -94,27 +115,8 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "3A9CE19954C72D6336D86F112C4BE8E97123C9DA495F0F09B12A151518EEF895",
-  "identities": [
-    {
-      "all_tenants?": false,
-      "base_filter": null,
-      "index_name": "article_tags_unique_article_tag_index",
-      "keys": [
-        {
-          "type": "atom",
-          "value": "article_id"
-        },
-        {
-          "type": "atom",
-          "value": "tag_id"
-        }
-      ],
-      "name": "unique_article_tag",
-      "nils_distinct?": true,
-      "where": null
-    }
-  ],
+  "hash": "F59CCC23F217373DA1A3F47B002FDF8D806DBEDE6778502ED3903D2E93F67E01",
+  "identities": [],
   "multitenancy": {
     "attribute": null,
     "global": null,
@@ -122,5 +124,5 @@
   },
   "repo": "Elixir.Helpcenter.Repo",
   "schema": null,
-  "table": "article_tags"
+  "table": "articles"
 }

@@ -35,18 +35,17 @@ defmodule HelpcenterWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {HelpcenterWeb.LiveUserAuth, :live_no_user}
+
+      scope "/categories" do
+        live "/", CategoriesLive
+        live "/create", CreateCategoryLive
+        live "/:category_id", EditCategoryLive
+      end
     end
   end
 
   scope "/", HelpcenterWeb do
     pipe_through :browser
-
-    # Add categories route
-    scope "/categories" do
-      live "/", CategoriesLive
-      live "/create", CreateCategoryLive
-      live "/:category_id", EditCategoryLive
-    end
 
     auth_routes AuthController, Helpcenter.Accounts.User, path: "/auth"
     sign_out_route AuthController

@@ -12,6 +12,26 @@
     },
     {
       "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "inserted_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": false,
+      "default": "fragment(\"(now() AT TIME ZONE 'utc')\")",
+      "generated?": false,
+      "primary_key?": false,
+      "references": null,
+      "size": null,
+      "source": "updated_at",
+      "type": "utc_datetime_usec"
+    },
+    {
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -40,7 +60,7 @@
       "type": "uuid"
     },
     {
-      "allow_nil?": false,
+      "allow_nil?": true,
       "default": "nil",
       "generated?": false,
       "primary_key?": false,
@@ -73,9 +93,28 @@
   "check_constraints": [],
   "custom_indexes": [],
   "custom_statements": [],
-  "has_create_action": false,
-  "hash": "CDBFEB2D399622D89B8B7223FAED2696FA898A6D996455B0B9359651A79A28B1",
-  "identities": [],
+  "has_create_action": true,
+  "hash": "8AEFB7D3F2B5FA9A55FB3CFCA85BC7D81DAE74B7EBC35F2454F7DF1ECBA78F4E",
+  "identities": [
+    {
+      "all_tenants?": false,
+      "base_filter": null,
+      "index_name": "article_tags_unique_article_tag_index",
+      "keys": [
+        {
+          "type": "atom",
+          "value": "article_id"
+        },
+        {
+          "type": "atom",
+          "value": "tag_id"
+        }
+      ],
+      "name": "unique_article_tag",
+      "nils_distinct?": true,
+      "where": null
+    }
+  ],
   "multitenancy": {
     "attribute": null,
     "global": null,

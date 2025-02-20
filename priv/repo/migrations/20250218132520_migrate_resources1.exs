@@ -1,4 +1,4 @@
-defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
+defmodule Helpcenter.Repo.Migrations.MigrateResources1 do
   @moduledoc """
   Updates resources based on their most recent snapshots.
 
@@ -8,12 +8,40 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
   use Ecto.Migration
 
   def up do
+    create table(:users, primary_key: false) do
+      add :confirmed_at, :utc_datetime_usec
+      add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+      add :email, :citext, null: false
+      add :hashed_password, :text
+    end
+
+    create unique_index(:users, [:email], name: "users_unique_email_index")
+
+    create table(:tokens, primary_key: false) do
+      add :created_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :jti, :text, null: false, primary_key: true
+      add :subject, :text, null: false
+      add :expires_at, :utc_datetime, null: false
+      add :purpose, :text, null: false
+      add :extra_data, :map
+
+      add :inserted_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :updated_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+    end
+
     create table(:tags, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :name, :text, null: false
-      add :slug, :text
 
-      add :created_at, :utc_datetime_usec,
+      add :inserted_at, :utc_datetime_usec,
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
@@ -26,7 +54,11 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
       add :content, :text, null: false
 
-      add :created_at, :utc_datetime_usec,
+      add :inserted_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :updated_at, :utc_datetime_usec,
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
@@ -39,7 +71,7 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
       add :slug, :text
       add :description, :text
 
-      add :created_at, :utc_datetime_usec,
+      add :inserted_at, :utc_datetime_usec,
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
@@ -69,7 +101,7 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
       add :views_count, :bigint, default: 0
       add :published, :boolean, default: false
 
-      add :created_at, :utc_datetime_usec,
+      add :inserted_at, :utc_datetime_usec,
         null: false,
         default: fragment("(now() AT TIME ZONE 'utc')")
 
@@ -82,13 +114,21 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
             column: :id,
             name: "articles_category_id_fkey",
             type: :uuid,
-            prefix: "public"
-          ),
-          null: false
+            prefix: "public",
+            on_delete: :nilify_all
+          )
     end
 
     create table(:article_tags, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
+
+      add :inserted_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
+
+      add :updated_at, :utc_datetime_usec,
+        null: false,
+        default: fragment("(now() AT TIME ZONE 'utc')")
 
       add :article_id,
           references(:articles,
@@ -96,8 +136,7 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
             name: "article_tags_article_id_fkey",
             type: :uuid,
             prefix: "public"
-          ),
-          null: false
+          )
 
       add :tag_id,
           references(:tags,
@@ -105,9 +144,12 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
             name: "article_tags_tag_id_fkey",
             type: :uuid,
             prefix: "public"
-          ),
-          null: false
+          )
     end
+
+    create unique_index(:article_tags, [:article_id, :tag_id],
+             name: "article_tags_unique_article_tag_index"
+           )
 
     create table(:article_feedbacks, primary_key: false) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -134,6 +176,10 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
 
     drop table(:article_feedbacks)
 
+    drop_if_exists unique_index(:article_tags, [:article_id, :tag_id],
+                     name: "article_tags_unique_article_tag_index"
+                   )
+
     drop constraint(:article_tags, "article_tags_article_id_fkey")
 
     drop constraint(:article_tags, "article_tags_tag_id_fkey")
@@ -145,7 +191,7 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
     alter table(:articles) do
       remove :category_id
       remove :updated_at
-      remove :created_at
+      remove :inserted_at
       remove :published
       remove :views_count
       remove :content
@@ -166,5 +212,11 @@ defmodule Helpcenter.Repo.Migrations.AddHelpcenterTables do
     drop table(:comments)
 
     drop table(:tags)
+
+    drop table(:tokens)
+
+    drop_if_exists unique_index(:users, [:email], name: "users_unique_email_index")
+
+    drop table(:users)
   end
 end

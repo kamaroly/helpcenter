@@ -17,48 +17,8 @@
       "primary_key?": false,
       "references": null,
       "size": null,
-      "source": "title",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "slug",
-      "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "nil",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
       "source": "content",
       "type": "text"
-    },
-    {
-      "allow_nil?": true,
-      "default": "0",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "views_count",
-      "type": "bigint"
-    },
-    {
-      "allow_nil?": true,
-      "default": "false",
-      "generated?": false,
-      "primary_key?": false,
-      "references": null,
-      "size": null,
-      "source": "published",
-      "type": "boolean"
     },
     {
       "allow_nil?": false,
@@ -98,15 +58,15 @@
           "global": null,
           "strategy": null
         },
-        "name": "articles_category_id_fkey",
-        "on_delete": "delete",
+        "name": "comments_article_id_fkey",
+        "on_delete": null,
         "on_update": null,
         "primary_key?": true,
         "schema": "public",
-        "table": "categories"
+        "table": "articles"
       },
       "size": null,
-      "source": "category_id",
+      "source": "article_id",
       "type": "uuid"
     }
   ],
@@ -115,7 +75,7 @@
   "custom_indexes": [],
   "custom_statements": [],
   "has_create_action": true,
-  "hash": "9AA821FE3F812687DD4C79481EC724A1379EFE01ACC291F19C541596D7E4EFBA",
+  "hash": "86F7CA95AD0272496FCFA9AB3DD9E6987121DE05129403D483D8A5C2962CA1C3",
   "identities": [],
   "multitenancy": {
     "attribute": null,
@@ -124,5 +84,5 @@
   },
   "repo": "Elixir.Helpcenter.Repo",
   "schema": null,
-  "table": "articles"
+  "table": "comments"
 }
