@@ -1,18 +1,20 @@
 defmodule HelpcenterWeb.KnowledgeBase.CategoriesLiveTest do
-  require Ash.Query
-  alias Helpcenter.KnowledgeBase.Category
   use Gettext, backend: HelpcenterWeb.Gettext
   use HelpcenterWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import CategoryCase
+  require Ash.Query
 
   def login(conn, user) do
-    subject = AshAuthentication.user_to_subject(user)
-    dbg(subject)
+    case AshAuthentication.Jwt.token_for_user(user, %{}, domain: Helpcenter.Accounts) do
+      {:ok, token, _claims} ->
+        conn
+        |> Phoenix.ConnTest.init_test_session(%{})
+        |> Plug.Conn.put_session(:user_token, token)
 
-    conn
-    |> Phoenix.ConnTest.init_test_session(%{})
-    |> Plug.Conn.put_session("current_user", subject)
+      {:error, reason} ->
+        raise "Failed to generate token: #{inspect(reason)}"
+    end
   end
 
   def create_user() do
@@ -22,7 +24,8 @@ defmodule HelpcenterWeb.KnowledgeBase.CategoriesLiveTest do
 
   describe "Categories live test" do
     test "Guest cannot access /categories", %{conn: conn} do
-      assert live(conn, ~p"/categories")
+      assert conn
+             |> live(~p"/categories")
              |> follow_redirect(conn, "/sign-in")
     end
 
@@ -35,50 +38,64 @@ defmodule HelpcenterWeb.KnowledgeBase.CategoriesLiveTest do
         |> login(user)
         |> live(~p"/categories")
 
-      # assert html =~ gettext("Categories")
+      assert html =~ gettext("Categories")
 
-      # for category <- categories do
-      #   assert html =~ category.name
-      # end
+      for category <- categories do
+        assert html =~ category.name
+      end
     end
 
-    # test "User can edit an existing category", %{conn: conn} do
-    #   category = get_category()
-    #   {:ok, view, _html} = live(conn, ~p"/categories")
+    test "User can edit an existing category", %{conn: conn} do
+      category = get_category()
+      user = create_user()
 
-    #   # Confirm that we can click on the edit button
-    #   assert view
-    #          |> element("#edit-button-#{category.id}")
-    #          |> render_click()
-    #          |> follow_redirect(conn, ~p"/categories/#{category.id}")
-    # end
+      {:ok, view, _html} =
+        conn
+        |> login(user)
+        |> live(~p"/categories")
 
-    # test "User can go to the new category form page from the list", %{conn: conn} do
-    #   {:ok, view, _html} = live(conn, ~p"/categories")
+      # Confirm that we can click on the edit button
+      assert view
+             |> element("#edit-button-#{category.id}")
+             |> render_click()
+             |> follow_redirect(conn, ~p"/categories/#{category.id}")
+    end
 
-    #   assert view
-    #          |> element("#create-category-button")
-    #          |> render_click()
-    #          |> follow_redirect(conn, ~p"/categories/create")
-    # end
+    test "User can go to the new category form page from the list", %{conn: conn} do
+      user = create_user()
 
-    # test "User should be able to delete an existing category", %{conn: conn} do
-    #   category = get_category()
-    #   {:ok, view, html} = live(conn, ~p"/categories")
+      {:ok, view, _html} =
+        conn
+        |> login(user)
+        |> live(~p"/categories")
 
-    #   # Confirm category existing on the page
-    #   assert html =~ category.name
+      assert view
+             |> element("#create-category-button")
+             |> render_click()
+             |> follow_redirect(conn, ~p"/categories/create")
+    end
 
-    #   # Attempt destroy
-    #   view
-    #   |> element("#delete-button-#{category.id}")
-    #   |> render_click()
+    test "User should be able to delete an existing category", %{conn: conn} do
+      category = get_category()
+      user = create_user()
 
-    #   # Confirm category is destroyed
+      {:ok, view, html} =
+        conn
+        |> login(user)
+        |> live(~p"/categories")
 
-    #   refute Category
-    #          |> Ash.Query.filter(id == ^category.id)
-    #          |> Ash.exists?()
-    # end
+      # Confirm category existing on the page
+      assert html =~ category.name
+
+      # Attempt destroy
+      view
+      |> element("#delete-button-#{category.id}")
+      |> render_click()
+
+      # Confirm category is destroyed
+      refute Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(id == ^category.id)
+             |> Ash.exists?()
+    end
   end
 end
