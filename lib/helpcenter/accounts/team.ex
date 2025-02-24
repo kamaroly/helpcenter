@@ -1,4 +1,6 @@
 defmodule Helpcenter.Accounts.Team do
+  require Ash.Resource.Change.Builtins
+
   use Ash.Resource,
     domain: Helpcenter.Accounts,
     data_layer: AshPostgres.DataLayer
@@ -30,8 +32,13 @@ defmodule Helpcenter.Accounts.Team do
   end
 
   actions do
-    default_accept [:name, :domain, :description]
-    defaults [:create, :read]
+    default_accept [:name, :domain, :description, :owner_user_id]
+    defaults [:read]
+
+    create :create do
+      primary? true
+      change after_action(&Helpcenter.Accounts.Team.Changes.SetCurrentTeam.change/3)
+    end
   end
 
   attributes do
@@ -41,5 +48,17 @@ defmodule Helpcenter.Accounts.Team do
     attribute :description, :string, allow_nil?: true, public?: true
 
     timestamps()
+  end
+
+  relationships do
+    belongs_to :owner, Helpcenter.Accounts.User do
+      source_attribute :owner_user_id
+    end
+
+    many_to_many :users, Helpcenter.Accounts.User do
+      through Helpcenter.Accounts.UserTeam
+      source_attribute_on_join_resource :team_id
+      destination_attribute_on_join_resource :user_id
+    end
   end
 end

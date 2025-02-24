@@ -274,7 +274,7 @@ defmodule Helpcenter.Accounts.User do
     end
 
     attribute :current_team, :string do
-      description "Hosts current team domain"
+      description "The current team the user is accessing the app with"
     end
 
     attribute :hashed_password, :string do
