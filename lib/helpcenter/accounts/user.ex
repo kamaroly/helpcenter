@@ -273,17 +273,21 @@ defmodule Helpcenter.Accounts.User do
       public? true
     end
 
-    attribute :current_team, :string
+    attribute :current_team, :string do
+      description "Hosts current team domain"
+    end
 
     attribute :hashed_password, :string do
       sensitive? true
     end
   end
 
-  many_to_many :teams, Helpcenter.Accounts.User do
-    through Helpcenter.Accounts.UserTeam
-    source_attribute_on_join_resource :user_id
-    destination_attribute_on_join_resource :team_id
+  relationships do
+    many_to_many :teams, Helpcenter.Accounts.User do
+      through Helpcenter.Accounts.UserTeam
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :team_id
+    end
   end
 
   identities do
