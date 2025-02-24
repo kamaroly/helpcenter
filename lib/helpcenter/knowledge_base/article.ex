@@ -108,6 +108,10 @@ defmodule Helpcenter.KnowledgeBase.Article do
     change Helpcenter.Changes.Slugify
   end
 
+  multitenancy do
+    strategy :context
+  end
+
   attributes do
     uuid_primary_key :id
 

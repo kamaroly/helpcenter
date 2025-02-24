@@ -16,4 +16,14 @@ defmodule Helpcenter.Repo do
   def min_pg_version do
     %Version{major: 16, minor: 0, patch: 0}
   end
+
+  @doc """
+  Used by migrations --tenants to list all tenants,
+  create related schemas and migrates
+  """
+  def all_tenants do
+    for tenant <- Ash.read!(Helpcenter.Accounts.Team) do
+      tenant.domain
+    end
+  end
 end
