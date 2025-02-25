@@ -10,7 +10,7 @@ defmodule Helpcenter.Accounts.TeamTest do
       team_attrs = %{name: "Team 1", domain: "team_1", owner_user_id: user.id}
       {:ok, team} = Ash.create(Helpcenter.Accounts.Team, team_attrs)
 
-      # New team should be created successfully
+      # New team should be stored successfully.
       assert Helpcenter.Accounts.Team
              |> Ash.Query.filter(domain == ^team.domain)
              |> Ash.Query.filter(owner_user_id == ^team.owner_user_id)

@@ -4,7 +4,8 @@ defmodule Helpcenter.Accounts.User do
     domain: Helpcenter.Accounts,
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication],
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    notifiers: [Helpcenter.Accounts.User.Notifiers.CreatePersonalTeamNotification]
 
   authentication do
     add_ons do
@@ -56,7 +57,8 @@ defmodule Helpcenter.Accounts.User do
   end
 
   actions do
-    defaults [:read]
+    default_accept [:email]
+    defaults [:create, :read]
 
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
