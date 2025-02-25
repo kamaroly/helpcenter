@@ -12,7 +12,6 @@ defmodule AuthCase do
   end
 
   def create_user() do
-    Helpcenter.Accounts.User
-    |> Ash.Seed.seed!(%{email: "kamaro.tester@example.com"})
+    Ash.Seed.seed!(Helpcenter.Accounts.User, %{email: "kamaro.tester@example.com"})
   end
 end

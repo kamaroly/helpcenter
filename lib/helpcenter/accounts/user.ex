@@ -253,6 +253,17 @@ defmodule Helpcenter.Accounts.User do
       # Generates an authentication token for the user
       change AshAuthentication.GenerateTokenChange
     end
+
+    update :set_current_team do
+      description "Set user's current team"
+
+      argument :team, :string do
+        allow_nil? false
+        sensitive? false
+      end
+
+      change set_attribute(:current_team, arg(:team))
+    end
   end
 
   policies do
@@ -283,7 +294,7 @@ defmodule Helpcenter.Accounts.User do
   end
 
   relationships do
-    many_to_many :teams, Helpcenter.Accounts.User do
+    many_to_many :teams, Helpcenter.Accounts.Team do
       through Helpcenter.Accounts.UserTeam
       source_attribute_on_join_resource :user_id
       destination_attribute_on_join_resource :team_id

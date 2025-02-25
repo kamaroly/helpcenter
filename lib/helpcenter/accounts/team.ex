@@ -37,7 +37,8 @@ defmodule Helpcenter.Accounts.Team do
 
     create :create do
       primary? true
-      change after_action(&Helpcenter.Accounts.Team.Changes.SetCurrentTeam.change/3)
+      change Helpcenter.Accounts.Team.Changes.AssociateUserToTeam
+      change Helpcenter.Accounts.Team.Changes.SetOwnerCurrentTeamAfterCreate
     end
   end
 

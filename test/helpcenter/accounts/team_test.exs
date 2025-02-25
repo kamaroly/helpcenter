@@ -5,9 +5,10 @@ defmodule Helpcenter.Accounts.TeamTest do
   describe "Team tests" do
     test "User team can be created" do
       user = create_user()
+
       # Create team under which category will be created
-      team =
-        Ash.create!(Helpcenter.Accounts.Team, %{
+      {:ok, team} =
+        Ash.create(Helpcenter.Accounts.Team, %{
           name: "Team 1",
           domain: "team_1",
           owner_user_id: user.id
@@ -20,11 +21,17 @@ defmodule Helpcenter.Accounts.TeamTest do
              |> Ash.exists?()
 
       # Confirm the owner's current_team is set successfully
-
       assert Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
              |> Ash.Query.filter(current_team == ^team.domain)
-             |> Ash.exists?()
+             |> Ash.exists?(authorize?: false)
+
+      # Confirm that user has also been linked to this team via user_teams relationship
+      assert Helpcenter.Accounts.User
+             |> Ash.Query.filter(id == ^user.id)
+             |> Ash.Query.filter(teams.id == ^team.id)
+             |> Ash.Query.load(:teams)
+             |> Ash.exists?(authorize?: false)
     end
   end
 end
