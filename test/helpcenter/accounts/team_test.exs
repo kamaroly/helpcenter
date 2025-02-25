@@ -6,27 +6,24 @@ defmodule Helpcenter.Accounts.TeamTest do
     test "User team can be created" do
       user = create_user()
 
-      # Create team under which category will be created
-      {:ok, team} =
-        Ash.create(Helpcenter.Accounts.Team, %{
-          name: "Team 1",
-          domain: "team_1",
-          owner_user_id: user.id
-        })
+      # Create a new team for the user
+      team_attrs = %{name: "Team 1", domain: "team_1", owner_user_id: user.id}
+      {:ok, team} = Ash.create(Helpcenter.Accounts.Team, team_attrs)
 
-      # Team should be created successfully
+      # New team should be created successfully
       assert Helpcenter.Accounts.Team
              |> Ash.Query.filter(domain == ^team.domain)
              |> Ash.Query.filter(owner_user_id == ^team.owner_user_id)
              |> Ash.exists?()
 
-      # Newly created team should be set as the current team on the owner
+      # New team should be set as the current team on the owner
       assert Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
              |> Ash.Query.filter(current_team == ^team.domain)
+             #  User resource has special policies for authorizations. We are skipping authorization by setting it to false
              |> Ash.exists?(authorize?: false)
 
-      # A new team should be added to the teams list of the owner
+      # New team should be added to the teams list of the owner
       assert Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
              |> Ash.Query.filter(teams.id == ^team.id)
