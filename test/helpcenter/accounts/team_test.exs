@@ -14,23 +14,22 @@ defmodule Helpcenter.Accounts.TeamTest do
           owner_user_id: user.id
         })
 
-      # Confirm team is created
+      # Team should be created successfully
       assert Helpcenter.Accounts.Team
              |> Ash.Query.filter(domain == ^team.domain)
              |> Ash.Query.filter(owner_user_id == ^team.owner_user_id)
              |> Ash.exists?()
 
-      # Confirm the owner's current_team is set successfully
+      # Newly created team should be set as the current team on the owner
       assert Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
              |> Ash.Query.filter(current_team == ^team.domain)
              |> Ash.exists?(authorize?: false)
 
-      # Confirm that user has also been linked to this team via user_teams relationship
+      # A new team should be added to the teams list of the owner
       assert Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
              |> Ash.Query.filter(teams.id == ^team.id)
-             |> Ash.Query.load(:teams)
              |> Ash.exists?(authorize?: false)
     end
   end
