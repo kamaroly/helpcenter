@@ -6,27 +6,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
 
   describe "Knowledge Base Category Tests" do
     test "Can create a category" do
-      # Create a user and the person team automatically.
-      # The person team will be the tenant for the query
-      user_params = %{
-        email: "john.tester@example.com",
-        password: "12345678",
-        password_confirmation: "12345678"
-      }
-
-      Ash.create!(
-        Helpcenter.Accounts.User,
-        user_params,
-        action: :register_with_password,
-        authorize?: false
-      )
-
-      # Reload the user with current_team set
-      user =
-        Helpcenter.Accounts.User
-        |> Ash.Query.filter(email == ^user_params.email)
-        |> Ash.read_first!(authorize?: false)
-
+      user = create_user()
       # Create a category and expect to user current_team as the
       # tenant databsae for this query
       cat_attrs = %{name: "Billing", description: "testing"}
