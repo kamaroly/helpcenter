@@ -1,3 +1,4 @@
+# lib/helpcenter_web/controllers/page_controller.ex
 defmodule HelpcenterWeb.PageController do
   alias Helpcenter.KnowledgeBase.Category
   use HelpcenterWeb, :controller

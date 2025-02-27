@@ -1,3 +1,4 @@
+# lib/helpcenter_web/live/categories/category_form.ex
 defmodule HelpcenterWeb.Categories.CategoryForm do
   use HelpcenterWeb, :live_component
   alias AshPhoenix.Form
@@ -16,7 +17,8 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   """
   attr :id, :string, default: Ash.UUIDv7.generate()
   attr :category_id, :string, default: nil
-  attr :actor, :map, required: true
+  # <-- Pass actor so we know what team to store data in
+  attr :actor, Helpcenter.Accounts.User, required: true
 
   def form(assigns) do
     ~H"""
@@ -26,7 +28,7 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
 
   attr :id, :string, default: Ash.UUIDv7.generate()
   attr :category_id, :string, default: nil
-  attr :actor, :map, required: true
+  attr :actor, Helpcenter.Accounts.User, required: true
 
   def render(assigns) do
     ~H"""
