@@ -59,6 +59,8 @@ defmodule Helpcenter.KnowledgeBase.Category do
   end
 
   changes do
+    # Changes are run in a sequential order so the first thing we want is to set a tenant
+    change Helpcenter.Changes.SetTenant
     change Helpcenter.Changes.Slugify
   end
 
