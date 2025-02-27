@@ -7,11 +7,12 @@ defmodule HelpcenterWeb.KnowledgeBase.CreateCategoryLiveTest do
 
   describe "New Category" do
     test "User can create category from the UI", %{conn: conn} do
-      category = get_category()
+      user = create_user()
+      category = get_category(user.current_team)
 
       {:ok, view, html} =
         conn
-        |> login(create_user())
+        |> login(user)
         |> live(~p"/categories/#{category.id}")
 
       # Confirm category is rendered successfully
@@ -47,7 +48,7 @@ defmodule HelpcenterWeb.KnowledgeBase.CreateCategoryLiveTest do
       assert Category
              |> Ash.Query.filter(name == ^attributes.name)
              |> Ash.Query.filter(description == ^attributes.description)
-             |> Ash.exists?()
+             |> Ash.exists?(actor: user)
     end
   end
 end

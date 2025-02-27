@@ -6,48 +6,53 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
 
   describe "Knowledge Base Tags Tests" do
     test "User can create a new tag" do
+      user = create_user()
       attrs = %{name: "Billing"}
 
       Tag
       |> Ash.Changeset.for_create(:create, attrs)
-      |> Ash.create()
+      |> Ash.create(actor: user)
 
       assert Tag
              |> Ash.Query.filter(name == ^attrs.name)
-             |> Ash.exists?()
+             |> Ash.exists?(actor: user)
     end
 
     test "User can filter existings tags" do
-      create_tags()
+      user = create_user()
+
+      create_tags(user.current_team)
 
       assert Tag
              |> Ash.Query.filter(name == "Time-Off")
-             |> Ash.exists?()
+             |> Ash.exists?(actor: user)
     end
 
     test "User can update an existing tag" do
-      create_tags()
+      user = create_user()
+      create_tags(user.current_team)
 
       {:ok, tag} =
         Tag
         |> Ash.Query.filter(name == "Time-Off")
         |> Ash.read_first!()
         |> Ash.Changeset.for_update(:update, %{name: "Leave"})
-        |> Ash.update()
+        |> Ash.update(actor: user)
 
       assert Tag
              |> Ash.Query.filter(name == ^tag.name)
-             |> Ash.read_first()
+             |> Ash.read_first(actor: user)
     end
 
     test "User can delete an existing tag" do
-      create_tags()
+      user = create_user()
+      create_tags(user.current_team)
 
       assert :ok =
                Tag
                |> Ash.Query.filter(name == "Time-Off")
-               |> Ash.read_first!()
-               |> Ash.destroy!()
+               |> Ash.read_first!(actor: user)
+               |> Ash.destroy!(actor: user)
     end
   end
 end

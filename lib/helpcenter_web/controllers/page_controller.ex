@@ -3,8 +3,15 @@ defmodule HelpcenterWeb.PageController do
   use HelpcenterWeb, :controller
 
   def home(conn, _params) do
+    # TODO: Configure default tenant. For now, we are picking the first available tenant
+
     # Retrieve categories with the articles
-    categories = Ash.read!(Category, load: :article_count)
+    categories =
+      if team = Ash.read_first!(Helpcenter.Accounts.Team) do
+        Ash.read!(Category, load: :article_count, tenant: team.domain)
+      else
+        []
+      end
 
     # The home page is often custom made,
     # so skip the default app layout.

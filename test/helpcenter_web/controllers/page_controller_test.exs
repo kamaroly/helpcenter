@@ -3,7 +3,8 @@ defmodule HelpcenterWeb.PageControllerTest do
   import CategoryCase
 
   test "GET /", %{conn: conn} do
-    categories = create_categories()
+    user = create_user()
+    categories = create_categories(user.current_team)
 
     conn = get(conn, ~p"/")
     html = html_response(conn, 200)
