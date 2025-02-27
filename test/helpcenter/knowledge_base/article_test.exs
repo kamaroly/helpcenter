@@ -24,8 +24,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
 
       # Create article and assign it to an existing category
       Article
-      |> Ash.Changeset.for_create(:create, attrs)
-      |> Ash.create(actor: user)
+      |> Ash.Changeset.for_create(:create, attrs, actor: user)
+      |> Ash.create()
 
       assert Article
              |> Ash.Query.filter(title == ^attrs.title)
@@ -47,8 +47,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
       }
 
       Helpcenter.KnowledgeBase.Article
-      |> Ash.Changeset.for_create(:create_with_category, attributes)
-      |> Ash.create(actor: user)
+      |> Ash.Changeset.for_create(:create_with_category, attributes, actor: user)
+      |> Ash.create()
 
       assert Article
              |> Ash.Query.filter(title == ^attributes.title)
@@ -68,8 +68,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
 
       {:ok, _article} =
         article
-        |> Ash.Changeset.for_update(:add_comment, %{comment: attrs})
-        |> Ash.update(actor: user)
+        |> Ash.Changeset.for_update(:add_comment, %{comment: attrs}, actor: user)
+        |> Ash.update()
 
       assert Comment
              |> Ash.Query.filter(content == ^attrs.content)
@@ -84,8 +84,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
 
       {:ok, _article} =
         article
-        |> Ash.Changeset.for_update(:add_feedback, %{feedback: attrs})
-        |> Ash.update(actor: user)
+        |> Ash.Changeset.for_update(:add_feedback, %{feedback: attrs}, actor: user)
+        |> Ash.update()
 
       assert ArticleFeedback
              |> Ash.Query.filter(feedback == ^attrs.feedback)
@@ -108,8 +108,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
 
       {:ok, _article} =
         Helpcenter.KnowledgeBase.Article
-        |> Ash.Changeset.for_create(:create_with_tags, attributes)
-        |> Ash.create(actor: user)
+        |> Ash.Changeset.for_create(:create_with_tags, attributes, actor: user)
+        |> Ash.create()
 
       assert Article
              |> Ash.Query.filter(title == ^attributes.title)
@@ -137,8 +137,8 @@ defmodule Helpcenter.KnowledgeBase.ArticleTest do
       # Add article with tags
       {:ok, _article} =
         Helpcenter.KnowledgeBase.Article
-        |> Ash.Changeset.for_create(:create_with_tags, attributes)
-        |> Ash.create(actor: user)
+        |> Ash.Changeset.for_create(:create_with_tags, attributes, actor: user)
+        |> Ash.create()
 
       assert Helpcenter.KnowledgeBase.Category
              |> Ash.Query.filter(articles.tags.name == "issues")

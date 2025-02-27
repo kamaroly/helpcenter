@@ -7,20 +7,18 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
   describe "Knowledge Base Tags Tests" do
     test "User can create a new tag" do
       user = create_user()
-      attrs = %{name: "Billing"}
+      attrs = %{name: "Billing #{Ash.UUIDv7.generate()}"}
 
-      Tag
-      |> Ash.Changeset.for_create(:create, attrs)
-      |> Ash.create(actor: user)
+      {:ok, tag} =
+        Tag
+        |> Ash.Changeset.for_create(:create, attrs, actor: user)
+        |> Ash.create()
 
-      assert Tag
-             |> Ash.Query.filter(name == ^attrs.name)
-             |> Ash.exists?(actor: user)
+      assert user.current_team == Ash.Resource.get_metadata(tag, :tenant)
     end
 
     test "User can filter existings tags" do
       user = create_user()
-
       create_tags(user.current_team)
 
       assert Tag
@@ -35,7 +33,7 @@ defmodule Helpcenter.KnowledgeBase.TagTest do
       {:ok, tag} =
         Tag
         |> Ash.Query.filter(name == "Time-Off")
-        |> Ash.read_first!()
+        |> Ash.read_first!(actor: user)
         |> Ash.Changeset.for_update(:update, %{name: "Leave"})
         |> Ash.update(actor: user)
 

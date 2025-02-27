@@ -126,7 +126,7 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   # Form for existing category
   defp get_form(%{category_id: category_id, actor: actor}) do
     Helpcenter.KnowledgeBase.Category
-    |> Ash.get!(category_id)
+    |> Ash.get!(category_id, actor: actor)
     |> Form.for_update(:update, actor: actor)
     |> to_form()
   end

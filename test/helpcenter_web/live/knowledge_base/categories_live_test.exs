@@ -118,9 +118,7 @@ defmodule HelpcenterWeb.KnowledgeBase.CategoriesLiveTest do
       |> render_submit()
 
       # Confirm that changes were saved in the database
-      require Ash.Query
-
-      assert Category
+      assert Helpcenter.KnowledgeBase.Category
              |> Ash.Query.filter(name == ^attributes.name)
              |> Ash.Query.filter(description == ^attributes.description)
              |> Ash.exists?(actor: user)

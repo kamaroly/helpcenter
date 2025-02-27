@@ -16,11 +16,14 @@ defmodule AuthCase do
   def create_user() do
     # Create a user and the person team automatically.
     # The person team will be the tenant for the query
-    user_params = %{email: "john.tester@example.com", current_team: "team_1"}
+    count = System.unique_integer([:monotonic, :positive])
+
+    team_domain = "team_#{count}"
+    user_params = %{email: "john.tester_#{count}@example.com", current_team: team_domain}
     user = Ash.Seed.seed!(Helpcenter.Accounts.User, user_params)
 
     # Create a new team for the user
-    team_attrs = %{name: "Team 1", domain: "team_1", owner_user_id: user.id}
+    team_attrs = %{name: "Team #{count}", domain: team_domain, owner_user_id: user.id}
     team = Ash.Seed.seed!(Helpcenter.Accounts.Team, team_attrs)
 
     Ash.Seed.seed!(Helpcenter.Accounts.UserTeam, %{user_id: user.id, team_id: team.id})

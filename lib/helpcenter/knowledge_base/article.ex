@@ -86,21 +86,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
 
       # Before this action is executed, we'll need to delete corresponding
       # comments
-      change before_action(fn changeset, context ->
-               # We need Ash.Query to allow filtering
-               require Ash.Query
-
-               # Find all comments related to this article
-               %Ash.BulkResult{status: :success} =
-                 Helpcenter.KnowledgeBase.Comment
-                 |> Ash.Query.filter(article_id == ^changeset.data.id)
-                 |> Ash.read!()
-
-                 #  Bulk delete all comments related to this article
-                 |> Ash.bulk_destroy(:destroy, _condition = %{}, batch_size: 100)
-
-               changeset
-             end)
+      change Helpcenter.KnowledgeBase.Article.Changes.DeleteRelatedComment
     end
   end
 

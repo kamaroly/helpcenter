@@ -3,8 +3,8 @@ defmodule CommentCase do
   import ArticleCase
 
   def get_comment(tenant) do
-    case Ash.read_first(Comment) do
-      {:ok, nil} -> create_comments(tenant) |> Enum.at(0)
+    case Ash.read_first(Comment, tenant: tenant) do
+      {:ok, nil} -> create_comments(nil, tenant) |> Enum.at(0)
       {:ok, comment} -> comment
     end
   end

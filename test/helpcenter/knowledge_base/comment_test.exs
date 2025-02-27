@@ -11,9 +11,10 @@ defmodule Helpcenter.KnowledgeBase.CommentTest do
       article = get_article(user.current_team)
       attrs = %{content: "Article looks great!", article_id: article.id}
 
-      Comment
-      |> Ash.Changeset.for_create(:create, attrs)
-      |> Ash.create(actor: user)
+      {:ok, _comment} =
+        Comment
+        |> Ash.Changeset.for_create(:create, attrs, actor: user)
+        |> Ash.create()
 
       # Confirm that the comment has been created
       assert Comment
@@ -28,9 +29,10 @@ defmodule Helpcenter.KnowledgeBase.CommentTest do
 
       attrs = %{content: "Updated content"}
 
-      comment
-      |> Ash.Changeset.for_update(:update, attrs)
-      |> Ash.update(actor: user)
+      {:ok, _comment} =
+        comment
+        |> Ash.Changeset.for_update(:update, attrs, actor: user)
+        |> Ash.update()
 
       # Confirm that updates actually happened
       assert Comment
@@ -42,17 +44,18 @@ defmodule Helpcenter.KnowledgeBase.CommentTest do
     test "A Comment can be deleted" do
       user = create_user()
 
-      assert :ok = get_comment(actor: user) |> Ash.destroy!(actor: user)
+      assert :ok ==
+               get_comment(user.current_team)
+               |> Ash.destroy!(tenant: user.current_team)
     end
 
     test "Delete an article deletes its comments too without relying on data layer" do
       user = create_user()
       comment = get_comment(user.current_team)
 
-      :ok =
-        Helpcenter.KnowledgeBase.Article
-        |> Ash.get!(comment.article_id)
-        |> Ash.destroy!(actor: user)
+      assert Helpcenter.KnowledgeBase.Article
+             |> Ash.get!(comment.article_id, actor: user)
+             |> Ash.destroy!(tenant: user.current_team)
 
       refute Helpcenter.KnowledgeBase.Article
              |> Ash.Query.filter(id == ^comment.id)

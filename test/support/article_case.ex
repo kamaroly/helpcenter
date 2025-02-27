@@ -4,7 +4,7 @@ defmodule ArticleCase do
 
   def get_article(tenant) do
     case Ash.read_first(Article, tenant: tenant) do
-      {:ok, nil} -> create_articles(tenant: tenant) |> Enum.at(0)
+      {:ok, nil} -> create_articles(nil, tenant) |> Enum.at(0)
       {:ok, article} -> article
     end
   end
