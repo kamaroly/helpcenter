@@ -78,14 +78,7 @@ defmodule Helpcenter.KnowledgeBase.Article do
 
     destroy :destroy do
       description "Destroy article and its comments"
-
-      # Make this action primary. It can be called with Ash.destroy without
-      # having to mention the action to use
       primary? true
-      require_atomic? false
-
-      # Before this action is executed, we'll need to delete corresponding
-      # comments
       change Helpcenter.KnowledgeBase.Article.Changes.DeleteRelatedComment
     end
   end
