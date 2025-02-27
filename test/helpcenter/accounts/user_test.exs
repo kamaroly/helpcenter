@@ -22,9 +22,10 @@ defmodule Helpcenter.Accounts.UserTest do
       # Confirm that the new user has a personal team created for them automatically
       refute Helpcenter.Accounts.User
              |> Ash.Query.filter(id == ^user.id)
+             |> Ash.Query.load(:groups)
              |> Ash.Query.filter(email == ^user_params.email)
              |> Ash.Query.filter(is_nil(current_team))
-             |> Ash.exists?(authorize?: false)
+             |> Ash.exists?(actor: user, authorize?: false)
     end
   end
 end

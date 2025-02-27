@@ -1,3 +1,4 @@
+# lib/helpcenter/accounts/permission.ex
 defmodule Helpcenter.Accounts.Permission do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
