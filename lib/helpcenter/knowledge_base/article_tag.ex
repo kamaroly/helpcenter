@@ -13,8 +13,12 @@ defmodule Helpcenter.KnowledgeBase.ArticleTag do
     defaults [:create, :read, :update, :destroy]
   end
 
-  multitenancy do
-    strategy :context
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    change Helpcenter.Changes.SetTenant
   end
 
   multitenancy do

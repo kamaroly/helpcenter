@@ -104,8 +104,13 @@ defmodule Helpcenter.KnowledgeBase.Article do
     end
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
   changes do
     change Helpcenter.Changes.Slugify
+    change Helpcenter.Changes.SetTenant
   end
 
   multitenancy do

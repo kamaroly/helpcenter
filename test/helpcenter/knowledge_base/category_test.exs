@@ -1,7 +1,7 @@
 defmodule Helpcenter.KnowledgeBase.CategoryTest do
   use HelpcenterWeb.ConnCase, async: false
-  # import CategoryCase
-  # import ArticleCase
+  import CategoryCase
+  import ArticleCase
   require Ash.Query
 
   describe "Knowledge Base Category Tests" do
@@ -28,183 +28,200 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       refute category.updated_at |> is_nil()
     end
 
-    # test "Can filter categories" do
-    #   create_categories()
+    test "Can filter categories" do
+      user = create_user()
+      create_categories(user.current_team)
 
-    #   require Ash.Query
+      require Ash.Query
 
-    #   assert Helpcenter.KnowledgeBase.Category
-    #          |> Ash.Query.filter(name == "Billing and Payments")
-    #          |> Ash.exists?()
+      assert Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(name == "Billing and Payments")
+             |> Ash.exists?(actor: user)
 
-    #   # Require the Ash.Query in order to use its macros
-    #   require Ash.Query
+      # Require the Ash.Query in order to use its macros
+      require Ash.Query
 
-    #   # Now we have all Ash.Query macros we can use it to filter
-    #   Helpcenter.KnowledgeBase.Category
-    #   |> Ash.Query.filter(name == "General Support")
-    #   |> Ash.Query.filter(slug == "general-support")
-    #   |> Ash.read()
-    # end
+      # Now we have all Ash.Query macros we can use it to filter
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Query.filter(name == "General Support")
+      |> Ash.Query.filter(slug == "general-support")
+      |> Ash.read(actor: user)
+    end
 
-    # test "Can update an existing category" do
-    #   # Seed data to work with
-    #   create_categories()
+    test "Can update an existing category" do
+      # Seed data to work with
+      user = create_user()
+      create_categories(user.current_team)
 
-    #   require Ash.Query
+      require Ash.Query
 
-    #   # 1. Get category to update
-    #   Helpcenter.KnowledgeBase.Category
-    #   |> Ash.Query.filter(name == "System Setup and Integration")
-    #   |> Ash.read_first!()
-    #   # Update category name in the database
-    #   |> Ash.Changeset.for_update(:update, %{name: "Integration"})
-    #   |> Ash.update()
+      # 1. Get category to update
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Query.filter(name == "System Setup and Integration")
+      |> Ash.read_first!(actor: user)
+      # Update category name in the database
+      |> Ash.Changeset.for_update(:update, %{name: "Integration"})
+      |> Ash.update(actor: user)
 
-    #   assert Helpcenter.KnowledgeBase.Category
-    #          |> Ash.Query.filter(name == "Integration")
-    #          |> Ash.exists?()
-    # end
+      assert Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(name == "Integration")
+             |> Ash.exists?(actor: user)
+    end
 
-    # test "Can destroy an existing Category" do
-    #   create_categories()
+    test "Can destroy an existing Category" do
+      user = create_user()
 
-    #   require Ash.Query
+      create_categories(user.current_team)
 
-    #   # First identify category to destroy
-    #   category_to_delete =
-    #     Helpcenter.KnowledgeBase.Category
-    #     |> Ash.Query.filter(name == "Approvals and Workflows")
-    #     |> Ash.read_first!()
+      require Ash.Query
 
-    #   # Tell Ash to destroy it
-    #   Ash.destroy(category_to_delete)
+      # First identify category to destroy
+      category_to_delete =
+        Helpcenter.KnowledgeBase.Category
+        |> Ash.Query.filter(name == "Approvals and Workflows")
+        |> Ash.read_first!(actor: user)
 
-    #   refute Helpcenter.KnowledgeBase.Category
-    #          |> Ash.Query.filter(name == "Approvals and Workflows")
-    #          |> Ash.exists?()
-    # end
+      # Tell Ash to destroy it
+      Ash.destroy(category_to_delete)
 
-    # test "Category can be created with an article" do
-    #   # Define category and related article attributes
-    #   attrs = %{
-    #     name: "Features",
-    #     slug: "features",
-    #     description: "Category for features",
-    #     article_attrs: %{
-    #       title: "Compliance Features in Zippiker",
-    #       slug: "compliance-features-zippiker",
-    #       content: "Overview of compliance management features built into Zippiker."
-    #     }
-    #   }
+      refute Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(name == "Approvals and Workflows")
+             |> Ash.exists?(actor: user)
+    end
 
-    #   # Create category and its article at the same time
-    #   Helpcenter.KnowledgeBase.Category
-    #   |> Ash.Changeset.for_create(:create_with_article, attrs)
-    #   |> Ash.create()
+    test "Category can be created with an article" do
+      user = create_user()
 
-    #   assert Helpcenter.KnowledgeBase.Category
-    #          |> Ash.Query.filter(name == ^attrs.name)
-    #          |> Ash.exists?()
+      # Define category and related article attributes
+      attrs = %{
+        name: "Features",
+        slug: "features",
+        description: "Category for features",
+        article_attrs: %{
+          title: "Compliance Features in Zippiker",
+          slug: "compliance-features-zippiker",
+          content: "Overview of compliance management features built into Zippiker."
+        }
+      }
 
-    #   assert Helpcenter.KnowledgeBase.Article
-    #          |> Ash.Query.filter(title == ^attrs.article_attrs.title)
-    #          |> Ash.exists?()
-    # end
+      # Create category and its article at the same time
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Changeset.for_create(:create_with_article, attrs, actor: user)
+      |> Ash.create()
 
-    # test "An article can be added to an existing category" do
-    #   # 1. Get category to create an article under
-    #   category = get_category()
+      assert Helpcenter.KnowledgeBase.Category
+             |> Ash.Query.filter(name == ^attrs.name)
+             |> Ash.exists?(actor: user)
 
-    #   # 2. Prepare new article data
-    #   attrs = %{
-    #     title: "Getting Started with Zippiker",
-    #     slug: "getting-started-zippiker",
-    #     content: "Learn how to set up your Zippiker account and configure basic settings.",
-    #     views_count: 1452,
-    #     published: true
-    #   }
+      assert Helpcenter.KnowledgeBase.Article
+             |> Ash.Query.filter(title == ^attrs.article_attrs.title)
+             |> Ash.exists?(actor: user)
+    end
 
-    #   # 3 Create an article under this category
-    #   {:ok, _category} =
-    #     category
-    #     |> Ash.Changeset.for_update(:add_article, %{article_attrs: attrs})
-    #     |> Ash.update()
+    test "An article can be added to an existing category" do
+      # 1. Get category to create an article under
+      user = create_user()
+      category = get_category(user.current_team)
 
-    #   # Confirm that the article has been create
-    #   assert Helpcenter.KnowledgeBase.Article
-    #          |> Ash.Query.filter(title == ^attrs.title)
-    #          |> Ash.Query.filter(content == ^attrs.content)
-    #          |> Ash.Query.filter(category_id == ^category.id)
-    #          |> Ash.read()
-    # end
+      # 2. Prepare new article data
+      attrs = %{
+        title: "Getting Started with Zippiker",
+        slug: "getting-started-zippiker",
+        content: "Learn how to set up your Zippiker account and configure basic settings.",
+        views_count: 1452,
+        published: true
+      }
 
-    # test "Category can be retrieved with related articles" do
-    #   # First create articles for the category
-    #   category = get_category()
-    #   articles = create_articles(category)
+      # 3 Create an article under this category
+      {:ok, _category} =
+        category
+        |> Ash.Changeset.for_update(:add_article, %{article_attrs: attrs}, actor: user)
+        |> Ash.update()
 
-    #   category_with_articles =
-    #     Helpcenter.KnowledgeBase.Category
-    #     |> Ash.Query.filter(id == ^category.id)
-    #     # Tell Ash to load related articles
-    #     |> Ash.Query.load(:articles)
-    #     |> Ash.read_first!()
+      # Confirm that the article has been create
+      assert Helpcenter.KnowledgeBase.Article
+             |> Ash.Query.filter(title == ^attrs.title)
+             |> Ash.Query.filter(content == ^attrs.content)
+             |> Ash.Query.filter(category_id == ^category.id)
+             |> Ash.read(actor: user)
+    end
 
-    #   # This category might have added article else where in concurrency writing. Thus, use <=
-    #   assert Enum.count(category_with_articles.articles) <= Enum.count(articles)
-    # end
+    test "Category can be retrieved with related articles" do
+      # First create articles for the category
+      user = create_user()
 
-    # test "articles_count aggregate can be loaded on the category" do
-    #   # Create categories and seed articles
-    #   category = get_category()
-    #   create_articles(category)
+      category = get_category(user.current_team)
+      articles = create_articles(category, user.current_team)
 
-    #   loaded_category =
-    #     Helpcenter.KnowledgeBase.Category
-    #     |> Ash.Query.filter(id == ^category.id)
-    #     |> Ash.Query.load([:article_count, :articles])
-    #     |> Ash.read_first!()
+      category_with_articles =
+        Helpcenter.KnowledgeBase.Category
+        |> Ash.Query.filter(id == ^category.id)
+        # Tell Ash to load related articles
+        |> Ash.Query.load(:articles)
+        |> Ash.read_first!(actor: user)
 
-    #   assert loaded_category.article_count == Enum.count(loaded_category.articles)
-    # end
+      # This category might have added article else where in concurrency writing. Thus, use <=
+      assert Enum.count(category_with_articles.articles) <= Enum.count(articles)
+    end
 
-    # test "'categories' pubsub event is published on create" do
-    #   # Subscribe to the event so we can test whether it is being fired
-    #   HelpcenterWeb.Endpoint.subscribe("categories")
+    test "articles_count aggregate can be loaded on the category" do
+      # Create categories and seed articles
+      user = create_user()
 
-    #   attributes = %{name: "Art 1", slug: "art-1", description: "descrpt-1"}
+      category = get_category(user.current_team)
+      create_articles(category, user.current_team)
 
-    #   Helpcenter.KnowledgeBase.Category
-    #   |> Ash.Changeset.for_create(:create, attributes)
-    #   |> Ash.create()
+      loaded_category =
+        Helpcenter.KnowledgeBase.Category
+        |> Ash.Query.filter(id == ^category.id)
+        |> Ash.Query.load([:article_count, :articles])
+        |> Ash.read_first!(actor: user)
 
-    #   # Confirm that the event is being recieved and its data
-    #   assert_receive %Phoenix.Socket.Broadcast{topic: "categories", payload: category}
-    #   assert category.data.name == attributes.name
-    #   assert category.data.slug == attributes.slug
-    #   assert category.data.description == attributes.description
-    # end
+      assert loaded_category.article_count == Enum.count(loaded_category.articles)
+    end
 
-    # test "Global preparations works as expected" do
-    #   create_categories()
+    test "'categories' pubsub event is published on create" do
+      # Subscribe to the event so we can test whether it is being fired
+      user = create_user()
+      HelpcenterWeb.Endpoint.subscribe("categories")
 
-    #   assert Helpcenter.KnowledgeBase.Category
-    #          |> Helpcenter.Preparations.LimitTo5.prepare([], [])
-    #          |> Helpcenter.Preparations.MonthToDate.prepare([], [])
-    #          |> Helpcenter.Preparations.OrderByMostRecent.prepare([], [])
-    #          |> Ash.count!() == 5
-    # end
+      attributes = %{name: "Art 1", slug: "art-1", description: "descrpt-1"}
 
-    # test "Slug change generates slug successfully" do
-    #   params = %{
-    #     name: "Home appliances you cannot find elsewhere",
-    #     description: "Home appliances description"
-    #   }
+      Helpcenter.KnowledgeBase.Category
+      |> Ash.Changeset.for_create(:create, attributes, actor: user)
+      |> Ash.create()
 
-    #   {:ok, category} = Ash.create(Helpcenter.KnowledgeBase.Category, params)
+      # Confirm that the event is being recieved and its data
+      assert_receive %Phoenix.Socket.Broadcast{topic: "categories", payload: category}
+      assert category.data.name == attributes.name
+      assert category.data.slug == attributes.slug
+      assert category.data.description == attributes.description
+    end
 
-    #   refute category.slug |> is_nil()
-    # end
+    test "Global preparations works as expected" do
+      user = create_user()
+
+      create_categories(user.current_team)
+
+      assert Helpcenter.KnowledgeBase.Category
+             |> Helpcenter.Preparations.LimitTo5.prepare([], [])
+             |> Helpcenter.Preparations.MonthToDate.prepare([], [])
+             |> Helpcenter.Preparations.OrderByMostRecent.prepare([], [])
+             |> Ash.count!(actor: user) == 5
+    end
+
+    test "Slug change generates slug successfully" do
+      user = create_user()
+
+      params = %{
+        name: "Home appliances you cannot find elsewhere",
+        description: "Home appliances description"
+      }
+
+      {:ok, category} =
+        Ash.create(Helpcenter.KnowledgeBase.Category, params, tenant: user.current_team)
+
+      refute category.slug |> is_nil()
+    end
   end
 end

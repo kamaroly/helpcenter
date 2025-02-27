@@ -13,6 +13,14 @@ defmodule Helpcenter.KnowledgeBase.Tag do
     defaults [:create, :read, :update, :destroy]
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    change Helpcenter.Changes.SetTenant
+  end
+
   multitenancy do
     strategy :context
   end
