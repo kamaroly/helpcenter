@@ -15,7 +15,7 @@ defmodule Helpcenter.Changes.Slugify do
   # Then make it unique by prefixing the `-count` at the end of the slug
   defp generate_slug(%{attributes: %{name: name}} = changeset, context) when not is_nil(name) do
     # 1. Generate a slug based on the namae
-    slug = get_slug_from_name(name)
+    slug = slugify(name)
 
     # Add the count if slug exists
     case count_similar_slugs(changeset, slug, context) do
@@ -34,7 +34,7 @@ defmodule Helpcenter.Changes.Slugify do
   defp generate_slug(_changeset, _context), do: Ash.UUIDv7
 
   # Generate a lowcase slug based on the string passed
-  defp get_slug_from_name(name) do
+  defp slugify(name) do
     name
     |> String.downcase()
     |> String.replace(~r/\s+/, "-")

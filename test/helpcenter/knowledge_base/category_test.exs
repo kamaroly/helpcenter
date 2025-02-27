@@ -34,7 +34,7 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
       category =
         Helpcenter.KnowledgeBase.Category
         |> Ash.Changeset.for_create(:create, cat_attrs, actor: user)
-        |> Ash.create()
+        |> Ash.create!()
 
       # Confirm that category's tenant is the same as the user current_team
       assert user.current_team == Ash.Resource.get_metadata(category, :tenant)

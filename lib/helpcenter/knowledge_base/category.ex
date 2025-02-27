@@ -58,10 +58,15 @@ defmodule Helpcenter.KnowledgeBase.Category do
     publish_all :destroy, [[:id, nil]]
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
   changes do
-    # Changes are run in a sequential order so the first thing we want is to set a tenant
-    change Helpcenter.Changes.SetTenant
     change Helpcenter.Changes.Slugify
+
+    # Automatically set tenant based on the user/ actor
+    change Helpcenter.Changes.SetTenant
   end
 
   multitenancy do
