@@ -21,6 +21,12 @@ defmodule Helpcenter.KnowledgeBase.CategoryTest do
         authorize?: false
       )
 
+      # Reload the user with current_team set
+      user =
+        Helpcenter.Accounts.User
+        |> Ash.Query.filter(email == ^user_params.email)
+        |> Ash.read_first!(authorize?: false)
+
       # Create a category and expect to user current_team as the
       # tenant databsae for this query
       cat_attrs = %{name: "Billing", description: "testing"}

@@ -3,19 +3,13 @@ defmodule Helpcenter.Changes.Slugify do
 
   @doc """
   Generate and populate a `slug` attribute while inserting a new records
-
+  When the action type is create
   """
-  def change(changeset, _opts, context) do
-    if changeset.action_type == :create do
-      changeset
-      |> Ash.Changeset.force_change_attribute(
-        :slug,
-        generate_slug(changeset, context)
-      )
-    else
-      changeset
-    end
+  def change(%{action_type: :create} = changeset, _opts, context) do
+    Ash.Changeset.force_change_attribute(changeset, :slug, generate_slug(changeset, context))
   end
+
+  def change(changeset, _opts, _context), do: changeset
 
   # Genarates a slug based on the name attribute. If the slug exists already,
   # Then make it unique by prefixing the `-count` at the end of the slug
