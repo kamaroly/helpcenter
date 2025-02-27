@@ -1,3 +1,4 @@
+# lib/helpcenter_web/live/categories/category_form.ex
 defmodule HelpcenterWeb.Categories.CategoryForm do
   use HelpcenterWeb, :live_component
   alias AshPhoenix.Form
@@ -16,15 +17,18 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   """
   attr :id, :string, default: Ash.UUIDv7.generate()
   attr :category_id, :string, default: nil
+  # <-- Pass actor so we know what team to store data in
+  attr :actor, Helpcenter.Accounts.User, required: true
 
   def form(assigns) do
     ~H"""
-    <.live_component id={@id} module={__MODULE__} category_id={@category_id} />
+    <.live_component id={@id} module={__MODULE__} category_id={@category_id} actor={@actor} />
     """
   end
 
   attr :id, :string, default: Ash.UUIDv7.generate()
   attr :category_id, :string, default: nil
+  attr :actor, Helpcenter.Accounts.User, required: true
 
   def render(assigns) do
     ~H"""
@@ -115,17 +119,17 @@ defmodule HelpcenterWeb.Categories.CategoryForm do
   defp get_form(%{form: _form} = assigns), do: assigns
 
   # Form for creating a new category
-  defp get_form(%{category_id: nil}) do
+  defp get_form(%{category_id: nil, actor: actor}) do
     Helpcenter.KnowledgeBase.Category
-    |> Form.for_create(:create)
+    |> Form.for_create(:create, actor: actor)
     |> to_form()
   end
 
   # Form for existing category
-  defp get_form(%{category_id: category_id}) do
+  defp get_form(%{category_id: category_id, actor: actor}) do
     Helpcenter.KnowledgeBase.Category
-    |> Ash.get!(category_id)
-    |> Form.for_update(:update)
+    |> Ash.get!(category_id, actor: actor)
+    |> Form.for_update(:update, actor: actor)
     |> to_form()
   end
 end

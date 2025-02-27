@@ -2,22 +2,41 @@
 <!-- Header / Hero -->
 <header class="bg-gray-900 px-6 py-6 text-white">
   <div class="mx-auto max-w-7xl">
-    <!-- Top row: Logo + Language selection -->
+    <!-- Top row: Logo -->
     <div class="flex items-center justify-between">
       <!-- Logo / Title -->
       <div class="flex items-center space-x-2">
         <!-- “Zippiker” in golden yellow -->
         <div class="text-3xl font-bold text-yellow-500">Zippiker</div>
       </div>
-      
-<!-- Language Selection (optional) -->
-      <%!-- <div>
-        <select class="rounded border-none bg-gray-800 p-2 text-sm text-white outline-none">
-          <option>English</option>
-          <option>Español</option>
-          <option>日本語</option>
-        </select>
-      </div> --%>
+
+      <%!-- ADD THIS SECTION FOR ASH AUTHENTICATION --%>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <%!-- Only show this div if the user is logged in --%>
+        <div :if={@current_user}>
+          <span class="px-3 py-2 text-sm font-medium text-yellow-500 rounded-md">
+            {@current_user.email}
+          </span>
+
+          <%!-- Display sign out button if the user is logged in --%>
+          <a
+            href="/sign-out"
+            class="rounded-lg bg-zinc-100 px-2 py-1 text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:bg-zinc-200/80 active:text-zinc-900/70"
+          >
+            Sign out
+          </a>
+        </div>
+
+        <%!-- Show this block if user is not logged in --%>
+        <a
+          :if={@current_user |> is_nil()}
+          href="/sign-in"
+          class="rounded-lg bg-zinc-100 px-2 py-1 text-[0.8125rem] font-semibold leading-6 text-zinc-900 hover:bg-zinc-200/80 active:text-zinc-900/70"
+        >
+          Sign In
+        </a>
+      </div>
+      <%!-- END OF THE AUTHENTICATION SECTION --%>
     </div>
     
 <!-- Subtitle (reduced size and goldish yellow) -->

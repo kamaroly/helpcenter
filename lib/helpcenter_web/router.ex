@@ -24,14 +24,8 @@ defmodule HelpcenterWeb.Router do
   scope "/", HelpcenterWeb do
     pipe_through :browser
 
-    # Add categories route
-    scope "/categories" do
-      live "/", CategoriesLive
-      live "/create", CreateCategoryLive
-      live "/:category_id", EditCategoryLive
-    end
-
-    ash_authentication_live_session :authenticated_routes do
+    ash_authentication_live_session :authenticated_routes,
+      on_mount: {HelpcenterWeb.LiveUserAuth, :live_user_required} do
       # in each liveview, add one of the following at the top of the module:
       #
       # If an authenticated user must be present:
@@ -42,11 +36,18 @@ defmodule HelpcenterWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {HelpcenterWeb.LiveUserAuth, :live_no_user}
+
+      scope "/categories" do
+        live "/", CategoriesLive
+        live "/create", CreateCategoryLive
+        live "/:category_id", EditCategoryLive
+      end
     end
   end
 
   scope "/", HelpcenterWeb do
     pipe_through :browser
+
     auth_routes AuthController, Helpcenter.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

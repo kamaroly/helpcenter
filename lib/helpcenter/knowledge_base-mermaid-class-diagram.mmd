@@ -1,0 +1,59 @@
+classDiagram
+    class Category {
+        UUID id
+        destroy()
+        update(String name, String slug, String description)
+        read()
+        create(String name, String slug, String description)
+        most_recent()
+        create_with_article(Map article_attrs, String name, String slug, String description)
+        add_article(Map article_attrs, String name, String slug, String description)
+    }
+    class Article {
+        UUID id
+        update(String title, String slug, String content, Integer views_count, ...)
+        read()
+        create(String title, String slug, String content, Integer views_count, ...)
+        create_with_category(Map category_attrs, String title, String slug, String content, ...)
+        create_with_comment(Map comment, String title, String slug, String content, ...)
+        create_with_tags(Map[] tags, String title, String slug, String content, ...)
+        between(DateTime start_date, DateTime end_date)
+        add_comment(Map comment, String title, String slug, String content, ...)
+        add_feedback(Map feedback, String title, String slug, String content, ...)
+        destroy()
+    }
+    class Tag {
+        UUID id
+        destroy()
+        update(String name)
+        read()
+        create(String name)
+    }
+    class ArticleTag {
+        UUID id
+        destroy()
+        update(UUID article_id, UUID tag_id)
+        read()
+        create(UUID article_id, UUID tag_id)
+    }
+    class Comment {
+        UUID id
+        destroy()
+        update(String content, UUID article_id)
+        read()
+        create(String content, UUID article_id)
+    }
+    class ArticleFeedback {
+        UUID id
+        destroy()
+        update(String feedback, Boolean helpful, UUID article_id)
+        read()
+        create(String feedback, Boolean helpful, UUID article_id)
+    }
+
+    Article -- ArticleFeedback
+    Article -- ArticleTag
+    Article -- Category
+    Article -- Comment
+    Article -- Tag
+    ArticleTag -- Tag

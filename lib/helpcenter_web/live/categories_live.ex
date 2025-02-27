@@ -11,12 +11,12 @@ defmodule HelpcenterWeb.CategoriesLive do
     <%!-- List category records --%>
     <h1>{gettext("Categories")}</h1>
 
-    <.table id="knowledge-base-categories" rows={@categories}>
-      <:col :let={row} label={gettext("Name")}>{row.name}</:col>
-      <:col :let={row} label={gettext("Description")}>{row.description}</:col>
-      <:col :let={row} label={gettext("Articles")}>{row.article_count}</:col>
+    <.table id="knowledge-base-categories" rows={@streams.categories}>
+      <:col :let={{_id, row}} label={gettext("Name")}>{row.name}</:col>
+      <:col :let={{_id, row}} label={gettext("Description")}>{row.description}</:col>
+      <:col :let={{_id, row}} label={gettext("Articles")}>{row.article_count}</:col>
 
-      <:action :let={row}>
+      <:action :let={{_id, row}}>
         <%!-- Edit Category button --%>
         <.button
           id={"edit-button-#{row.id}"}
@@ -60,7 +60,9 @@ defmodule HelpcenterWeb.CategoriesLive do
 
   # Responds when a user clicks on trash button
   def handle_event("delete-" <> category_id, _params, socket) do
-    case destroy_record(category_id) do
+    actor = socket.assigns.current_user
+
+    case destroy_record(category_id, actor) do
       :ok ->
         socket
         |> put_flash(:info, "Category deleted successfully")
@@ -86,18 +88,19 @@ defmodule HelpcenterWeb.CategoriesLive do
   end
 
   defp assign_categories(socket) do
-    assign(socket, :categories, get_articles())
+    actor = socket.assigns.current_user
+    stream(socket, :categories, get_articles(actor))
   end
 
-  defp get_articles do
+  defp get_articles(actor) do
     Helpcenter.KnowledgeBase.Category
     |> Ash.Query.load(:article_count)
-    |> Ash.read!()
+    |> Ash.read!(actor: actor)
   end
 
-  defp destroy_record(category_id) do
+  defp destroy_record(category_id, actor) do
     Helpcenter.KnowledgeBase.Category
-    |> Ash.get!(category_id)
-    |> Ash.destroy()
+    |> Ash.get!(category_id, actor: actor)
+    |> Ash.destroy(actor: actor)
   end
 end

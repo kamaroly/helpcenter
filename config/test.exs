@@ -22,6 +22,9 @@ config :helpcenter, HelpcenterWeb.Endpoint,
   secret_key_base: "6PDHd+7lZTjSsqZNoz3TFNacwgz9YAtQ2dq7W0kHYJzAAsvaRH30b0PsFKBKsEZ4",
   server: false
 
+# Do NOT set this value for production
+config :bcrypt_elixir, log_rounds: 1
+
 # In test we don't send emails
 config :helpcenter, Helpcenter.Mailer, adapter: Swoosh.Adapters.Test
 

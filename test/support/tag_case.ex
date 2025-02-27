@@ -1,14 +1,14 @@
 defmodule TagCase do
   alias Helpcenter.KnowledgeBase.Tag
 
-  def get_tags do
-    case(Ash.read(Tag)) do
+  def get_tags(tenant) do
+    case(Ash.read(Tag, tenant: tenant)) do
       {:ok, records} -> records
-      _others -> create_tags()
+      _others -> create_tags(tenant)
     end
   end
 
-  def create_tags do
+  def create_tags(tenant) do
     attrs = [
       %{name: "Onboarding"},
       %{name: "Payroll"},
@@ -27,6 +27,6 @@ defmodule TagCase do
       %{name: "User Management"}
     ]
 
-    Ash.Seed.seed!(Tag, attrs)
+    Ash.Seed.seed!(Tag, attrs, tenant: tenant)
   end
 end

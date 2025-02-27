@@ -2,22 +2,22 @@ defmodule ArticleCase do
   alias Helpcenter.KnowledgeBase.Article
   import CategoryCase
 
-  def get_article do
-    case Ash.read_first(Article) do
-      {:ok, nil} -> create_articles() |> Enum.at(0)
+  def get_article(tenant) do
+    case Ash.read_first(Article, tenant: tenant) do
+      {:ok, nil} -> create_articles(nil, tenant) |> Enum.at(0)
       {:ok, article} -> article
     end
   end
 
-  def get_articles do
-    case Ash.read(Article) do
-      {:ok, []} -> create_articles()
+  def get_articles(tenant) do
+    case Ash.read(Article, tenant: tenant) do
+      {:ok, []} -> create_articles(tenant)
       {:ok, articles} -> articles
     end
   end
 
-  def create_articles(category \\ nil) do
-    category = if is_nil(category), do: get_category(), else: category
+  def create_articles(category \\ nil, tenant) do
+    category = if is_nil(category), do: get_category(tenant), else: category
 
     attrs = [
       %{
@@ -103,6 +103,6 @@ defmodule ArticleCase do
       }
     ]
 
-    Ash.Seed.seed!(Helpcenter.KnowledgeBase.Article, attrs)
+    Ash.Seed.seed!(Helpcenter.KnowledgeBase.Article, attrs, tenant: tenant)
   end
 end

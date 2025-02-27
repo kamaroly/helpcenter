@@ -78,30 +78,22 @@ defmodule Helpcenter.KnowledgeBase.Article do
 
     destroy :destroy do
       description "Destroy article and its comments"
-
-      # Make this action primary. It can be called with Ash.destroy without
-      # having to mention the action to use
       primary? true
-      require_atomic? false
-
-      # Before this action is executed, we'll need to delete corresponding
-      # comments
-      change before_action(fn changeset, context ->
-               # We need Ash.Query to allow filtering
-               require Ash.Query
-
-               # Find all comments related to this article
-               %Ash.BulkResult{status: :success} =
-                 Helpcenter.KnowledgeBase.Comment
-                 |> Ash.Query.filter(article_id == ^changeset.data.id)
-                 |> Ash.read!()
-
-                 #  Bulk delete all comments related to this article
-                 |> Ash.bulk_destroy(:destroy, _condition = %{}, batch_size: 100)
-
-               changeset
-             end)
+      change Helpcenter.KnowledgeBase.Article.Changes.DeleteRelatedComment
     end
+  end
+
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    change Helpcenter.Changes.Slugify
+    change Helpcenter.Changes.SetTenant
+  end
+
+  multitenancy do
+    strategy :context
   end
 
   attributes do

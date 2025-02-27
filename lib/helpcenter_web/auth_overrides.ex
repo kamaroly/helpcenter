@@ -15,6 +15,6 @@ defmodule HelpcenterWeb.AuthOverrides do
   # end
 
   # override AshAuthentication.Phoenix.Components.SignIn do
-  #  set :show_banner false
+  #  set :show_banner, false
   # end
 end

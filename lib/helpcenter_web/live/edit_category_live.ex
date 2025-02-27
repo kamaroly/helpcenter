@@ -8,7 +8,7 @@ defmodule HelpcenterWeb.EditCategoryLive do
     ~H"""
     <%!-- Display link to take user back to category list --%>
     <.back navigate={~p"/categories"}>{gettext("Back to categories")}</.back>
-    <HelpcenterWeb.Categories.CategoryForm.form category_id={@category_id} />
+    <HelpcenterWeb.Categories.CategoryForm.form category_id={@category_id} actor={@current_user} />
     """
   end
 

@@ -2,22 +2,22 @@ defmodule CommentCase do
   alias Helpcenter.KnowledgeBase.Comment
   import ArticleCase
 
-  def get_comment do
-    case Ash.read_first(Comment) do
-      {:ok, nil} -> create_comments() |> Enum.at(0)
+  def get_comment(tenant) do
+    case Ash.read_first(Comment, tenant: tenant) do
+      {:ok, nil} -> create_comments(nil, tenant) |> Enum.at(0)
       {:ok, comment} -> comment
     end
   end
 
-  def get_comments do
+  def get_comments(tenant) do
     case Ash.read(Comment) do
-      {:ok, []} -> create_comments()
+      {:ok, []} -> create_comments(tenant)
       {:ok, comments} -> comments
     end
   end
 
-  def create_comments(article \\ nil) do
-    article = if is_nil(article), do: get_article(), else: article
+  def create_comments(article \\ nil, tenant) do
+    article = if is_nil(article), do: get_article(tenant), else: article
 
     attrs = [
       %{
@@ -62,6 +62,6 @@ defmodule CommentCase do
       }
     ]
 
-    Ash.Seed.seed!(Comment, attrs)
+    Ash.Seed.seed!(Comment, attrs, tenant: tenant)
   end
 end
