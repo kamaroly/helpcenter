@@ -1,33 +1,30 @@
 # lib/helpcenter/accounts/permission.ex
 defmodule Helpcenter.Accounts.Permission do
-  use Ash.Resource,
-    domain: Helpcenter.Accounts,
-    data_layer: AshPostgres.DataLayer,
-    notifiers: Ash.Notifier.PubSub
+  @doc """
+  Get a list of maps of resources and their actions
+  Example:
+    iex> Helpcenter.Accounts.Permission.get_permissions()
+    iex> [%{resource: Helpcenter.Accounts.GroupPermission, action: :create}]
+  """
 
-  postgres do
-    table "permissions"
-    repo Helpcenter.Repo
+  def permissions() do
+    get_all_domain_resources()
+    |> Enum.map(&map_resource_actions/1)
+    |> Enum.flat_map(& &1)
   end
 
-  actions do
-    default_accept [:action, :resource]
-    defaults [:create, :read, :update, :destroy]
+  defp map_resource_action(action, resource) do
+    %{action: action.name, resource: resource}
   end
 
-  attributes do
-    uuid_v7_primary_key :id
+  defp map_resource_actions(resource) do
+    Ash.Resource.Info.actions(resource)
+    |> Enum.map(&map_resource_action(&1, resource))
+  end
 
-    attribute :action, :string do
-      description "Action name or type on the resource to authorize"
-      allow_nil? false
-    end
-
-    attribute :resource, :string do
-      description "Resource this authorization is for"
-      allow_nil? false
-    end
-
-    timestamps()
+  defp get_all_domain_resources() do
+    Application.get_env(:helpcenter, :ash_domains)
+    |> Enum.map(&Ash.Domain.Info.resources(&1))
+    |> Enum.flat_map(& &1)
   end
 end

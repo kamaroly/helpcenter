@@ -11,9 +11,8 @@ defmodule Helpcenter.Accounts do
 
     # Authorization
     resource Helpcenter.Accounts.Group
-    resource Helpcenter.Accounts.Permission
+    # Delete this resource Helpcenter.Accounts.Permission
     resource Helpcenter.Accounts.GroupPermission
-
     resource Helpcenter.Accounts.UserGroup
   end
 end

@@ -50,8 +50,9 @@ defmodule Helpcenter.Accounts.Group do
       destination_attribute_on_join_resource :user_id
     end
 
-    many_to_many :permissions, Helpcenter.Accounts.Permission do
-      through Helpcenter.Accounts.GroupPermission
+    has_many :permissions, Helpcenter.Accounts.GroupPermission do
+      description "List of permission assigned to this group"
+      destination_attribute :group_id
     end
   end
 

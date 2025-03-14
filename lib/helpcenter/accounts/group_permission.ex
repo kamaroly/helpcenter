@@ -1,4 +1,4 @@
-# lib/helpcenter/accounts/group.ex
+# lib/helpcenter/accounts/group_permission.ex
 defmodule Helpcenter.Accounts.GroupPermission do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
@@ -11,7 +11,7 @@ defmodule Helpcenter.Accounts.GroupPermission do
   end
 
   actions do
-    default_accept [:permission_id, :group_id]
+    default_accept [:resource, :action, :group_id]
     defaults [:create, :read, :update, :destroy]
   end
 
@@ -29,7 +29,8 @@ defmodule Helpcenter.Accounts.GroupPermission do
 
   attributes do
     uuid_v7_primary_key :id
-
+    attribute :action, :string, allow_nil?: false
+    attribute :resource, :string, allow_nil?: false
     timestamps()
   end
 
@@ -39,15 +40,9 @@ defmodule Helpcenter.Accounts.GroupPermission do
       source_attribute :group_id
       allow_nil? false
     end
-
-    belongs_to :permission, Helpcenter.Accounts.Permission do
-      description "Permission for the user access group"
-      source_attribute :permission_id
-      allow_nil? false
-    end
   end
 
   identities do
-    identity :unique_name, [:group_id, :permission_id]
+    identity :unique_name, [:group_id, :resource, :action]
   end
 end
