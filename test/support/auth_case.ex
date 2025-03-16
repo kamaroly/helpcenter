@@ -13,6 +13,13 @@ defmodule AuthCase do
     end
   end
 
+  def get_user() do
+    case Ash.read_first(Helpcenter.Accounts.User) do
+      {:ok, user} -> user
+      {:error, _} -> create_user()
+    end
+  end
+
   def create_user() do
     # Create a user and the person team automatically.
     # The person team will be the tenant for the query
@@ -30,5 +37,37 @@ defmodule AuthCase do
 
     # Return created team
     user
+  end
+
+  def get_group(user \\ nil) do
+    actor = user || create_user()
+
+    case Ash.read_first(Helpcenter.Accounts.Group, actor: actor) do
+      {:ok, nil} -> create_groups(actor) |> Enum.at(0)
+      {:ok, group} -> group
+    end
+  end
+
+  def get_groups(user \\ nil) do
+    actor = user || create_user()
+
+    case Ash.read(Helpcenter.Accounts.Group, actor: actor) do
+      {:ok, []} -> create_groups(actor)
+      {:ok, groups} -> groups
+    end
+  end
+
+  def create_groups(user \\ nil) do
+    actor = user || create_user()
+
+    group_attrs = [
+      %{name: "Accountant", description: "Finance accountant"},
+      %{name: "Manager", description: "Team manager"},
+      %{name: "Developer", description: "Software developer"},
+      %{name: "Admin", description: "System administrator"},
+      %{name: "HR", description: "Human resources specialist"}
+    ]
+
+    Ash.Seed.seed!(Helpcenter.Accounts.Group, group_attrs, tenant: actor.current_team)
   end
 end

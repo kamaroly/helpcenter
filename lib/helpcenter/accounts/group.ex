@@ -15,6 +15,17 @@ defmodule Helpcenter.Accounts.Group do
     defaults [:create, :read, :update, :destroy]
   end
 
+  # Confirm how Ash will wor
+  pub_sub do
+    module HelpcenterWeb.Endpoint
+
+    prefix "groups"
+
+    publish_all :update, [[:id, nil]]
+    publish_all :create, [[:id, nil]]
+    publish_all :destroy, [[:id, nil]]
+  end
+
   preparations do
     prepare Helpcenter.Preparations.SetTenant
   end

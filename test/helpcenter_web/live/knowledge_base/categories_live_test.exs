@@ -1,7 +1,5 @@
 defmodule HelpcenterWeb.KnowledgeBase.CategoriesLiveTest do
-  use Gettext, backend: HelpcenterWeb.Gettext
   use HelpcenterWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
   import CategoryCase
   require Ash.Query
 

@@ -42,6 +42,10 @@ defmodule HelpcenterWeb.Router do
         live "/create", CreateCategoryLive
         live "/:category_id", EditCategoryLive
       end
+
+      scope "/accounts/groups", Accounts.Groups do
+        live "/", GroupsLive
+      end
     end
   end
 
