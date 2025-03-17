@@ -88,7 +88,6 @@ defmodule HelpcenterWeb do
       Use Phoenix inbuild javascript executor to cancel modal
       """
       def cancel_modal(socket, id) do
-        dbg(id)
         push_event(socket, "js-exec", %{to: "##{@id}", attr: "data-cancel"})
       end
 

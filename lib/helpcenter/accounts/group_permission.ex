@@ -43,6 +43,6 @@ defmodule Helpcenter.Accounts.GroupPermission do
   end
 
   identities do
-    identity :unique_name, [:group_id, :resource, :action]
+    identity :unique_group_permission, [:group_id, :resource, :action]
   end
 end

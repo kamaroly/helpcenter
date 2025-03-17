@@ -15,8 +15,8 @@ defmodule AuthCase do
 
   def get_user() do
     case Ash.read_first(Helpcenter.Accounts.User) do
+      {:ok, nil} -> create_user()
       {:ok, user} -> user
-      {:error, _} -> create_user()
     end
   end
 

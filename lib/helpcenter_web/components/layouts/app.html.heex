@@ -2,15 +2,41 @@
   <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
     <div class="flex items-center gap-4">
       <a href="/">
-        <img src={~p"/images/logo.svg"} width="36" />
+        <p
+          :if={!@current_user}
+          class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6"
+        >
+          Helpcenter
+        </p>
+
+        <div
+          :if={@current_user}
+          class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6"
+        >
+          {@current_user.current_team |> Phoenix.Naming.humanize()}
+        </div>
       </a>
-      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
-        v{Application.spec(:phoenix, :vsn)}
-      </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <%!-- Only show this div if the user is logged in --%>
-      <div :if={@current_user}>
+      <div :if={@current_user} class="space-x-6">
+        <.link
+          id="categories"
+          navigate={~p"/categories"}
+          class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700 hover:underline"
+        >
+          <.icon name="hero-rectangle-group" class="h-4 w-4" />
+          {gettext("Categories")}
+        </.link>
+        <.link
+          id="accounts"
+          navigate={~p"/accounts/groups"}
+          class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700 hover:underline"
+        >
+          <.icon name="hero-user-group" class="h-4 w-4" />
+          {gettext("Access Groups")}
+        </.link>
+
         <span class="px-3 py-2 text-sm font-medium rounded-md">
           {@current_user.email}
         </span>

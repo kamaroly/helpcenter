@@ -35,11 +35,27 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
           phx-click={show_modal("access-group-form-modal#{@group_id}")}
           id={"access-group-modal-button#{@group_id}"}
         >
-          <.icon name="hero-plus-solid" class="h-4 w-4" /> {gettext("New")}
+          <.icon name="hero-plus-solid" class="h-5 w-5" />
         </.button>
       </div>
 
       <.modal id={"access-group-form-modal#{@group_id}"}>
+        <.header class="mt-4">
+          <.icon name="hero-user-group" />
+          <%!-- New Group --%>
+          <span :if={is_nil(@group_id)}>{gettext("New Access Group")}</span>
+          <:subtitle :if={is_nil(@group_id)}>
+            {gettext("Fill below form to create a new user access group")}
+          </:subtitle>
+
+          <%!-- Existing group --%>
+          <span :if={@group_id}>{@form.source.data.name}</span>
+          <:subtitle :if={@group_id}>
+            {gettext("Fill below form to update %{name} access group details.",
+              name: @form.source.data.name
+            )}
+          </:subtitle>
+        </.header>
         <.simple_form
           for={@form}
           phx-change="validate"
@@ -50,7 +66,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
           <.input
             field={@form[:name]}
             id={"access-group-name#{@id}-#{@group_id}"}
-            label={gettext("Category Name")}
+            label={gettext("Access Group Name")}
           />
           <.input
             field={@form[:description]}

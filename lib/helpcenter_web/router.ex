@@ -45,6 +45,7 @@ defmodule HelpcenterWeb.Router do
 
       scope "/accounts/groups", Accounts.Groups do
         live "/", GroupsLive
+        live "/:group_id", EditGroupLive
       end
     end
   end
