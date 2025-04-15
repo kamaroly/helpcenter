@@ -1,3 +1,4 @@
+# lib/helpcenter_web/live/accounts/groups/groups_live.ex
 defmodule HelpcenterWeb.Accounts.Groups.GroupsLive do
   use HelpcenterWeb, :live_view
 
@@ -30,7 +31,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupsLive do
 
           <.link
             id={"access-group-permissions-#{group.id}"}
-            navigate={~p"/accounts/groups/#{group.id}"}
+            navigate={~p"/accounts/groups/#{group.id}/permissions"}
             class="font-semibold leading-6 text-zinc-900 hover:text-zinc-700 hover:underline"
           >
             <.icon name="hero-shield-check" class="h-4 w-4" />
@@ -64,11 +65,10 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupsLive do
     |> noreply()
   end
 
-  # Subscribe connectdd users to the "groups" topic
+  # Subscribe connected users to the "groups" topic for real-time
+  # notifications when changes happen on access group
   defp maybe_subscribe(socket) do
-    if connected?(socket) do
-      HelpcenterWeb.Endpoint.subscribe("groups")
-    end
+    if connected?(socket), do: HelpcenterWeb.Endpoint.subscribe("groups")
 
     socket
   end

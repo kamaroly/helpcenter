@@ -1,3 +1,4 @@
+// assets/js/hooks.js
 let Hooks = {};
 
 Hooks.SelectAllPermissions = {

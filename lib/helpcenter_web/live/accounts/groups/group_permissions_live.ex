@@ -1,4 +1,5 @@
-defmodule HelpcenterWeb.Accounts.Groups.EditGroupLive do
+# lib/helpcenter_web/live/accounts/groups/edit_group_live.ex
+defmodule HelpcenterWeb.Accounts.Groups.GroupPermissionsLive do
   use HelpcenterWeb, :live_view
 
   def render(assigns) do

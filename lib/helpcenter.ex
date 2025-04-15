@@ -1,3 +1,4 @@
+# /home/kamaro/elixir/helpcenter/lib/helpcenter.ex
 defmodule Helpcenter do
   @moduledoc """
   Helpcenter keeps the contexts that define your domain

@@ -1,3 +1,4 @@
+# test/support/auth_case.ex
 defmodule AuthCase do
   require Ash.Query
 

@@ -1,11 +1,25 @@
+# lib/helpcenter_web/live/accounts/groups/group_form.ex
 defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
   use HelpcenterWeb, :live_component
-
   alias AshPhoenix.Form
 
-  attr :id, :string, required: true
+  @doc """
+  This a wrapper used to access this component like a static component
+  in the template.
+
+  example:
+    <HelpcenterWeb.Accounts.Groups.GroupForm.form
+      :for={group <- @groups}
+      actor={@current_user}
+      group_id={group.id}
+      show_button={false}
+      id={group.id}
+    />
+
+  """
+  attr :id, :string, default: Ash.UUIDv7.generate()
   attr :group_id, :string, default: nil
-  attr :show_button, :boolean, default: true
+  attr :show_button, :boolean, default: true, doc: "Show button to create new group"
   attr :actor, Helpcenter.Accounts.User, required: true
 
   def form(assigns) do
@@ -20,7 +34,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
     """
   end
 
-  attr :id, :string, required: true
+  attr :id, :string, default: Ash.UUIDv7.generate()
   attr :group_id, :string, default: nil
   attr :show_button, :boolean, default: true
   attr :actor, Helpcenter.Accounts.User, required: true
@@ -28,7 +42,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
   def render(assigns) do
     ~H"""
     <div id={"access-group-#{@group_id}"} class="mt-4">
-      <%!-- Trigger Button --%>
+      <%!-- Form modal trigger Button --%>
       <div class="flex justify-end">
         <.button
           :if={@show_button}
@@ -39,6 +53,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
         </.button>
       </div>
 
+      <%!-- We want this form to show-up in a modal --%>
       <.modal id={"access-group-form-modal#{@group_id}"}>
         <.header class="mt-4">
           <.icon name="hero-user-group" />
@@ -113,18 +128,21 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupForm do
     end
   end
 
+  # Prevents the form from being re-created on every update
   defp assign_form(%{assigns: %{form: _form}} = socket), do: socket
 
   defp assign_form(%{assigns: assigns} = socket) do
     assign(socket, :form, get_form(assigns))
   end
 
+  # Build for the new access group
   defp get_form(%{group_id: nil} = assigns) do
     Helpcenter.Accounts.Group
     |> Form.for_create(:create, actor: assigns.actor)
     |> to_form()
   end
 
+  # Build for the existing access group
   defp get_form(%{group_id: group_id} = assigns) do
     Helpcenter.Accounts.Group
     |> Ash.get!(group_id, actor: assigns.actor)

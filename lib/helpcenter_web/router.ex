@@ -43,9 +43,10 @@ defmodule HelpcenterWeb.Router do
         live "/:category_id", EditCategoryLive
       end
 
+      # lib/helpcenter_web/router.ex
       scope "/accounts/groups", Accounts.Groups do
         live "/", GroupsLive
-        live "/:group_id", EditGroupLive
+        live "/:group_id/permissions", GroupPermissionsLive
       end
     end
   end

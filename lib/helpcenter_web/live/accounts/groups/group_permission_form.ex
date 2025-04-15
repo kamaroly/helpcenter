@@ -1,3 +1,4 @@
+# lib/helpcenter_web/live/accounts/groups/group_permission_form.ex
 defmodule HelpcenterWeb.Accounts.Groups.GroupPermissionForm do
   use HelpcenterWeb, :live_component
 
@@ -57,7 +58,7 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupPermissionForm do
                       type="checkbox"
                       checked={group_has_permission?(perm.resource, perm.action, @group_permissions)}
                       class="rounded border-zinc-300 text-zinc-900 focus:ring-0 permission-checkbox"
-                      id={"group-permission-#{perm.resource}-#{perm.action}"}
+                      id={"access-group-permission-#{perm.resource}-#{perm.action}"}
                       name={"form[#{perm.resource}][#{perm.action}]"}
                       data-resource={perm.resource}
                     />

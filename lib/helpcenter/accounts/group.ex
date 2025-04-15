@@ -61,6 +61,7 @@ defmodule Helpcenter.Accounts.Group do
       destination_attribute_on_join_resource :user_id
     end
 
+    # lib/helpcenter/accounts/group.ex
     has_many :permissions, Helpcenter.Accounts.GroupPermission do
       description "List of permission assigned to this group"
       destination_attribute :group_id

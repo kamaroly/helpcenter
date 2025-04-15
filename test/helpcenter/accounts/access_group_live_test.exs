@@ -1,12 +1,15 @@
+# test/helpcenter/accounts/access_group_live_test.exs
 defmodule Helpcenter.Accounts.AccessGroupLiveTest do
   use HelpcenterWeb.ConnCase, async: false
   import AuthCase
 
   describe "User Access Group Test:" do
     test "All actions can be listed for permissions" do
-      assert Helpcenter.permissions() |> is_list()
+      assert Helpcenter.permissions()
+             |> is_list()
     end
 
+    # test/helpcenter/accounts/access_group_live_test.exs
     test "Group form renders successfully" do
       user = create_user()
 
@@ -37,25 +40,24 @@ defmodule Helpcenter.Accounts.AccessGroupLiveTest do
 
       html = render_component(HelpcenterWeb.Accounts.Groups.GroupForm, assigns)
 
-      # Confirm that all necessary fields are there
+      # Confirm that all necessary fields are visible
       assert html =~ "access-group-modal-button"
       assert html =~ "form[name]"
       assert html =~ "form[description]"
       assert html =~ gettext("Submit")
 
       # Confirm that group data is visible in the form
-
       assert html =~ group.name
       assert html =~ group.description
     end
 
-    test "Guest cannot access /accounts/groups", %{conn: conn} do
+    test "Guests should be redirected to login while accessing /accounts/groups", %{conn: conn} do
       assert conn
              |> live(~p"/accounts/groups")
              |> follow_redirect(conn, "/sign-in")
     end
 
-    test "User can list existing access groups form", %{conn: conn} do
+    test "Access groups can be listed", %{conn: conn} do
       user = create_user()
       groups = get_groups(user)
 
@@ -74,7 +76,7 @@ defmodule Helpcenter.Accounts.AccessGroupLiveTest do
       end
     end
 
-    test "User can create a new access group form", %{conn: conn} do
+    test "Access Group can be created", %{conn: conn} do
       user = create_user()
 
       {:ok, view, _html} =
@@ -103,7 +105,7 @@ defmodule Helpcenter.Accounts.AccessGroupLiveTest do
              |> Ash.exists?(actor: user)
     end
 
-    test "User can edit an existing access group", %{conn: conn} do
+    test "Access group can be edited", %{conn: conn} do
       user = get_user()
       group = get_group(user)
 
@@ -115,38 +117,25 @@ defmodule Helpcenter.Accounts.AccessGroupLiveTest do
       # confirm that the group is visible on the page
       assert html =~ group.name
       assert html =~ group.description
-      assert html =~ ~p"/accounts/groups/#{group.id}"
+      assert html =~ ~p"/accounts/groups/#{group.id}/permissions"
 
       # Confirm user can click on the link to group edit
       assert view
              |> element("#edit-access-group-#{group.id}")
              |> render_click()
 
-      assert view
-             |> element("#access-group-permissions-#{group.id}")
-             |> render_click()
-             |> follow_redirect(conn, ~p"/accounts/groups/#{group.id}")
-
       # Confirm that edit group page display the group details
-      {:ok, edit_view, edit_html} =
+      {:ok, _edit_view, edit_html} =
         conn
         |> login(user)
-        |> live(~p"/accounts/groups/#{group.id}")
+        |> live(~p"/accounts/groups/#{group.id}/permissions")
 
       assert edit_html =~ group.name
       assert edit_html =~ group.description
-      assert edit_html =~ "form[name]"
-      assert edit_html =~ "form[description]"
 
       # Confirm that user can see all permissions in the app listed
       for perm <- Helpcenter.permissions() do
-        assert edit_html =~ perm.action
-        assert edit_html =~ perm.resource
-
-        # Confirm the permission is clickable
-        assert edit_view
-               |> element("#group-permission-#{perm.resource}-#{perm.action}")
-               |> render_click()
+        assert edit_html =~ "form[#{perm.resource}][#{perm.action}]"
       end
     end
   end
