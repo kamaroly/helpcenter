@@ -1,9 +1,11 @@
+# lib/helpcenter/knowledge_base/category.ex
 defmodule Helpcenter.KnowledgeBase.Category do
   use Ash.Resource,
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer,
-    # Tell Ash to broadcast/ Emit events via pubsub
-    notifiers: Ash.Notifier.PubSub
+    notifiers: Ash.Notifier.PubSub,
+    # Tell Ash that this resource require authorization
+    authorizers: Ash.Policy.Authorizer
 
   postgres do
     # <-- Tell Ash that this resource data is stored in a table named "categories"
@@ -33,6 +35,13 @@ defmodule Helpcenter.KnowledgeBase.Category do
       require_atomic? false
       argument :article_attrs, :map, allow_nil?: false
       change manage_relationship(:article_attrs, :articles, type: :create)
+    end
+  end
+
+  policies do
+    policy always() do
+      access_type :strict
+      authorize_if Helpcenter.Accounts.Checks.Authorized
     end
   end
 

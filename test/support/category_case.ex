@@ -2,7 +2,7 @@ defmodule CategoryCase do
   alias Helpcenter.KnowledgeBase.Category
 
   def get_category(tenant) do
-    case Ash.read_first(Category, tenant: tenant) do
+    case Ash.read_first(Category, tenant: tenant, authorize?: false) do
       {:ok, nil} -> create_categories(tenant) |> Enum.at(0)
       {:ok, category} -> category
     end

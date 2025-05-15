@@ -10,7 +10,7 @@ defmodule Helpcenter.Accounts.User do
   authentication do
     add_ons do
       log_out_everywhere do
-        apply_on_password_change?(true)
+        apply_on_password_change? true
       end
 
       confirmation :confirm_new_user do
@@ -300,6 +300,12 @@ defmodule Helpcenter.Accounts.User do
       through Helpcenter.Accounts.UserTeam
       source_attribute_on_join_resource :user_id
       destination_attribute_on_join_resource :team_id
+    end
+
+    many_to_many :groups, Helpcenter.Accounts.Group do
+      through Helpcenter.Accounts.UserGroup
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :group_id
     end
   end
 

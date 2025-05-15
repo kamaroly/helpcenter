@@ -4,13 +4,23 @@ defmodule HelpcenterWeb.CategoriesLive do
   def render(assigns) do
     ~H"""
     <%!-- New Category Button --%>
-    <.button id="create-category-button" phx-click={JS.navigate(~p"/categories/create")}>
-      <.icon name="hero-plus-solid" />
-    </.button>
 
+    <div class="flex justify-between items-end">
+      <.header class="mt-4">
+        <.icon name="hero-rectangle-group-solid" /> {gettext("Knowledge Base Categories")}
+        <:subtitle>
+          {gettext("Create, update and manage knowledge base categories")}
+        </:subtitle>
+      </.header>
+      <%!-- Access Group Create form --%>
+
+      <div class="">
+        <.button id="create-category-button" phx-click={JS.navigate(~p"/categories/create")}>
+          <.icon name="hero-plus-solid" class="h-5 w-5" />
+        </.button>
+      </div>
+    </div>
     <%!-- List category records --%>
-    <h1>{gettext("Categories")}</h1>
-
     <.table id="knowledge-base-categories" rows={@streams.categories}>
       <:col :let={{_id, row}} label={gettext("Name")}>{row.name}</:col>
       <:col :let={{_id, row}} label={gettext("Description")}>{row.description}</:col>

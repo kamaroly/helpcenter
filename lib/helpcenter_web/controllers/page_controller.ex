@@ -9,7 +9,7 @@ defmodule HelpcenterWeb.PageController do
     # Retrieve categories with the articles
     categories =
       if team = Ash.read_first!(Helpcenter.Accounts.Team) do
-        Ash.read!(Category, load: :article_count, tenant: team.domain)
+        Ash.read!(Category, load: :article_count, tenant: team.domain, authorize?: false)
       else
         []
       end

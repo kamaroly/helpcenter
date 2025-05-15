@@ -24,6 +24,9 @@ defmodule HelpcenterWeb.ConnCase do
 
       use HelpcenterWeb, :verified_routes
 
+      # Add convenience for testing with Gettext translations
+      use Gettext, backend: HelpcenterWeb.Gettext
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
@@ -31,6 +34,10 @@ defmodule HelpcenterWeb.ConnCase do
 
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
+
+      # Import Conveniences for testing with Components
+      import Phoenix.LiveViewTest
+      import Phoenix.Component
 
       import AuthCase
     end
