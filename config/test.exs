@@ -1,4 +1,5 @@
 import Config
+config :helpcenter, Oban, testing: :manual
 config :helpcenter, token_signing_secret: "eEDPOnkZl5Qv+3SbqpbbmRoZeyjgYKp6"
 config :ash, disable_async?: true
 

@@ -14,5 +14,10 @@ defmodule Helpcenter.Accounts do
     # Delete this resource Helpcenter.Accounts.Permission
     resource Helpcenter.Accounts.GroupPermission
     resource Helpcenter.Accounts.UserGroup
+
+    # Notifications
+    resource Helpcenter.Accounts.UserNotification do
+      define :send_email, action: :send
+    end
   end
 end
