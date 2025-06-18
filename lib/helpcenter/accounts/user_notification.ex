@@ -1,20 +1,45 @@
 defmodule Helpcenter.Accounts.UserNotification do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshOban]
 
   postgres do
     table "user_notifications"
     repo Helpcenter.Repo
   end
 
+  oban do
+    triggers do
+      # Since our application is multitenant, we need to ensure that we specify the tenant
+      # triggers are going to run for.
+      list_tenants fn -> Helpcenter.Repo.all_tenants() end
+
+      trigger :deliver do
+        action :deliver
+        queue :default
+        worker_read_action :read
+        actor_persister :none
+
+        debug? true
+        worker_module_name Helpcenter.Accounts.UserNotification.AshOban.Worker.Deliver
+        scheduler_module_name Helpcenter.Accounts.UserNotification.AshOban.Scheduler.Deliver
+      end
+    end
+  end
+
   actions do
     default_accept [:sender_user_id, :recipient_user_id, :subject, :body, :read_at, :status]
+    defaults [:read, :create, :update, :destroy]
 
     create :send do
       description "Send a new user notification to the user"
       accept [:sender_user_id, :recipient_user_id, :subject, :body]
-      change Helpcenter.Accounts.UserNotification.Changes.SendEmail
+    end
+
+    update :deliver do
+      description "Mark a notification as delivered"
+      change Helpcenter.Accounts.UserNotification.Changes.DeliverEmail
     end
   end
 
@@ -64,6 +89,12 @@ defmodule Helpcenter.Accounts.UserNotification do
       default :unread
       allow_nil? false
       constraints one_of: [:unread, :read, :archived]
+    end
+
+    attribute :processed, :boolean do
+      description "Whether the notification has been processed"
+      default false
+      allow_nil? false
     end
 
     timestamps()

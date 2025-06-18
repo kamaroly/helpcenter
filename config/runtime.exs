@@ -119,4 +119,16 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
+
+  config :helpcenter, Helpcenter.Mailer,
+    adapter: Swoosh.Adapters.SMTP,
+    relay: System.get_env("MAILTRAP_SERVER", "smtp.mailtrap.io"),
+    username: System.get_env("MAILTRAP_USERNAME", "76b2c94cffd164"),
+    password: System.get_env("MAILTRAP_PASSWORD", "ed60898722b1c7"),
+    ssl: System.get_env("MAILTRAP_SSL", false),
+    tls: System.get_env("MAILTRAP_TLS", :never),
+    auth: System.get_env("MAILTRAP_AUTH", :always),
+    port: System.get_env("MAILTRAP_PORT", 2525),
+    retries: System.get_env("MAILTRAP_RETRIES", 2),
+    no_mx_lookups: System.get_env("MAILTRAP_NO_MX_LOOKUPS", false)
 end

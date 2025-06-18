@@ -12,10 +12,7 @@ defmodule Helpcenter.Accounts.UserNotificationTest do
         body: "This is a test notification."
       }
 
-      dbg(attrs)
-
       Helpcenter.Accounts.send_email(attrs, actor: user)
-      |> dbg()
 
       # # Create user notification
       # Helpcenter.Accounts.UserNotification
