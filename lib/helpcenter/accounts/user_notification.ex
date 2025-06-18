@@ -1,4 +1,4 @@
-defmodule Helpcenter.Accounts.UserNotification do
+defmodule Helpcenter.Notifications.UserNotification do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
     data_layer: AshPostgres.DataLayer,
@@ -9,24 +9,30 @@ defmodule Helpcenter.Accounts.UserNotification do
     repo Helpcenter.Repo
   end
 
+  # ================================================================
+  # Ash Oban configuration to add background jobs for your resource.
+  # ================================================================
   oban do
     triggers do
-      # Since our application is multitenant, we need to ensure that we specify the tenant
+      # Since our application is multitenant, we need to tell ash tenants to run this trigger for
       # triggers are going to run for.
       list_tenants fn -> Helpcenter.Repo.all_tenants() end
 
       trigger :deliver do
-        action :deliver
-        queue :default
-        worker_read_action :read
-        actor_persister :none
+        action :deliver_notification # > The action on this resource to be triggered
+        queue :default # > Oban queue name in which the job will be placed
+        worker_read_action :read # > The action the job will use to read data
 
-        debug? true
-        worker_module_name Helpcenter.Accounts.UserNotification.AshOban.Worker.Deliver
-        scheduler_module_name Helpcenter.Accounts.UserNotification.AshOban.Scheduler.Deliver
+        debug? true # > Enable debug for testing and development purposes
+        worker_module_name Helpcenter.Notifications.UserNotification.AshOban.Worker.Deliver
+        scheduler_module_name Helpcenter.Notifications.UserNotification.AshOban.Scheduler.Deliver
       end
     end
   end
+
+  # ================================================================
+  # End of Ash Oban configuration
+  # ================================================================
 
   actions do
     default_accept [:sender_user_id, :recipient_user_id, :subject, :body, :read_at, :status]
@@ -37,11 +43,13 @@ defmodule Helpcenter.Accounts.UserNotification do
       accept [:sender_user_id, :recipient_user_id, :subject, :body]
     end
 
-    update :deliver do
+    update :deliver_notification do
       description "Mark a notification as delivered"
       change Helpcenter.Accounts.UserNotification.Changes.DeliverEmail
     end
   end
+  # ... other definitions...
+end
 
   preparations do
     prepare Helpcenter.Preparations.SetTenant
