@@ -19,4 +19,8 @@ defmodule Helpcenter.Changes.SetTenant do
   end
 
   def change(changeset, _opts, _context), do: changeset
+
+  def atomic(changeset, opts, context) do
+    {:ok, change(changeset, opts, context)}
+  end
 end

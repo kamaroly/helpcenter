@@ -1,4 +1,4 @@
-defmodule Helpcenter.Notifications.UserNotification do
+defmodule Helpcenter.Accounts.UserNotification do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
     data_layer: AshPostgres.DataLayer,
@@ -14,42 +14,35 @@ defmodule Helpcenter.Notifications.UserNotification do
   # ================================================================
   oban do
     triggers do
-      # Since our application is multitenant, we need to tell ash tenants to run this trigger for
-      # triggers are going to run for.
       list_tenants fn -> Helpcenter.Repo.all_tenants() end
 
-      trigger :deliver do
-        action :deliver_notification # > The action on this resource to be triggered
-        queue :default # > Oban queue name in which the job will be placed
-        worker_read_action :read # > The action the job will use to read data
+      trigger :send do
+        debug? true
+        queue :default
+        action :send
 
-        debug? true # > Enable debug for testing and development purposes
-        worker_module_name Helpcenter.Notifications.UserNotification.AshOban.Worker.Deliver
-        scheduler_module_name Helpcenter.Notifications.UserNotification.AshOban.Scheduler.Deliver
+        worker_read_action :unprocessed
+        worker_module_name Helpcenter.Accounts.UserNotification.AshOban.Worker.Send
+        scheduler_module_name Helpcenter.Accounts.UserNotification.AshOban.Scheduler.Send
       end
     end
   end
-
-  # ================================================================
-  # End of Ash Oban configuration
-  # ================================================================
 
   actions do
     default_accept [:sender_user_id, :recipient_user_id, :subject, :body, :read_at, :status]
     defaults [:read, :create, :update, :destroy]
 
-    create :send do
+    update :send do
       description "Send a new user notification to the user"
-      accept [:sender_user_id, :recipient_user_id, :subject, :body]
-    end
-
-    update :deliver_notification do
-      description "Mark a notification as delivered"
       change Helpcenter.Accounts.UserNotification.Changes.DeliverEmail
     end
+
+    read :unprocessed do
+      description "Read unprocessed notifications"
+      filter expr(processed == false)
+      prepare build(limit: 100)
+    end
   end
-  # ... other definitions...
-end
 
   preparations do
     prepare Helpcenter.Preparations.SetTenant

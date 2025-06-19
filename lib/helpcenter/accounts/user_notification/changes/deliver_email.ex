@@ -4,26 +4,27 @@ defmodule Helpcenter.Accounts.UserNotification.Changes.DeliverEmail do
 
   def change(changeset, _opts, _context) do
     changeset
-    |> Ash.Changeset.before_action(&deliver_email/1)
     |> Ash.Changeset.change_attribute(:processed, true)
+    |> Ash.Changeset.after_action(&deliver_email/2)
   end
 
-  def atomic?(), do: true
+  def atomic?(), do: false
 
   def atomic(changeset, opts, context) do
     {:ok, change(changeset, opts, context)}
   end
 
-  defp deliver_email(%{data: notification} = changeset) do
+  defp deliver_email(_changeset, notification) do
+    dbg(notification)
+
     new()
     |> from({"noreply", "noreply@example.com"})
     |> to("noreply@example.com")
-    |> subject(notification.subject || "New Notification")
+    |> subject(notification.subject)
     |> text_body(notification.body)
     |> html_body(notification.body)
     |> Helpcenter.Mailer.deliver!()
-    |> dbg()
 
-    {:ok, changeset}
+    {:ok, notification}
   end
 end

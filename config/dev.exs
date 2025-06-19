@@ -84,3 +84,15 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+config :helpcenter, Helpcenter.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: System.get_env("MAILTRAP_SERVER", "smtp.mailtrap.io"),
+  username: System.get_env("MAILTRAP_USERNAME", "76b2c94cffd164"),
+  password: System.get_env("MAILTRAP_PASSWORD", "ed60898722b1c7"),
+  ssl: false,
+  tls: :never,
+  auth: :always,
+  port: System.get_env("MAILTRAP_PORT", "2525"),
+  retries: System.get_env("MAILTRAP_RETRIES", "2"),
+  no_mx_lookups: System.get_env("MAILTRAP_NO_MX_LOOKUPS", "false")
