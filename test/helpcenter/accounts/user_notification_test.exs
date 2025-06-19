@@ -8,7 +8,7 @@ defmodule Helpcenter.Accounts.UserNotificationTest do
 
       attrs = %{
         recipient_user_id: user.id,
-        subject: "Test Notification",
+        subject: "You have been added to the new team",
         body: "This is a test notification body text."
       }
 

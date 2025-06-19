@@ -21,6 +21,7 @@ defmodule Helpcenter.Accounts.UserNotification do
         queue :default
         action :send
 
+        trigger_once? true
         worker_read_action :unprocessed
         worker_module_name Helpcenter.Accounts.UserNotification.AshOban.Worker.Send
         scheduler_module_name Helpcenter.Accounts.UserNotification.AshOban.Scheduler.Send
@@ -41,6 +42,7 @@ defmodule Helpcenter.Accounts.UserNotification do
       description "Read unprocessed notifications"
       filter expr(processed == false)
       prepare build(limit: 100)
+      prepare build(load: :recipient)
     end
   end
 
@@ -99,5 +101,17 @@ defmodule Helpcenter.Accounts.UserNotification do
     end
 
     timestamps()
+  end
+
+  relationships do
+    belongs_to :sender, Helpcenter.Accounts.User do
+      description "The user who sent the notification"
+      source_attribute :recipient_user_id
+    end
+
+    belongs_to :recipient, Helpcenter.Accounts.User do
+      description "The user who received the notification"
+      source_attribute :recipient_user_id
+    end
   end
 end
