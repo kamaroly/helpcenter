@@ -11,6 +11,11 @@ defmodule Helpcenter.Application do
       HelpcenterWeb.Telemetry,
       Helpcenter.Repo,
       {DNSCluster, query: Application.get_env(:helpcenter, :dns_cluster_query) || :ignore},
+      {Oban,
+       AshOban.config(
+         Application.fetch_env!(:helpcenter, :ash_domains),
+         Application.fetch_env!(:helpcenter, Oban)
+       )},
       {Phoenix.PubSub, name: Helpcenter.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Helpcenter.Finch},

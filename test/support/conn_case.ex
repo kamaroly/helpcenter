@@ -22,6 +22,8 @@ defmodule HelpcenterWeb.ConnCase do
       # The default endpoint for testing
       @endpoint HelpcenterWeb.Endpoint
 
+      use Oban.Testing, repo: Helpcenter.Repo
+
       use HelpcenterWeb, :verified_routes
 
       # Add convenience for testing with Gettext translations
