@@ -1,7 +1,9 @@
+# lib/helpcenter/accounts/user_notification.ex
 defmodule Helpcenter.Accounts.UserNotification do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
     data_layer: AshPostgres.DataLayer,
+    # > Add Ash Oban extension for background jobs
     extensions: [AshOban]
 
   postgres do
@@ -14,15 +16,25 @@ defmodule Helpcenter.Accounts.UserNotification do
   # ================================================================
   oban do
     triggers do
+      # > Ensure this trigger runs for all tenants.
       list_tenants fn -> Helpcenter.Repo.all_tenants() end
 
       trigger :send do
+        # Enable debug logging for testing
         debug? true
+        # Specify the queue to use for this trigger
         queue :default
+        # Action on this resource that is run when the trigger is invoked
         action :send
 
         trigger_once? true
+        # The action on this resource that is used to retrieve data to work with
+        # on this resource. In this case, we want to read unprocessed notifications.
+        # check in the actions block for the `unprocessed` action.
         worker_read_action :unprocessed
+
+        # The worker module that will process the job automatically added for you by the Ash Oban extension.
+        # You can also specify a custom worker module if needed. It is based on action name
         worker_module_name Helpcenter.Accounts.UserNotification.AshOban.Worker.Send
         scheduler_module_name Helpcenter.Accounts.UserNotification.AshOban.Scheduler.Send
       end
@@ -41,8 +53,7 @@ defmodule Helpcenter.Accounts.UserNotification do
     read :unprocessed do
       description "Read unprocessed notifications"
       filter expr(processed == false)
-      prepare build(limit: 100)
-      prepare build(load: :recipient)
+      prepare build(limit: 100, load: :recipient)
     end
   end
 
