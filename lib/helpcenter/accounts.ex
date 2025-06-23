@@ -3,7 +3,15 @@ defmodule Helpcenter.Accounts do
   use Ash.Domain, otp_app: :helpcenter
 
   resources do
-    #  the rest of the domain resources
+    # Authentication
+    resource Helpcenter.Accounts.Token
+    resource Helpcenter.Accounts.User
+    resource Helpcenter.Accounts.Team
+    resource Helpcenter.Accounts.UserTeam
+
+    resource Helpcenter.Accounts.Group
+    resource Helpcenter.Accounts.GroupPermission
+    resource Helpcenter.Accounts.UserGroup
 
     resource Helpcenter.Accounts.UserNotification do
       define :notify, action: :create
