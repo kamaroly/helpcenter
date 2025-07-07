@@ -48,7 +48,7 @@ defmodule HelpcenterWeb.AuthController do
     return_to = get_session(conn, :return_to) || ~p"/"
 
     conn
-    |> clear_session()
+    |> clear_session(:helpcenter)
     |> put_flash(:info, "You are now signed out")
     |> redirect(to: return_to)
   end

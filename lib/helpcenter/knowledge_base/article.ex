@@ -111,7 +111,6 @@ defmodule Helpcenter.KnowledgeBase.Article do
   relationships do
     belongs_to :category, Helpcenter.KnowledgeBase.Category do
       source_attribute :category_id
-      # category_id can be null when there is no related category
       allow_nil? true
     end
 

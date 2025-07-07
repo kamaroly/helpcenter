@@ -1,0 +1,109 @@
+# lib/helpcenter/accounts/invitation.ex
+defmodule Helpcenter.Accounts.Invitation do
+  use Ash.Resource,
+    domain: Helpcenter.Accounts,
+    data_layer: AshPostgres.DataLayer,
+    authorizers: [Ash.Policy.Authorizer]
+
+  postgres do
+    table "invitations"
+    repo Helpcenter.Repo
+  end
+
+  actions do
+    defaults [:read, :destroy]
+
+    create :create do
+      description """
+      This action assumes that inserting new data == inviting a new users. It will then:
+      1. Set new invitation attributes such as: token, expires_at, team, etc
+      2. Sends an invitation to the newly invited user via email
+      """
+
+      accept [:email]
+      change Helpcenter.Accounts.Invitation.Changes.SetInviteAttributes
+      change Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail
+    end
+
+    update :accept do
+      description """
+      When an invitee accepts invitation, this action will be called:
+      1. Add invitee to the team based on the invitation data
+      2. Add invitee to the permission group based on the invitation data
+      3. Send invitee a welcome email to the newly added user to the team
+      """
+
+      accept []
+      change set_attribute(:status, :accepted)
+      change Helpcenter.Accounts.Invitation.Changes.AddUserToTeam
+      change Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail
+    end
+
+    update :decline do
+      description """
+      When an invitee declines invitation, this action will be called:
+      1. Changes the status to the declined.
+      2. Send a decline email.
+      """
+
+      accept []
+      change set_attribute(:status, :declined)
+      change Helpcenter.Accounts.Invitation.Changes.SendDeclinedEmail
+    end
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :email, :string do
+      allow_nil? false
+      constraints match: ~r/^[^\s]+@[^\s]+\.[^\s]+$/
+      description "Email address of the user to invite"
+    end
+
+    attribute :status, :atom do
+      default :pending
+      allow_nil? false
+      constraints one_of: [:pending, :accepted, :declined]
+      description "The status of the invitation sent to the user"
+    end
+
+    attribute :token, :string do
+      allow_nil? false
+      description "The token in the URL to identify this invitation"
+    end
+
+    attribute :expires_at, :utc_datetime do
+      allow_nil? false
+      description "The time this invitation will expire. Default 30 days"
+    end
+
+    timestamps()
+  end
+
+  relationships do
+    belongs_to :team, Helpcenter.Accounts.Team do
+      allow_nil? false
+      source_attribute :team_id
+      description "The team user will be added to after accepting invitation"
+    end
+
+    belongs_to :group, Helpcenter.Accounts.Group do
+      allow_nil? false
+      source_attribute :group_id
+      description "User permission group the invitee will be added to"
+    end
+
+    belongs_to :inviter, Helpcenter.Accounts.User do
+      allow_nil? false
+      source_attribute :inviter_user_id
+      description "The user who sent this invitation to the new joiner"
+    end
+
+    belongs_to :invitee, Helpcenter.Accounts.User do
+      allow_nil? true
+      source_attribute :invitee_user_id
+      description "The invited user. This will not be nil if the user already exists in the app"
+    end
+  end
+end
