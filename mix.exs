@@ -9,6 +9,7 @@ defmodule Helpcenter.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
+      test_paths: ["test", "lib"],
       aliases: aliases(),
       deps: deps()
     ]

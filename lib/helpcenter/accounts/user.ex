@@ -269,6 +269,10 @@ defmodule Helpcenter.Accounts.User do
     end
   end
 
+  code_interface do
+    define :get_by_email, args: [:email], action: :get_by_email
+  end
+
   policies do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
       authorize_if always()

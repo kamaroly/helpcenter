@@ -2,8 +2,7 @@
 defmodule Helpcenter.Accounts.Invitation do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
-    data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer]
+    data_layer: AshPostgres.DataLayer
 
   postgres do
     table "invitations"
@@ -20,9 +19,14 @@ defmodule Helpcenter.Accounts.Invitation do
       2. Sends an invitation to the newly invited user via email
       """
 
-      accept [:email]
-      change Helpcenter.Accounts.Invitation.Changes.SetInviteAttributes
-      change Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail
+      accept [:email, :group_id]
+      change Helpcenter.Accounts.Invitation.Changes.SetInvitationAttributes
+      # change Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail
+    end
+
+    read :by_token do
+      description "This action is used to read an invitation by its token"
+      filter expr(token == ^arg(:token))
     end
 
     update :accept do
@@ -73,6 +77,11 @@ defmodule Helpcenter.Accounts.Invitation do
       description "The token in the URL to identify this invitation"
     end
 
+    attribute :team, :string do
+      allow_nil? false
+      description "The team the user will be added to after accepting invitation"
+    end
+
     attribute :expires_at, :utc_datetime do
       allow_nil? false
       description "The time this invitation will expire. Default 30 days"
@@ -81,13 +90,19 @@ defmodule Helpcenter.Accounts.Invitation do
     timestamps()
   end
 
-  relationships do
-    belongs_to :team, Helpcenter.Accounts.Team do
-      allow_nil? false
-      source_attribute :team_id
-      description "The team user will be added to after accepting invitation"
-    end
+  multitenancy do
+    strategy :context
+  end
 
+  changes do
+    change Helpcenter.Changes.SetTenant
+  end
+
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  relationships do
     belongs_to :group, Helpcenter.Accounts.Group do
       allow_nil? false
       source_attribute :group_id

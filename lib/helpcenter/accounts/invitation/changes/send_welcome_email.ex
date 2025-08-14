@@ -19,11 +19,8 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail do
   end
 
   defp send_invitation_email(_changeset, invitation) do
-    send(invitation.email, invitation.token)
-    {:ok, invitation}
-  end
+    %{token: token, email: email} = invitation
 
-  def send(email, token, _) do
     new()
     # TODO: Replace with your email
     |> from({"noreply", "noreply@example.com"})
@@ -31,6 +28,8 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail do
     |> subject("Your login link")
     |> html_body(body(token: token, email: email))
     |> Mailer.deliver!()
+
+    {:ok, invitation}
   end
 
   defp body(params) do

@@ -18,7 +18,7 @@ defmodule Helpcenter.Accounts.GroupTest do
           Helpcenter.Accounts.Group,
           group_attrs,
           actor: user,
-          load: [:permissions, :users],
+          load: [:permissions],
           authorize?: false
         )
 
