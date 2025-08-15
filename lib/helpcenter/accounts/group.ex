@@ -15,7 +15,10 @@ defmodule Helpcenter.Accounts.Group do
     defaults [:create, :read, :update, :destroy]
   end
 
-  # Confirm how Ash will wor
+  code_interface do
+    define :list_groups, action: :read
+  end
+
   pub_sub do
     module HelpcenterWeb.Endpoint
 

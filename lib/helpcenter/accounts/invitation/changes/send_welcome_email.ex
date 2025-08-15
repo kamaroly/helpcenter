@@ -2,16 +2,10 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail do
   use Ash.Resource.Change
   use HelpcenterWeb, :verified_routes
 
-  import Swoosh.Email
-  alias Helpcenter.Mailer
-
   @impl true
   def change(changeset, _opts, _context) do
     Ash.Changeset.after_action(changeset, &send_invitation_email/2)
   end
-
-  @impl true
-  def atomic?, do: true
 
   @impl true
   def atomic(changeset, opts, context) do
@@ -19,15 +13,21 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail do
   end
 
   defp send_invitation_email(_changeset, invitation) do
-    %{token: token, email: email} = invitation
+    %{email: email, token: token, team: team} = invitation
+    message = body(token: token, email: email)
 
-    new()
-    # TODO: Replace with your email
-    |> from({"noreply", "noreply@example.com"})
-    |> to(to_string(email))
-    |> subject("Your login link")
-    |> html_body(body(token: token, email: email))
-    |> Mailer.deliver!()
+    %{
+      id: token,
+      params: %{
+        html_message: message,
+        text_message: message,
+        subject: "Welcome to #{invitation.team}",
+        from: nil,
+        to: email
+      }
+    }
+    |> Helpcenter.Workers.EmailSender.new()
+    |> Oban.insert()
 
     {:ok, invitation}
   end

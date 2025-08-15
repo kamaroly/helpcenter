@@ -17,18 +17,23 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail do
   end
 
   defp send_invitation_email(_changeset, invitation) do
-    send(invitation.email, invitation.token)
-    {:ok, invitation}
-  end
+    %{email: email, token: token} = invitation
+    message = body(token: token, email: email)
 
-  def send(email, token, _) do
-    new()
-    # TODO: Replace with your email
-    |> from({"noreply", "noreply@example.com"})
-    |> to(to_string(email))
-    |> subject("Your login link")
-    |> html_body(body(token: token, email: email))
-    |> Mailer.deliver!()
+    %{
+      id: token,
+      params: %{
+        html_message: message,
+        text_message: message,
+        subject: "You are invited",
+        from: nil,
+        to: email
+      }
+    }
+    |> Helpcenter.Workers.EmailSender.new()
+    |> Oban.insert()
+
+    {:ok, invitation}
   end
 
   defp body(params) do

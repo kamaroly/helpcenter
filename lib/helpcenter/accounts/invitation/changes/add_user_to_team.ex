@@ -65,6 +65,10 @@ defmodule Helpcenter.Accounts.Invitation.Changes.AddUserToTeam do
   end
 
   defp create_user(email, tenant) do
-    Ash.Seed.seed!(Helpcenter.Accounts.User, %{email: email}, tenant: tenant)
+    Ash.Seed.seed!(
+      Helpcenter.Accounts.User,
+      %{email: email, current_team: tenant},
+      tenant: tenant
+    )
   end
 end

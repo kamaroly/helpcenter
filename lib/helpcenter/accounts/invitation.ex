@@ -2,11 +2,39 @@
 defmodule Helpcenter.Accounts.Invitation do
   use Ash.Resource,
     domain: Helpcenter.Accounts,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    notifiers: Ash.Notifier.PubSub
 
   postgres do
     table "invitations"
     repo Helpcenter.Repo
+  end
+
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+    prepare Helpcenter.Accounts.Invitation.Preparations.ForCurrentTeam
+  end
+
+  changes do
+    change Helpcenter.Changes.SetTenant
+  end
+
+  multitenancy do
+    strategy :context
+  end
+
+  # Confirm how Ash will wor
+  pub_sub do
+    module HelpcenterWeb.Endpoint
+    prefix "invitations"
+    publish_all :update, [[:id, :team, nil]]
+    publish_all :create, [[:id, :team, nil]]
+    publish_all :destroy, [[:id, :team, nil]]
+  end
+
+  code_interface do
+    define :accept, action: :accept
+    define :get_by_token, args: [:token], action: :by_token
   end
 
   actions do
@@ -21,12 +49,14 @@ defmodule Helpcenter.Accounts.Invitation do
 
       accept [:email, :group_id]
       change Helpcenter.Accounts.Invitation.Changes.SetInvitationAttributes
-      # change Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail
+      change Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail
     end
 
     read :by_token do
       description "This action is used to read an invitation by its token"
+      argument :token, :string
       filter expr(token == ^arg(:token))
+      get? true
     end
 
     update :accept do
@@ -54,18 +84,6 @@ defmodule Helpcenter.Accounts.Invitation do
       change set_attribute(:status, :declined)
       change Helpcenter.Accounts.Invitation.Changes.SendDeclinedEmail
     end
-  end
-
-  preparations do
-    prepare Helpcenter.Preparations.SetTenant
-  end
-
-  changes do
-    change Helpcenter.Changes.SetTenant
-  end
-
-  multitenancy do
-    strategy :context
   end
 
   attributes do

@@ -47,7 +47,7 @@ defmodule HelpcenterWeb.Router do
       scope "/accounts", Accounts do
         scope "/users", Users do
           live "/", UsersLive
-          live "/:user_id", UserLive
+          live "/invitations", UserInvitationsLive
         end
 
         scope "/groups", Groups do

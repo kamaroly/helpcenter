@@ -4,7 +4,6 @@ defmodule Helpcenter.KnowledgeBase.Category do
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer,
     notifiers: Ash.Notifier.PubSub,
-    # Tell Ash that this resource require authorization
     authorizers: Ash.Policy.Authorizer
 
   postgres do
