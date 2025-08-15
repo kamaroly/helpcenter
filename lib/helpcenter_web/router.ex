@@ -44,9 +44,16 @@ defmodule HelpcenterWeb.Router do
       end
 
       # lib/helpcenter_web/router.ex
-      scope "/accounts/groups", Accounts.Groups do
-        live "/", GroupsLive
-        live "/:group_id/permissions", GroupPermissionsLive
+      scope "/accounts", Accounts do
+        scope "/users", Users do
+          live "/", UsersLive
+          live "/:user_id", UserLive
+        end
+
+        scope "/groups", Groups do
+          live "/", GroupsLive
+          live "/:group_id/permissions", GroupPermissionsLive
+        end
       end
     end
   end

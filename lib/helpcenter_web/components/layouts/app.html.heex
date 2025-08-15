@@ -22,6 +22,14 @@
       <div :if={@current_user} class="space-x-6">
         <.link
           id="categories"
+          navigate={~p"/accounts/users"}
+          class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700 hover:underline"
+        >
+          <.icon name="hero-users" class="h-4 w-4" />
+          {gettext("Users")}
+        </.link>
+        <.link
+          id="categories"
           navigate={~p"/categories"}
           class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700 hover:underline"
         >

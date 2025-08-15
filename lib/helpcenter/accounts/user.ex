@@ -57,6 +57,10 @@ defmodule Helpcenter.Accounts.User do
     repo Helpcenter.Repo
   end
 
+  code_interface do
+    define :get_by_email, args: [:email], action: :get_by_email
+  end
+
   actions do
     default_accept [:email]
     defaults [:create, :read]
@@ -267,10 +271,6 @@ defmodule Helpcenter.Accounts.User do
 
       change set_attribute(:current_team, arg(:team))
     end
-  end
-
-  code_interface do
-    define :get_by_email, args: [:email], action: :get_by_email
   end
 
   policies do

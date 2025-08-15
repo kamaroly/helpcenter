@@ -56,6 +56,18 @@ defmodule Helpcenter.Accounts.Invitation do
     end
   end
 
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+  end
+
+  changes do
+    change Helpcenter.Changes.SetTenant
+  end
+
+  multitenancy do
+    strategy :context
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -88,18 +100,6 @@ defmodule Helpcenter.Accounts.Invitation do
     end
 
     timestamps()
-  end
-
-  multitenancy do
-    strategy :context
-  end
-
-  changes do
-    change Helpcenter.Changes.SetTenant
-  end
-
-  preparations do
-    prepare Helpcenter.Preparations.SetTenant
   end
 
   relationships do

@@ -34,6 +34,7 @@ defmodule Helpcenter.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cinder, "~> 0.5"},
       {:gen_smtp, "~> 1.0"},
       {:oban, "~> 2.0"},
       {:ash_oban, "~> 0.4"},

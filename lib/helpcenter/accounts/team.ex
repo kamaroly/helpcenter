@@ -20,11 +20,6 @@ defmodule Helpcenter.Accounts.Team do
     end
   end
 
-  code_interface do
-    # the action open can be omitted because it matches the function name
-    define :by_domain, args: [:domain], action: :by_domain
-  end
-
   postgres do
     table "teams"
     repo Helpcenter.Repo
@@ -34,6 +29,11 @@ defmodule Helpcenter.Accounts.Team do
       create? true
       update? false
     end
+  end
+
+  code_interface do
+    # the action open can be omitted because it matches the function name
+    define :by_domain, args: [:domain], action: :by_domain
   end
 
   actions do
@@ -72,12 +72,6 @@ defmodule Helpcenter.Accounts.Team do
     timestamps()
   end
 
-  identities do
-    identity :unique_domain, [:domain] do
-      description "Identity to find a team by its domain"
-    end
-  end
-
   relationships do
     belongs_to :owner, Helpcenter.Accounts.User do
       source_attribute :owner_user_id
@@ -87,6 +81,12 @@ defmodule Helpcenter.Accounts.Team do
       through Helpcenter.Accounts.UserTeam
       source_attribute_on_join_resource :team_id
       destination_attribute_on_join_resource :user_id
+    end
+  end
+
+  identities do
+    identity :unique_domain, [:domain] do
+      description "Identity to find a team by its domain"
     end
   end
 end
