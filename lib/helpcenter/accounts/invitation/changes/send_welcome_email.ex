@@ -21,7 +21,7 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail do
       params: %{
         html_message: message,
         text_message: message,
-        subject: "Welcome to #{invitation.team}",
+        subject: "Welcome to #{team}",
         from: nil,
         to: email
       }

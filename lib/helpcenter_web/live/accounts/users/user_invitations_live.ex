@@ -5,7 +5,7 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
     ~H"""
     <Cinder.Table.table query={get_query()} actor={@current_user} id="user-invitations-table">
       <:col label="Email" :let={row} field="email" filter sort>{Phoenix.Naming.humanize(row.email)}</:col>
-      <:col label="Status" :let={row} field="status" fitler sort>{Phoenix.Naming.humanize(row.status)}</:col>
+      <:col label="Status" :let={row} field="status" filter sort>{Phoenix.Naming.humanize(row.status)}</:col>
       <:col label="Team" :let={row}>{Phoenix.Naming.humanize(row.team)}</:col>
       <:col :let={row}>
         <.button phx-click={"accept-invite-#{row.token}"}>{gettext("Accept")}</.button>
@@ -14,7 +14,6 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
     """
   end
 
-  @imple true
   def mount(_params, _sessions, socket) do
     if connected?(socket) do
       HelpcenterWeb.Endpoint.subscribe("invitations")

@@ -1,7 +1,6 @@
 defmodule Helpcenter.Workers.EmailSender do
   use Oban.Worker, queue: :mailers
   import Swoosh.Email
-  import Phoenix.Component
 
   @impl Oban.Worker
   def perform(job) do

@@ -3,7 +3,13 @@ defmodule HelpcenterWeb.Accounts.Users.UsersLiveTest do
 
   describe "UsersLive" do
     test "renders the users page", %{conn: conn} do
-      conn = get(conn, ~p"/accounts/users")
+      user = create_user()
+
+      conn =
+        conn
+        |> login(user)
+        |> get(~p"/accounts/users")
+
       assert html_response(conn, 200) =~ "Users"
       assert html_response(conn, 200) =~ "Email"
       assert html_response(conn, 200) =~ "Team"

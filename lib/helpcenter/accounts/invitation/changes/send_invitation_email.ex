@@ -2,10 +2,6 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail do
   use Ash.Resource.Change
   use HelpcenterWeb, :verified_routes
 
-  import Swoosh.Email
-
-  alias Helpcenter.Mailer
-
   @impl true
   def change(changeset, _opts, _context) do
     Ash.Changeset.after_action(changeset, &send_invitation_email/2)
