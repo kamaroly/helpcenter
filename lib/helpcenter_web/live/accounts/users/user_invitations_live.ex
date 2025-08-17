@@ -47,7 +47,7 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
 
   def handle_info(_event, socket) do
     socket
-    |> Cinder.Table.refresh_table("user-invitations-table")
+    |> Cinder.Table.Refresh.refresh_table("user-invitations-table")
     |> noreply()
   end
 
