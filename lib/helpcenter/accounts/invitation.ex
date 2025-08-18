@@ -21,6 +21,7 @@ defmodule Helpcenter.Accounts.Invitation do
 
   multitenancy do
     strategy :context
+    global? true
   end
 
   # Confirm how Ash will wor
@@ -68,7 +69,7 @@ defmodule Helpcenter.Accounts.Invitation do
       """
 
       accept []
-      change set_attribute(:status, :accepted)
+      change atomic_update(:status, :accepted)
       change Helpcenter.Accounts.Invitation.Changes.AddUserToTeam
       change Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail
     end

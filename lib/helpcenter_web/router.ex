@@ -86,6 +86,10 @@ defmodule HelpcenterWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/accounts/users/invitations/:tenant/:token/accept",
+        TeamInvitationAcceptanceController,
+        :accept
   end
 
   # Other scopes may use custom stacks.

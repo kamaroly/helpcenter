@@ -30,8 +30,6 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
 
     case Helpcenter.Accounts.Invitation.accept(invitation, actor: actor) do
       {:ok, invitation} ->
-        dbg(invitation)
-
         socket
         |> put_flash(:info, "Invitation accepted")
         |> noreply()

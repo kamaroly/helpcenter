@@ -13,8 +13,8 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail do
   end
 
   defp send_invitation_email(_changeset, invitation) do
-    %{email: email, token: token} = invitation
-    message = body(token: token, email: email)
+    %{email: email, token: token, team: team} = invitation
+    message = body(token: token, email: email, tenant: team)
 
     %{
       id: token,
@@ -33,10 +33,10 @@ defmodule Helpcenter.Accounts.Invitation.Changes.SendInvitationEmail do
   end
 
   defp body(params) do
-    url = url(~p"/auth/user/magic_link/?token=#{params[:token]}")
+    url = url(~p"/accounts/users/invitations/#{params[:tenant]}/#{params[:token]}/accept")
 
     """
-    <p>Hello, #{params[:email]}! Click this link to sign in:</p>
+    <p>Hello, #{params[:email]}! Click this link to accept the invitation to #{params[:tenant]}.</p>
     <p><a href="#{url}">#{url}</a></p>
     """
   end

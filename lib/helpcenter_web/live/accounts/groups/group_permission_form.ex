@@ -90,8 +90,6 @@ defmodule HelpcenterWeb.Accounts.Groups.GroupPermissionForm do
         |> noreply()
 
       error ->
-        dbg(error)
-
         socket
         |> put_flash(:error, "Unable to update permissions")
         |> noreply()
