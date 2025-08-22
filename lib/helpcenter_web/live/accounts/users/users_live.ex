@@ -51,6 +51,7 @@ defmodule HelpcenterWeb.Accounts.Users.UsersLive do
         socket
         |> put_flash(:info, "Invitation sent successfully")
         |> push_event("js-exec", %{to: "#invite-user-modal", attr: "data-cancel"})
+        |> redirect(to: ~p"/accounts/users/invitations")
         |> noreply()
 
       {:error, form} ->

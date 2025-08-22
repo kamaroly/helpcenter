@@ -17,9 +17,19 @@ defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
         |> put_flash(:info, gettext("Invitation accepted"))
         |> redirect(to: ~p"/")
 
-      {:error, error} ->
-        dbg(error)
-        put_flash(conn, :error, gettext("Unable to accept invitation"))
+      {:error, %Ash.Error.Invalid{errors: errors}} ->
+        error_message =
+          Enum.map(errors, & &1.message)
+          |> Enum.join(", ")
+
+        conn
+        |> put_flash(:error, error_message)
+        |> redirect(to: ~p"/")
+
+      {:error, _other} ->
+        conn
+        |> put_flash(:error, gettext("Unable to accept invitation"))
+        |> redirect(to: ~p"/")
     end
   end
 end

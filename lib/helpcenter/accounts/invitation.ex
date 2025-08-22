@@ -44,8 +44,9 @@ defmodule Helpcenter.Accounts.Invitation do
     create :create do
       description """
       This action assumes that inserting new data == inviting a new users. It will then:
-      1. Set new invitation attributes such as: token, expires_at, team, etc
-      2. Sends an invitation to the newly invited user via email
+      1. Generate a unique token for the invitation and add it to the changeset
+      2. Set new invitation attributes such as:  expires_at, team, etc.
+      3. Sends an invitation to the newly invited user via email
       """
 
       accept [:email, :group_id]
@@ -54,7 +55,7 @@ defmodule Helpcenter.Accounts.Invitation do
     end
 
     read :by_token do
-      description "This action is used to read an invitation by its token"
+      description "Get one invitation by its token"
       argument :token, :string
       filter expr(token == ^arg(:token))
       get? true
@@ -72,6 +73,7 @@ defmodule Helpcenter.Accounts.Invitation do
       change atomic_update(:status, :accepted)
       change Helpcenter.Accounts.Invitation.Changes.AddUserToTeam
       change Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail
+      validate Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus
     end
 
     update :decline do
@@ -84,6 +86,7 @@ defmodule Helpcenter.Accounts.Invitation do
       accept []
       change set_attribute(:status, :declined)
       change Helpcenter.Accounts.Invitation.Changes.SendDeclinedEmail
+      validate Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus
     end
   end
 
