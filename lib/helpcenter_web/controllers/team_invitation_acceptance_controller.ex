@@ -1,35 +1,59 @@
 defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
   use HelpcenterWeb, :controller
 
+  alias Helpcenter.Accounts.Invitation
+
+  @doc """
+  Accepts a team invitation using a tenant and token, updating the invitation status.
+  Redirects to the homepage with appropriate flash messages based on the outcome.
+  """
   def accept(conn, %{"tenant" => tenant, "token" => token}) do
+    with {:ok, invitation} <- fetch_invitation(tenant, token),
+         {:ok, _updated_invitation} <- accept_invitation(invitation, tenant) do
+      conn
+      |> put_flash(:info, gettext("Invitation accepted"))
+      |> redirect(to: ~p"/")
+    else
+      {:error, error} ->
+        conn
+        |> put_flash(:error, format_error_message(error))
+        |> redirect(to: ~p"/")
+    end
+  end
+
+  defp fetch_invitation(tenant, token) do
     require Ash.Query
 
     options = [tenant: tenant, authorize?: false]
 
-    Helpcenter.Accounts.Invitation
+    Invitation
     |> Ash.Query.filter(token == ^token)
     |> Ash.read_first!(options)
+    |> case do
+      nil -> {:error, :invitation_not_found}
+      invitation -> {:ok, invitation}
+    end
+  end
+
+  defp accept_invitation(invitation, tenant) do
+    options = [tenant: tenant, authorize?: false]
+
+    invitation
     |> Ash.Changeset.for_update(:accept, %{}, options)
     |> Ash.update()
-    |> case do
-      {:ok, _inv} ->
-        conn
-        |> put_flash(:info, gettext("Invitation accepted"))
-        |> redirect(to: ~p"/")
+  end
 
-      {:error, %Ash.Error.Invalid{errors: errors}} ->
-        error_message =
-          Enum.map(errors, & &1.message)
-          |> Enum.join(", ")
+  defp format_error_message(:invitation_not_found) do
+    gettext("Invitation not found")
+  end
 
-        conn
-        |> put_flash(:error, error_message)
-        |> redirect(to: ~p"/")
+  defp format_error_message(%Ash.Error.Invalid{errors: errors}) do
+    errors
+    |> Enum.map(& &1.message)
+    |> Enum.join(", ")
+  end
 
-      {:error, _other} ->
-        conn
-        |> put_flash(:error, gettext("Unable to accept invitation"))
-        |> redirect(to: ~p"/")
-    end
+  defp format_error_message(_other) do
+    gettext("Unable to accept invitation")
   end
 end

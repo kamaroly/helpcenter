@@ -37,6 +37,16 @@ defmodule Helpcenter.Accounts.InvitationTest do
       assert accepted_invitation.status == :accepted
       assert accepted_invitation.email == invite_attributes.email
       assert accepted_invitation.group_id == group.id
+
+      # Confirm that user cannot decline an already accepted invitation
+      {:error, %Ash.Error.Invalid{errors: errors}} =
+        accepted_invitation
+        |> Ash.Changeset.for_update(:decline, %{}, actor: actor)
+        |> Ash.update()
+
+      error = List.first(errors)
+      assert error.field == :token
+      assert error.message == "This invitation has already been accepted."
     end
   end
 end

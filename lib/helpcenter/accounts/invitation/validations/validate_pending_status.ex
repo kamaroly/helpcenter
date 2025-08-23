@@ -4,7 +4,7 @@ defmodule Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus do
   def validate(changeset, _opts, context) do
     changeset
     |> get_invitation(context)
-    |> validate_invitation()
+    |> validate_pending_status()
   end
 
   @doc """
@@ -26,17 +26,17 @@ defmodule Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus do
   end
 
   # Validate that the invitation is still pending
-  defp validate_invitation({:ok, %{status: :pending}}), do: :ok
+  defp validate_pending_status({:ok, %{status: :pending}}), do: :ok
 
-  defp validate_invitation({:ok, %{status: :accepted}}) do
+  defp validate_pending_status({:ok, %{status: :accepted}}) do
     {:error, field: :token, message: "This invitation has already been accepted."}
   end
 
-  defp validate_invitation({:ok, %{status: :declined}}) do
+  defp validate_pending_status({:ok, %{status: :declined}}) do
     {:error, field: :token, message: "This invitation has already been declined."}
   end
 
-  defp validate_invitation(_others) do
+  defp validate_pending_status(_others) do
     {:error, field: :token, message: "Invalid invitation."}
   end
 end
