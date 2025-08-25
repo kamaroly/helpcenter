@@ -1,5 +1,5 @@
 defmodule Helpcenter.Accounts.InvitationTest do
-  use HelpcenterWeb.ConnCase, async: false
+  use HelpcenterWeb.ConnCase
   require Ash.Query
 
   defp create_group!(actor) do
@@ -47,6 +47,29 @@ defmodule Helpcenter.Accounts.InvitationTest do
       error = List.first(errors)
       assert error.field == :token
       assert error.message == "This invitation has already been accepted."
+    end
+
+    test "Invitation can be decline an invitation" do
+      actor = create_user()
+      group = create_group!(actor)
+      invite_attributes = %{email: "john@example.com", group_id: group.id}
+
+      invitation =
+        Helpcenter.Accounts.Invitation
+        |> Ash.Changeset.for_create(:create, invite_attributes, actor: actor)
+        |> Ash.create!()
+
+      assert invitation.status == :pending
+      assert invitation.email == invite_attributes.email
+      assert invitation.group_id == group.id
+
+      # Decline invitation
+      declined_invitation =
+        invitation
+        |> Ash.Changeset.for_update(:decline, %{}, actor: actor)
+        |> Ash.update!()
+
+      assert declined_invitation.status == :declined
     end
   end
 end

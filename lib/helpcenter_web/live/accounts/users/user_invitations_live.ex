@@ -4,10 +4,21 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Cinder.Table.table query={get_query()} actor={@current_user} id="user-invitations-table" page_size={20}>
-      <:col label="Email" :let={row} field="email" filter sort>{Phoenix.Naming.humanize(row.email)}</:col>
-      <:col label="Status" :let={row} field="status" filter sort>{Phoenix.Naming.humanize(row.status)}</:col>
-      <:col label="Team" :let={row}>{Phoenix.Naming.humanize(row.team)}</:col>
+    <HelpcenterWeb.Accounts.Users.UserInvitationsLive.InviteNewUserForm.form actor={@current_user} />
+
+    <Cinder.Table.table
+      query={get_query()}
+      actor={@current_user}
+      id="user-invitations-table"
+      page_size={20}
+    >
+      <:col :let={row} label="Email" field="email" filter sort>
+        {Phoenix.Naming.humanize(row.email)}
+      </:col>
+      <:col :let={row} label="Status" field="status" filter sort>
+        {Phoenix.Naming.humanize(row.status)}
+      </:col>
+      <:col :let={row} label="Team">{Phoenix.Naming.humanize(row.team)}</:col>
       <:col :let={row}>
         <.button phx-click={"accept-invite-#{row.token}"}>{gettext("Accept")}</.button>
       </:col>
@@ -17,9 +28,7 @@ defmodule HelpcenterWeb.Accounts.Users.UserInvitationsLive do
 
   @impl true
   def mount(_params, _sessions, socket) do
-    if connected?(socket) do
-      HelpcenterWeb.Endpoint.subscribe("invitations")
-    end
+    if connected?(socket), do: HelpcenterWeb.Endpoint.subscribe("invitations")
 
     socket
     |> assign(:page_title, gettext("User Invitations"))

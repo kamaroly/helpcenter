@@ -10,29 +10,6 @@ defmodule Helpcenter.Accounts.Invitation do
     repo Helpcenter.Repo
   end
 
-  preparations do
-    prepare Helpcenter.Preparations.SetTenant
-    prepare Helpcenter.Accounts.Invitation.Preparations.ForCurrentTeam
-  end
-
-  changes do
-    change Helpcenter.Changes.SetTenant
-  end
-
-  multitenancy do
-    strategy :context
-    global? true
-  end
-
-  # Confirm how Ash will wor
-  pub_sub do
-    module HelpcenterWeb.Endpoint
-    prefix "invitations"
-    publish_all :update, [[:id, :team, nil]]
-    publish_all :create, [[:id, :team, nil]]
-    publish_all :destroy, [[:id, :team, nil]]
-  end
-
   code_interface do
     define :accept, action: :accept
     define :get_by_token, args: [:token], action: :by_token
@@ -70,10 +47,12 @@ defmodule Helpcenter.Accounts.Invitation do
       """
 
       accept []
+
+      validate Helpcenter.Accounts.Invitation.Validations.EnsurePendingStatus
+
       change atomic_update(:status, :accepted)
       change Helpcenter.Accounts.Invitation.Changes.AddUserToTeam
       change Helpcenter.Accounts.Invitation.Changes.SendWelcomeEmail
-      validate Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus
     end
 
     update :decline do
@@ -84,10 +63,35 @@ defmodule Helpcenter.Accounts.Invitation do
       """
 
       accept []
+
+      validate Helpcenter.Accounts.Invitation.Validations.EnsurePendingStatus
+
       change set_attribute(:status, :declined)
       change Helpcenter.Accounts.Invitation.Changes.SendDeclinedEmail
-      validate Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus
     end
+  end
+
+  # Confirm how Ash will wor
+  pub_sub do
+    module HelpcenterWeb.Endpoint
+    prefix "invitations"
+    publish_all :update, [[:id, :team, nil]]
+    publish_all :create, [[:id, :team, nil]]
+    publish_all :destroy, [[:id, :team, nil]]
+  end
+
+  preparations do
+    prepare Helpcenter.Preparations.SetTenant
+    prepare Helpcenter.Accounts.Invitation.Preparations.ForCurrentTeam
+  end
+
+  changes do
+    change Helpcenter.Changes.SetTenant
+  end
+
+  multitenancy do
+    strategy :context
+    global? true
   end
 
   attributes do

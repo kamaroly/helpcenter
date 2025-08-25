@@ -10,13 +10,13 @@ defmodule Helpcenter.Accounts.Group do
     repo Helpcenter.Repo
   end
 
+  code_interface do
+    define :list_groups, action: :read
+  end
+
   actions do
     default_accept [:name, :description]
     defaults [:create, :read, :update, :destroy]
-  end
-
-  code_interface do
-    define :list_groups, action: :read
   end
 
   pub_sub do

@@ -1,3 +1,4 @@
+# mix.exs
 defmodule Helpcenter.MixProject do
   use Mix.Project
 
@@ -9,6 +10,7 @@ defmodule Helpcenter.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
+      # Include "lib" for integration tests
       test_paths: ["test", "lib"],
       aliases: aliases(),
       deps: deps()

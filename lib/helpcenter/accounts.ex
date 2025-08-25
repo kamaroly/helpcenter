@@ -3,7 +3,6 @@ defmodule Helpcenter.Accounts do
   use Ash.Domain, otp_app: :helpcenter
 
   resources do
-    #  the rest of the domain resources
     resource Helpcenter.Accounts.Team
     resource Helpcenter.Accounts.User
     resource Helpcenter.Accounts.Group

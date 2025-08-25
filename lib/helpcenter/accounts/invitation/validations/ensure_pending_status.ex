@@ -1,4 +1,5 @@
-defmodule Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus do
+# lib/helpcenter/accounts/invitation/validations/ensure_pending_status.ex
+defmodule Helpcenter.Accounts.Invitation.Validations.EnsurePendingStatus do
   use Ash.Resource.Validation
 
   def validate(changeset, _opts, context) do
@@ -10,7 +11,8 @@ defmodule Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus do
   @doc """
     Atomic function's return must be the same as the main behaviour callback function.
     that's why we are not returning {:ok, validate(changeset, opts, context)}
-    like in a change {:ok, change(changeset, opts, context)}
+    like in a change {:ok, change(changeset, opts, context)} instead we
+    retruning :ok or {:error, ...} directly as per validate definition
   """
   def atomic(changeset, opts, context) do
     validate(changeset, opts, context)
@@ -37,6 +39,6 @@ defmodule Helpcenter.Accounts.Invitation.Validations.ValidatePendingStatus do
   end
 
   defp validate_pending_status(_others) do
-    {:error, field: :token, message: "Invalid invitation."}
+    {:error, field: :token, message: "This invitation token is invalid or has expired."}
   end
 end
