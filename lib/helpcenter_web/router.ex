@@ -90,6 +90,10 @@ defmodule HelpcenterWeb.Router do
     get "/accounts/users/invitations/:tenant/:token/accept",
         TeamInvitationAcceptanceController,
         :accept
+
+    get "/accounts/users/invitations/:tenant/:token/reject",
+        TeamInvitationAcceptanceController,
+        :reject
   end
 
   # Other scopes may use custom stacks.

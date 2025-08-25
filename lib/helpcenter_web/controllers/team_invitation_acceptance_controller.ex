@@ -1,3 +1,4 @@
+# lib/helpcenter_web/controllers/team_invitation_acceptance_controller.ex
 defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
   use HelpcenterWeb, :controller
 
@@ -12,6 +13,20 @@ defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
          {:ok, _updated_invitation} <- accept_invitation(invitation, tenant) do
       conn
       |> put_flash(:info, gettext("Invitation accepted"))
+      |> redirect(to: ~p"/")
+    else
+      {:error, error} ->
+        conn
+        |> put_flash(:error, format_error_message(error))
+        |> redirect(to: ~p"/")
+    end
+  end
+
+  def reject(conn, %{"tenant" => tenant, "token" => token}) do
+    with {:ok, invitation} <- fetch_invitation(tenant, token),
+         {:ok, _updated_invitation} <- reject_invitation(invitation, tenant) do
+      conn
+      |> put_flash(:info, gettext("Invitation rejected"))
       |> redirect(to: ~p"/")
     else
       {:error, error} ->
@@ -36,6 +51,14 @@ defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
   end
 
   defp accept_invitation(invitation, tenant) do
+    options = [tenant: tenant, authorize?: false]
+
+    invitation
+    |> Ash.Changeset.for_update(:accept, %{}, options)
+    |> Ash.update()
+  end
+
+  defp reject_invitation(invitation, tenant) do
     options = [tenant: tenant, authorize?: false]
 
     invitation
