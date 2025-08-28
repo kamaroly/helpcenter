@@ -1,17 +1,9 @@
 defmodule Helpcenter.Extensions.AshParentalTest do
   use ExUnit.Case
 
-  defmodule Domain do
-    use Ash.Domain
-
-    resources do
-      resource Comment
-    end
-  end
-
   defmodule Comment do
     use Ash.Resource,
-      domain: Domain,
+      domain: Helpcenter.Extensions.AshParentalTest.Domain,
       data_layer: Ash.DataLayer.Ets,
       extensions: [Helpcenter.Extensions.AshParental]
 
@@ -26,9 +18,17 @@ defmodule Helpcenter.Extensions.AshParentalTest do
     end
   end
 
+  defmodule Domain do
+    use Ash.Domain
+
+    resources do
+      resource Helpcenter.Extensions.AshParentalTest.Comment
+    end
+  end
+
   describe "AshParental" do
     test "AshParental adds parent_id to the resource" do
-      dbg(Ash.Resource.Info.attribute_names(Comment))
+      assert :parent_id in Ash.Resource.Info.attribute_names(Comment)
     end
   end
 end
