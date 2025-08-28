@@ -1,3 +1,4 @@
+# lib/helpcenter_web/controllers/team_invitation_acceptance_controller_test.exs
 defmodule HelpcenterWeb.TeamInvitationAcceptanceControllerTEst do
   use HelpcenterWeb.ConnCase
 

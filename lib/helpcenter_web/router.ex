@@ -37,6 +37,8 @@ defmodule HelpcenterWeb.Router do
       # If an authenticated user must *not* be present:
       # on_mount {HelpcenterWeb.LiveUserAuth, :live_no_user}
 
+      live "/grok", GrokLayoutLive
+
       scope "/categories" do
         live "/", CategoriesLive
         live "/create", CreateCategoryLive

@@ -2,13 +2,14 @@
 defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
   use HelpcenterWeb, :controller
 
-  alias Helpcenter.Accounts.Invitation
-
   @doc """
   Accepts a team invitation using a tenant and token, updating the invitation status.
   Redirects to the homepage with appropriate flash messages based on the outcome.
   """
   def accept(conn, %{"tenant" => tenant, "token" => token}) do
+    # 1. Check if the invitation exists and is valid
+    # 2. If valid, accept inviation(creates account behind the scenes)
+    # 3. Redirect to homepage with success message
     with {:ok, invitation} <- fetch_invitation(tenant, token),
          {:ok, _updated_invitation} <- accept_invitation(invitation, tenant) do
       conn
@@ -23,6 +24,10 @@ defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
   end
 
   def reject(conn, %{"tenant" => tenant, "token" => token}) do
+    # 1. Check if the invitation exists and is valid
+    # 2. If valid, reject inviation
+    # 3. Redirect to homepage with success message
+
     with {:ok, invitation} <- fetch_invitation(tenant, token),
          {:ok, _updated_invitation} <- reject_invitation(invitation, tenant) do
       conn
@@ -41,12 +46,12 @@ defmodule HelpcenterWeb.TeamInvitationAcceptanceController do
 
     options = [tenant: tenant, authorize?: false]
 
-    Invitation
+    Helpcenter.Accounts.Invitation
     |> Ash.Query.filter(token == ^token)
-    |> Ash.read_first!(options)
+    |> Ash.read_first(options)
     |> case do
-      nil -> {:error, :invitation_not_found}
-      invitation -> {:ok, invitation}
+      {:ok, nil} -> {:error, :invitation_not_found}
+      other -> other
     end
   end
 
