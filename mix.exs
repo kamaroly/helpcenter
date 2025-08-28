@@ -44,7 +44,6 @@ defmodule Helpcenter.MixProject do
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:picosat_elixir, "~> 0.2"},
-      {:mix_test_watch, "~> 1.0"},
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.0"},
       {:ash_phoenix, "~> 2.0"},

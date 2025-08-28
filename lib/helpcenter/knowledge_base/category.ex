@@ -4,12 +4,11 @@ defmodule Helpcenter.KnowledgeBase.Category do
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer,
     notifiers: Ash.Notifier.PubSub,
-    authorizers: Ash.Policy.Authorizer
+    authorizers: Ash.Policy.Authorizer,
+    extensions: [Helpcenter.Extensions.AshParental]
 
   postgres do
-    # <-- Tell Ash that this resource data is stored in a table named "categories"
     table "categories"
-    # <-- Tell Ash that this resource access data storage via Helpcenter.Repo
     repo Helpcenter.Repo
   end
 

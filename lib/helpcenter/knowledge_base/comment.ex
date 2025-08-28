@@ -1,7 +1,8 @@
 defmodule Helpcenter.KnowledgeBase.Comment do
   use Ash.Resource,
     domain: Helpcenter.KnowledgeBase,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [Helpcenter.Extensions.AshParental]
 
   postgres do
     table "comments"
