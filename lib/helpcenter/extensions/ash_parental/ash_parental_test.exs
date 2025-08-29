@@ -12,6 +12,10 @@ defmodule Helpcenter.Extensions.AshParentalTest do
       table :comments
     end
 
+    actions do
+      defaults [:create, :read, :update, :destroy]
+    end
+
     attributes do
       uuid_primary_key :id
       attribute :content, :string, allow_nil?: false
@@ -54,6 +58,21 @@ defmodule Helpcenter.Extensions.AshParentalTest do
 
       assert :count_of_children == aggregate_name
       assert :count == kind
+    end
+
+    test "Parents - Child and versa relationships records" do
+      parent = Ash.Seed.seed!(Comment, %{content: "parent"})
+      child_1 = Ash.Seed.seed!(Comment, %{content: "child 1", parent_id: parent.id})
+      child_2 = Ash.Seed.seed!(Comment, %{content: "child 2", parent_id: parent.id})
+
+      parent_record = Ash.get!(Comment, parent.id, load: [:children, :count_of_children])
+
+      assert 2 == parent_record.count_of_children
+      assert Enum.count(parent_record.children) == parent_record.count_of_children
+
+      child_1_record = Ash.get!(Comment, child_1.id, load: [:parent])
+
+      assert child_1_record.parent_id == parent.id
     end
   end
 end
