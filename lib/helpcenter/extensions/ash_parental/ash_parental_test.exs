@@ -48,8 +48,12 @@ defmodule Helpcenter.Extensions.AshParentalTest do
     end
 
     test "Adds children count aggregate" do
-      dbg(Ash.Resource.Info.aggregates(Comment))
-      assert :children_count in Ash.Resource.Info.aggregates(Comment)
+      %{name: aggregate_name, kind: kind} =
+        Ash.Resource.Info.aggregates(Comment)
+        |> List.first()
+
+      assert :count_of_children == aggregate_name
+      assert :count == kind
     end
   end
 end
