@@ -2,6 +2,7 @@
 defmodule Helpcenter.Extensions.AshParentalTest do
   use ExUnit.Case
 
+  # Define a simple Ash resource for testing purposes
   defmodule Comment do
     use Ash.Resource,
       domain: Helpcenter.Extensions.AshParentalTest.Domain,
@@ -23,23 +24,52 @@ defmodule Helpcenter.Extensions.AshParentalTest do
     end
   end
 
+  # lib/helpcenter/extensions/ash_parental/ash_parental_test.exs
+  defmodule Category do
+    use Ash.Resource,
+      domain: Helpcenter.Extensions.AshParentalTest.Domain,
+      data_layer: Ash.DataLayer.Ets,
+      extensions: [Helpcenter.Extensions.AshParental]
+
+    ets do
+      table :categories
+    end
+
+    ash_parental do
+      children_relationship_name(:subcategories)
+    end
+
+    actions do
+      defaults [:create, :read, :update, :destroy]
+    end
+
+    attributes do
+      uuid_primary_key :id
+      attribute :name, :string, allow_nil?: false
+      timestamps()
+    end
+  end
+
+  # Define a domain to hold the resource for testing
   defmodule Domain do
     use Ash.Domain
 
     resources do
       resource Helpcenter.Extensions.AshParentalTest.Comment
+      resource Helpcenter.Extensions.AshParentalTest.Category
     end
   end
 
   defp relationships(resource) do
-    Ash.Resource.Info.relationships(resource)
-    |> Enum.map(& &1.name)
+    Ash.Resource.Info.relationships(resource) |> Enum.map(& &1.name)
   end
 
   alias Helpcenter.Extensions.AshParentalTest.Comment
 
   describe "AshParental" do
     test "Adds parent_id to the resource" do
+      # Confirm that the parent_id attribute has been added
+      # to the reource's attributes after applying the extension
       assert :parent_id in Ash.Resource.Info.attribute_names(Comment)
     end
 
@@ -73,6 +103,10 @@ defmodule Helpcenter.Extensions.AshParentalTest do
       child_1_record = Ash.get!(Comment, child_1.id, load: [:parent])
 
       assert child_1_record.parent_id == parent.id
+    end
+
+    test "Children relationship name is configurable" do
+      assert :subcategories in relationships(Category)
     end
   end
 end

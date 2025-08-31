@@ -1,3 +1,4 @@
+# lib/helpcenter/extensions/ash_parental/transformers/add_children_count_aggregate.ex
 defmodule Helpcenter.Extensions.AshParental.Transformers.AddChildrenCountAggregate do
   use Spark.Dsl.Transformer
 
@@ -12,7 +13,13 @@ defmodule Helpcenter.Extensions.AshParental.Transformers.AddChildrenCountAggrega
       dsl_state,
       :count_of_children,
       :count,
-      [:children]
+      # <-- Use the configured children relationship name
+      [get_children_relationship_name(dsl_state)]
     )
+  end
+
+  defp get_children_relationship_name(dsl_state) do
+    dsl_state
+    |> Helpcenter.Extensions.AshParental.Info.ash_parental_children_relationship_name!()
   end
 end

@@ -87,6 +87,8 @@ defmodule Helpcenter.KnowledgeBase.Category do
     attribute :slug, :string
     attribute :description, :string, allow_nil?: true
 
+    attribute :parent_id, :uuid, allow_nil?: true
+
     timestamps()
   end
 
