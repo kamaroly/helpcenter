@@ -121,9 +121,13 @@ defmodule Helpcenter.Extensions.AshParentalTest do
 
       # assert %{status: :success} =
       Comment
-      |> Ash.Query.filter(parent_id == ^parent.id)
-      |> Ash.read_first!()
+      |> Ash.get!(parent.id)
       |> Ash.destroy()
+
+      # Confirm that no children remain
+      refute Comment
+             |> Ash.Query.filter(parent_id == ^parent.id)
+             |> Ash.exists?()
     end
   end
 end
