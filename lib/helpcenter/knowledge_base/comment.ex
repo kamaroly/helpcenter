@@ -15,7 +15,7 @@ defmodule Helpcenter.KnowledgeBase.Comment do
   end
 
   ash_parental do
-    children_relationship_name(:replies)
+    distroy_with_children?(true)
   end
 
   preparations do

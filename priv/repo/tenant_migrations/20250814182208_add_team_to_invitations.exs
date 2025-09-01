@@ -8,17 +8,6 @@ defmodule Helpcenter.Repo.TenantMigrations.AddTeamToInvitations do
   use Ecto.Migration
 
   def up do
-    alter table(:user_notifications, prefix: prefix()) do
-      modify :recipient_user_id,
-             references(:users,
-               column: :id,
-               name: "user_notifications_recipient_user_id_fkey",
-               type: :uuid,
-               prefix: "public"
-             )
-    end
-
-    create index(:user_notifications, [:recipient_user_id])
 
     create table(:invitations, primary_key: false, prefix: prefix()) do
       add :id, :uuid, null: false, default: fragment("gen_random_uuid()"), primary_key: true
@@ -74,11 +63,5 @@ defmodule Helpcenter.Repo.TenantMigrations.AddTeamToInvitations do
     drop table(:invitations, prefix: prefix())
 
     drop_if_exists index(:user_notifications, [:recipient_user_id])
-
-    drop constraint(:user_notifications, "user_notifications_recipient_user_id_fkey")
-
-    alter table(:user_notifications, prefix: prefix()) do
-      modify :recipient_user_id, :uuid
-    end
   end
 end

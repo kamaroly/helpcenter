@@ -71,7 +71,6 @@ defmodule Helpcenter.KnowledgeBase.Category do
   changes do
     change Helpcenter.Changes.Slugify
 
-    # Automatically set tenant based on the user/ actor
     change Helpcenter.Changes.SetTenant
   end
 

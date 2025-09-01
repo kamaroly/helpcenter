@@ -11,9 +11,16 @@ defmodule Helpcenter.Extensions.AshParental do
 
   @transformers [
     Helpcenter.Extensions.AshParental.Transformers.AddParentIdAttribute,
-    Helpcenter.Extensions.AshParental.Transformers.AddChildrenCountAggregate,
+
+    # Add relationships after the attribute and aggregate have been added
     Helpcenter.Extensions.AshParental.Transformers.AddBelongsToParentRelationship,
-    Helpcenter.Extensions.AshParental.Transformers.AddHasManyChildrenRelationship
+    Helpcenter.Extensions.AshParental.Transformers.AddHasManyChildrenRelationship,
+
+    # Aggregates
+    Helpcenter.Extensions.AshParental.Transformers.AddChildrenCountAggregate,
+
+    # Add the destroy children change last
+    Helpcenter.Extensions.AshParental.Transformers.AddDestroyWithChildrenChange
   ]
 
   # Define the DSL section and its schema for configuration
@@ -35,10 +42,10 @@ defmodule Helpcenter.Extensions.AshParental do
         doc: "The name of the children relationship to be added",
         default: :children
       ],
-      on_parent_delete_destroy_children: [
+      distroy_with_children?: [
         type: :boolean,
         doc: "If true, deleting a parent will also delete its children",
-        default: false
+        default: true
       ]
     ]
   }

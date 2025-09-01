@@ -22,9 +22,12 @@ defmodule Helpcenter.Extensions.AshParentalTest do
       attribute :content, :string, allow_nil?: false
       timestamps()
     end
+
+    changes do
+      change Helpcenter.Extensions.AshParental.Changes.DestroyChildren
+    end
   end
 
-  # lib/helpcenter/extensions/ash_parental/ash_parental_test.exs
   defmodule Category do
     use Ash.Resource,
       domain: Helpcenter.Extensions.AshParentalTest.Domain,
@@ -93,7 +96,7 @@ defmodule Helpcenter.Extensions.AshParentalTest do
     test "Parents - Child and versa relationships records" do
       parent = Ash.Seed.seed!(Comment, %{content: "parent"})
       child_1 = Ash.Seed.seed!(Comment, %{content: "child 1", parent_id: parent.id})
-      child_2 = Ash.Seed.seed!(Comment, %{content: "child 2", parent_id: parent.id})
+      Ash.Seed.seed!(Comment, %{content: "child 2", parent_id: parent.id})
 
       parent_record = Ash.get!(Comment, parent.id, load: [:children, :count_of_children])
 
@@ -107,6 +110,20 @@ defmodule Helpcenter.Extensions.AshParentalTest do
 
     test "Children relationship name is configurable" do
       assert :subcategories in relationships(Category)
+    end
+
+    test "Destroying a parent also destroys its children" do
+      parent = Ash.Seed.seed!(Comment, %{content: "parent"})
+      Ash.Seed.seed!(Comment, %{content: "child 1", parent_id: parent.id})
+      Ash.Seed.seed!(Comment, %{content: "child 2", parent_id: parent.id})
+
+      require Ash.Query
+
+      # assert %{status: :success} =
+      Comment
+      |> Ash.Query.filter(parent_id == ^parent.id)
+      |> Ash.read_first!()
+      |> Ash.destroy()
     end
   end
 end
