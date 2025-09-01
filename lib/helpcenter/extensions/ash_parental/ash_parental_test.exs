@@ -13,6 +13,10 @@ defmodule Helpcenter.Extensions.AshParentalTest do
       table :comments
     end
 
+    ash_parental do
+      distroy_with_children?(true)
+    end
+
     actions do
       defaults [:create, :read, :update, :destroy]
     end
@@ -21,10 +25,6 @@ defmodule Helpcenter.Extensions.AshParentalTest do
       uuid_primary_key :id
       attribute :content, :string, allow_nil?: false
       timestamps()
-    end
-
-    changes do
-      change Helpcenter.Extensions.AshParental.Changes.DestroyChildren
     end
   end
 

@@ -45,7 +45,7 @@ defmodule Helpcenter.Extensions.AshParental do
       distroy_with_children?: [
         type: :boolean,
         doc: "If true, deleting a parent will also delete its children",
-        default: true
+        default: false
       ]
     ]
   }

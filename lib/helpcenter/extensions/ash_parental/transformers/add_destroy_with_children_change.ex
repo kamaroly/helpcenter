@@ -16,7 +16,7 @@ defmodule Helpcenter.Extensions.AshParental.Transformers.AddDestroyWithChildrenC
       # Specify only on: :destroy to avoid adding it to updates or create changes
       Ash.Resource.Builder.add_change(dsl_state, DestroyChildren, on: :destroy)
     else
-      dsl_state
+      {:ok, dsl_state}
     end
   end
 end
