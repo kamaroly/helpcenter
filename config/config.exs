@@ -7,6 +7,7 @@
 # General application configuration
 import Config
 
+config :cinder, default_theme: "modern"
 config :ash_oban, pro?: false
 
 config :helpcenter, Oban,

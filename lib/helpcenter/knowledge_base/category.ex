@@ -4,13 +4,10 @@ defmodule Helpcenter.KnowledgeBase.Category do
     domain: Helpcenter.KnowledgeBase,
     data_layer: AshPostgres.DataLayer,
     notifiers: Ash.Notifier.PubSub,
-    # Tell Ash that this resource require authorization
     authorizers: Ash.Policy.Authorizer
 
   postgres do
-    # <-- Tell Ash that this resource data is stored in a table named "categories"
     table "categories"
-    # <-- Tell Ash that this resource access data storage via Helpcenter.Repo
     repo Helpcenter.Repo
   end
 
@@ -74,7 +71,6 @@ defmodule Helpcenter.KnowledgeBase.Category do
   changes do
     change Helpcenter.Changes.Slugify
 
-    # Automatically set tenant based on the user/ actor
     change Helpcenter.Changes.SetTenant
   end
 
@@ -89,6 +85,8 @@ defmodule Helpcenter.KnowledgeBase.Category do
     attribute :name, :string, allow_nil?: false
     attribute :slug, :string
     attribute :description, :string, allow_nil?: true
+
+    attribute :parent_id, :uuid, allow_nil?: true
 
     timestamps()
   end

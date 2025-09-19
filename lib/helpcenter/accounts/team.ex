@@ -31,6 +31,11 @@ defmodule Helpcenter.Accounts.Team do
     end
   end
 
+  code_interface do
+    # the action open can be omitted because it matches the function name
+    define :by_domain, args: [:domain], action: :by_domain
+  end
+
   actions do
     default_accept [:name, :domain, :description, :owner_user_id]
     defaults [:read]
@@ -40,12 +45,28 @@ defmodule Helpcenter.Accounts.Team do
       change Helpcenter.Accounts.Team.Changes.AssociateUserToTeam
       change Helpcenter.Accounts.Team.Changes.SetOwnerCurrentTeamAfterCreate
     end
+
+    read :by_domain do
+      description "This action is used to read a team by its domain"
+      filter expr(domain == ^arg(:domain))
+    end
   end
 
   attributes do
     uuid_v7_primary_key :id
-    attribute :name, :string, allow_nil?: false, public?: true
-    attribute :domain, :string, allow_nil?: false, public?: true
+
+    attribute :name, :string do
+      allow_nil? false
+      public? true
+      description "Team or organisation name"
+    end
+
+    attribute :domain, :string do
+      allow_nil? false
+      public? true
+      description "Domain name of the team or organisation"
+    end
+
     attribute :description, :string, allow_nil?: true, public?: true
 
     timestamps()
@@ -60,6 +81,12 @@ defmodule Helpcenter.Accounts.Team do
       through Helpcenter.Accounts.UserTeam
       source_attribute_on_join_resource :team_id
       destination_attribute_on_join_resource :user_id
+    end
+  end
+
+  identities do
+    identity :unique_domain, [:domain] do
+      description "Identity to find a team by its domain"
     end
   end
 end

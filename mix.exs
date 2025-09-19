@@ -1,3 +1,4 @@
+# mix.exs
 defmodule Helpcenter.MixProject do
   use Mix.Project
 
@@ -9,6 +10,8 @@ defmodule Helpcenter.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
+      # Include "lib" for integration tests
+      test_paths: ["test", "lib"],
       aliases: aliases(),
       deps: deps()
     ]
@@ -33,6 +36,7 @@ defmodule Helpcenter.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cinder, "~> 0.5"},
       {:gen_smtp, "~> 1.0"},
       {:oban, "~> 2.0"},
       {:ash_oban, "~> 0.4"},
@@ -40,7 +44,6 @@ defmodule Helpcenter.MixProject do
       {:ash_authentication, "~> 4.0"},
       {:ash_authentication_phoenix, "~> 2.0"},
       {:picosat_elixir, "~> 0.2"},
-      {:mix_test_watch, "~> 1.0"},
       {:distillery, "~> 2.0"},
       {:edeliver, "~> 1.0"},
       {:ash_phoenix, "~> 2.0"},

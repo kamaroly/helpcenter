@@ -1,7 +1,8 @@
 defmodule Helpcenter.KnowledgeBase.Comment do
   use Ash.Resource,
     domain: Helpcenter.KnowledgeBase,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [Helpcenter.Extensions.AshParental]
 
   postgres do
     table "comments"
@@ -11,6 +12,10 @@ defmodule Helpcenter.KnowledgeBase.Comment do
   actions do
     default_accept [:content, :article_id]
     defaults [:create, :read, :update, :destroy]
+  end
+
+  ash_parental do
+    distroy_with_children?(true)
   end
 
   preparations do

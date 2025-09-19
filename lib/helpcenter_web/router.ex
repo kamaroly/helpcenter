@@ -37,6 +37,8 @@ defmodule HelpcenterWeb.Router do
       # If an authenticated user must *not* be present:
       # on_mount {HelpcenterWeb.LiveUserAuth, :live_no_user}
 
+      live "/grok", GrokLayoutLive
+
       scope "/categories" do
         live "/", CategoriesLive
         live "/create", CreateCategoryLive
@@ -44,9 +46,16 @@ defmodule HelpcenterWeb.Router do
       end
 
       # lib/helpcenter_web/router.ex
-      scope "/accounts/groups", Accounts.Groups do
-        live "/", GroupsLive
-        live "/:group_id/permissions", GroupPermissionsLive
+      scope "/accounts", Accounts do
+        scope "/users", Users do
+          live "/", UsersLive
+          live "/invitations", UserInvitationsLive
+        end
+
+        scope "/groups", Groups do
+          live "/", GroupsLive
+          live "/:group_id/permissions", GroupPermissionsLive
+        end
       end
     end
   end
@@ -79,6 +88,14 @@ defmodule HelpcenterWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    get "/accounts/users/invitations/:tenant/:token/accept",
+        TeamInvitationAcceptanceController,
+        :accept
+
+    get "/accounts/users/invitations/:tenant/:token/reject",
+        TeamInvitationAcceptanceController,
+        :reject
   end
 
   # Other scopes may use custom stacks.

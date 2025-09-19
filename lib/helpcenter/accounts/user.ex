@@ -17,6 +17,7 @@ defmodule Helpcenter.Accounts.User do
         monitor_fields [:email]
         confirm_on_create? true
         confirm_on_update? false
+        require_interaction? true
         auto_confirm_actions [:sign_in_with_magic_link, :reset_password_with_token]
         sender Helpcenter.Accounts.User.Senders.SendNewUserConfirmationEmail
       end
@@ -34,7 +35,7 @@ defmodule Helpcenter.Accounts.User do
       magic_link do
         identity_field :email
         registration_enabled? true
-
+        require_interaction? true
         sender Helpcenter.Accounts.User.Senders.SendMagicLinkEmail
       end
 
@@ -54,6 +55,10 @@ defmodule Helpcenter.Accounts.User do
   postgres do
     table "users"
     repo Helpcenter.Repo
+  end
+
+  code_interface do
+    define :get_by_email, args: [:email], action: :get_by_email
   end
 
   actions do
