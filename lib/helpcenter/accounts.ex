@@ -13,6 +13,7 @@ defmodule Helpcenter.Accounts do
     resource Helpcenter.Accounts.Token
     resource Helpcenter.Accounts.Invitation
 
+
     resource Helpcenter.Accounts.UserNotification do
       define :notify, action: :create
     end
